@@ -1,4 +1,4 @@
-package com.kazakago
+package com.kazakago.ktor_starter
 
 import io.ktor.application.Application
 import io.ktor.application.call
@@ -10,7 +10,7 @@ import io.ktor.routing.get
 fun Application.module() {
     install(Routing) {
         get("/") {
-            call.respond("Hello world from Ktor!!!!")
+            call.respond("Hello world from Ktor!!")
         }
     }
 }
