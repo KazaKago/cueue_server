@@ -3,6 +3,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     application
     kotlin("jvm")
+    id("com.github.johnrengelman.shadow")
+    id("com.google.cloud.tools.appengine")
 }
 
 group = "com.kazakago.ktor_starter"
@@ -19,6 +21,24 @@ java {
 
 tasks.withType<KotlinCompile>().all {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+tasks.shadowJar {
+    archiveClassifier.set("")
+}
+
+tasks.assemble {
+    dependsOn(tasks.shadowJar)
+}
+
+appengine {
+    stage {
+        setAppEngineDirectory("./appengine")
+    }
+    deploy {
+        projectId = "kazakago-playground"
+        version = "1"
+    }
 }
 
 dependencies {
