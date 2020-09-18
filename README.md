@@ -1,5 +1,5 @@
 # ktor_starter
-"Ktor" Starter Kit.
+"Ktor" Starter Kit with Deploying GAE.
 
 ## Run Locally
 
