@@ -25,7 +25,6 @@ tasks.withType<KotlinCompile>().all {
 
 tasks.shadowJar {
     archiveClassifier.set("")
-    archiveVersion.set("")
 }
 
 tasks.assemble {
