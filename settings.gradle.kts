@@ -1,4 +1,4 @@
-rootProject.name = "ktor-starter"
+rootProject.name = "ktor_starter"
 include("app")
 
 pluginManagement {
