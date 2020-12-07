@@ -1,4 +1,4 @@
-rootProject.name = "ktor_starter"
+rootProject.name = "weekly-cook-plan"
 include("app")
 
 pluginManagement {

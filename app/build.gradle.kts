@@ -7,7 +7,7 @@ plugins {
     id("com.google.cloud.tools.appengine") version "2.4.1"
 }
 
-group = "com.kazakago.ktor_starter"
+group = "com.kazakago.weekly_cook_plan"
 version = "1.0.0-SNAPSHOT"
 
 application {
@@ -36,7 +36,7 @@ appengine {
         setAppEngineDirectory("./appengine")
     }
     deploy {
-        projectId = "kazakago-playground"
+        projectId = "weekly-cook-plan"
         version = "1"
     }
 }
