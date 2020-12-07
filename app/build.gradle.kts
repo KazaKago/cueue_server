@@ -3,8 +3,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     application
     kotlin("jvm")
-    id("com.github.johnrengelman.shadow") version "6.0.0"
-    id("com.google.cloud.tools.appengine") version "2.3.0"
+    id("com.github.johnrengelman.shadow") version "6.1.0"
+    id("com.google.cloud.tools.appengine") version "2.4.1"
 }
 
 group = "com.kazakago.ktor_starter"
