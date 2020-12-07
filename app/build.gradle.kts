@@ -44,8 +44,8 @@ appengine {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(kotlin("stdlib-jdk8"))
-    implementation("io.ktor:ktor-server-netty:1.4.0")
+    implementation("io.ktor:ktor-server-netty:1.4.3")
     implementation("ch.qos.logback:logback-classic:1.2.3")
 
-    testImplementation("io.ktor:ktor-server-tests:1.4.0")
+    testImplementation("io.ktor:ktor-server-tests:1.4.3")
 }
