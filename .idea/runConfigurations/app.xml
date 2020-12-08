@@ -6,7 +6,7 @@
       <env name="GOOGLE_APPLICATION_CREDENTIALS" value="./app/weekly-cook-plan-d1822c49b4e4.json" />
     </envs>
     <option name="MAIN_CLASS_NAME" value="io.ktor.server.netty.EngineMain" />
-    <module name="weekly-cook-plan.app.main" />
+    <module name="weekly_cook_plan.app.main" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
