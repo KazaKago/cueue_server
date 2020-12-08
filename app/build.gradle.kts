@@ -26,6 +26,7 @@ tasks.withType<KotlinCompile>().all {
 
 tasks.shadowJar {
     archiveClassifier.set("")
+    mergeServiceFiles()
 }
 
 tasks.assemble {
@@ -48,6 +49,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
     implementation("io.ktor:ktor-server-netty:1.4.3")
     implementation("io.ktor:ktor-serialization:1.4.3")
+    implementation("com.google.cloud:google-cloud-firestore:1.32.0")
     implementation("ch.qos.logback:logback-classic:1.2.3")
 
     testImplementation("io.ktor:ktor-server-tests:1.4.3")
