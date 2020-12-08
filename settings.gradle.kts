@@ -1,4 +1,4 @@
-rootProject.name = "weekly-cook-plan"
+rootProject.name = "weekly_cook_plan"
 include("app")
 
 pluginManagement {
