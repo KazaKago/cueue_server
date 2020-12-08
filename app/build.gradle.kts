@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     application
     kotlin("jvm")
+    kotlin("plugin.serialization")
     id("com.github.johnrengelman.shadow") version "6.1.0"
     id("com.google.cloud.tools.appengine") version "2.4.1"
 }
@@ -44,7 +45,9 @@ appengine {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(kotlin("stdlib-jdk8"))
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
     implementation("io.ktor:ktor-server-netty:1.4.3")
+    implementation("io.ktor:ktor-serialization:1.4.3")
     implementation("ch.qos.logback:logback-classic:1.2.3")
 
     testImplementation("io.ktor:ktor-server-tests:1.4.3")
