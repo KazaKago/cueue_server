@@ -5,7 +5,6 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
     id("com.github.johnrengelman.shadow") version "6.1.0"
-    id("com.google.cloud.tools.appengine") version "2.4.1"
 }
 
 group = "com.kazakago.weekly_cook_plan"
@@ -31,16 +30,6 @@ tasks.shadowJar {
 
 tasks.assemble {
     dependsOn(tasks.shadowJar)
-}
-
-appengine {
-    stage {
-        setAppEngineDirectory("./appengine")
-    }
-    deploy {
-        projectId = "weekly-cook-plan"
-        version = "1"
-    }
 }
 
 dependencies {
