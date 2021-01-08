@@ -28,7 +28,9 @@ tasks.shadowJar {
     mergeServiceFiles()
 }
 
-tasks.assemble {
+tasks.register("stage") {
+    group = "heroku"
+    dependsOn(tasks.clean)
     dependsOn(tasks.shadowJar)
 }
 
