@@ -1,6 +1,6 @@
-package com.kazakago.weekly_cook_plan
+package com.kazakago.cooking_planner
 
-import com.kazakago.weekly_cook_plan.route.appRouting
+import com.kazakago.cooking_planner.route.appRouting
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.serialization.*

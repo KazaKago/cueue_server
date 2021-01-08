@@ -1,4 +1,4 @@
-package com.kazakago.weekly_cook_plan.model
+package com.kazakago.cooking_planner.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

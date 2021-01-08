@@ -1,10 +1,7 @@
-package com.kazakago.weekly_cook_plan.route
+package com.kazakago.cooking_planner.route
 
-import com.kazakago.weekly_cook_plan.controller.CookPlanController
-import com.kazakago.weekly_cook_plan.controller.RootController
-import com.kazakago.weekly_cook_plan.repository.CookPlanRepository
+import com.kazakago.cooking_planner.controller.RootController
 import io.ktor.application.*
-import io.ktor.request.*
 import io.ktor.routing.*
 
 fun Application.appRouting() {

@@ -1,10 +1,10 @@
-package com.kazakago.weekly_cook_plan.repository
+package com.kazakago.cooking_planner.repository
 
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.firestore.DocumentReference
 import com.google.cloud.firestore.FirestoreOptions
-import com.kazakago.weekly_cook_plan.model.CookPlan
-import com.kazakago.weekly_cook_plan.model.WeeklyCookPlan
+import com.kazakago.cooking_planner.model.CookPlan
+import com.kazakago.cooking_planner.model.WeeklyCookPlan
 
 class CookPlanRepository {
 

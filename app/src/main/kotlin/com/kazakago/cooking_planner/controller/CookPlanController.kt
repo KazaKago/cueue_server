@@ -1,7 +1,7 @@
-package com.kazakago.weekly_cook_plan.controller
+package com.kazakago.cooking_planner.controller
 
-import com.kazakago.weekly_cook_plan.model.WeeklyCookPlan
-import com.kazakago.weekly_cook_plan.repository.CookPlanRepository
+import com.kazakago.cooking_planner.model.WeeklyCookPlan
+import com.kazakago.cooking_planner.repository.CookPlanRepository
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*

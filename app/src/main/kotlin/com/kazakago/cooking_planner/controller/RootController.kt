@@ -1,4 +1,4 @@
-package com.kazakago.weekly_cook_plan.controller
+package com.kazakago.cooking_planner.controller
 
 import io.ktor.application.*
 import io.ktor.response.*
