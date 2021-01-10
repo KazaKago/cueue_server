@@ -37,10 +37,14 @@ tasks.register("stage") {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(kotlin("stdlib-jdk8"))
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
     implementation("io.ktor:ktor-server-netty:1.5.0")
     implementation("io.ktor:ktor-serialization:1.5.0")
-    implementation("com.google.cloud:google-cloud-firestore:1.32.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
+    implementation("org.jetbrains.exposed:exposed-core:0.28.1")
+    implementation("org.jetbrains.exposed:exposed-dao:0.28.1")
+    implementation("org.jetbrains.exposed:exposed-jdbc:0.28.1")
+    implementation("org.jetbrains.exposed:exposed-java-time:0.28.1")
+    implementation("org.postgresql:postgresql:42.2.18")
     implementation("ch.qos.logback:logback-classic:1.2.3")
 
     testImplementation("io.ktor:ktor-server-tests:1.4.3")
