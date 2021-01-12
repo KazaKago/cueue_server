@@ -6,6 +6,6 @@ import java.time.LocalDateTime
 
 object TagsTable : LongIdTable() {
     val name = text("name")
-    val createdAt = datetime("created_at").default(LocalDateTime.now())
-    val updatedAt = datetime("updated_at").default(LocalDateTime.now())
+    val createdAt = datetime("created_at").clientDefault { LocalDateTime.now() }
+    val updatedAt = datetime("updated_at").clientDefault { LocalDateTime.now() }
 }

@@ -8,6 +8,6 @@ object MenusTable : LongIdTable() {
     val memo = text("memo")
     val date = datetime("description")
     val timeFrame = text("time_frame")
-    val createdAt = datetime("created_at").default(LocalDateTime.now())
-    val updatedAt = datetime("updated_at").default(LocalDateTime.now())
+    val createdAt = datetime("created_at").clientDefault { LocalDateTime.now() }
+    val updatedAt = datetime("updated_at").clientDefault { LocalDateTime.now() }
 }
