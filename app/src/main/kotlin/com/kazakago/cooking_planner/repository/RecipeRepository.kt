@@ -6,9 +6,9 @@ import com.kazakago.cooking_planner.database.setting.DbSettings
 import com.kazakago.cooking_planner.database.table.RecipesTable
 import com.kazakago.cooking_planner.database.table.TagsTable
 import com.kazakago.cooking_planner.mapper.RecipeMapper
+import com.kazakago.cooking_planner.model.Recipe
 import com.kazakago.cooking_planner.model.RecipeId
 import com.kazakago.cooking_planner.model.RecipeRegistrationData
-import com.kazakago.cooking_planner.model.Recipe
 import com.kazakago.cooking_planner.model.TagName
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.emptySized
@@ -38,7 +38,7 @@ class RecipeRepository(private val recipeMapper: RecipeMapper) {
 
     suspend fun getRecipe(recipeId: RecipeId): Recipe {
         return newSuspendedTransaction(db = DbSettings.db) {
-            val recipe = RecipeEntity.findById(recipeId.value) ?: throw NoSuchElementException()
+            val recipe = RecipeEntity[recipeId.value]
             recipeMapper.toModel(recipe)
         }
     }
@@ -49,6 +49,17 @@ class RecipeRepository(private val recipeMapper: RecipeMapper) {
                 title = recipe.title
                 description = recipe.description
             }.apply {
+                val rawTagNames = recipe.tagNames.map { it.value }
+                tags = TagEntity.find { TagsTable.name inList rawTagNames }
+            }
+        }
+    }
+
+    suspend fun updateRecipe(recipeId: RecipeId, recipe: RecipeRegistrationData) {
+        newSuspendedTransaction(db = DbSettings.db) {
+            RecipeEntity[recipeId.value].apply {
+                title = recipe.title
+                description = recipe.description
                 val rawTagNames = recipe.tagNames.map { it.value }
                 tags = TagEntity.find { TagsTable.name inList rawTagNames }
             }

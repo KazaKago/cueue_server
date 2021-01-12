@@ -51,6 +51,10 @@ fun Application.appRouting() {
                 val recipeId = call.parameters.getLong("id").let { RecipeId(it) }
                 recipeController.index(call, recipeId)
             }
+            patch {
+                val recipeId = call.parameters.getLong("id").let { RecipeId(it) }
+                recipeController.update(call, recipeId, call.receive())
+            }
             delete {
                 val recipeId = call.parameters.getLong("id").let { RecipeId(it) }
                 recipeController.delete(call, recipeId)
@@ -68,6 +72,10 @@ fun Application.appRouting() {
             get {
                 val tagName = call.parameters.getString("name").let { TagName(it) }
                 tagController.index(call, tagName)
+            }
+            patch {
+                val tagName = call.parameters.getString("name").let { TagName(it) }
+                tagController.update(call, tagName, call.receive())
             }
             delete {
                 val tagName = call.parameters.getString("name").let { TagName(it) }
@@ -87,6 +95,10 @@ fun Application.appRouting() {
             get {
                 val menuId = call.parameters.getLong("id").let { MenuId(it) }
                 menuController.index(call, menuId)
+            }
+            patch {
+                val menuId = call.parameters.getLong("id").let { MenuId(it) }
+                menuController.update(call, menuId, call.receive())
             }
             delete {
                 val menuId = call.parameters.getLong("id").let { MenuId(it) }
