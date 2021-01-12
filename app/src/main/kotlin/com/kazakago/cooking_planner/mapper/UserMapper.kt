@@ -11,6 +11,7 @@ class UserMapper {
         return User(
             id = UserId(user.id.value),
             email = Email(user.email),
+            nickname = user.nickname,
         )
     }
 }
