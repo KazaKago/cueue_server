@@ -1,7 +1,7 @@
 package com.kazakago.cooking_planner
 
-import com.kazakago.cooking_planner.presentation.route.appRouting
-import com.kazakago.cooking_planner.presentation.route.handleException
+import com.kazakago.cooking_planner.route.appRouting
+import com.kazakago.cooking_planner.route.handleException
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.serialization.*
