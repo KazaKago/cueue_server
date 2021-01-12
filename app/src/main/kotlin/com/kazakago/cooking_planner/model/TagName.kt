@@ -13,7 +13,7 @@ data class TagName(val value: String) {
 
     object Serializer : KSerializer<TagName> {
 
-        override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("id", PrimitiveKind.STRING)
+        override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("tag_name", PrimitiveKind.STRING)
 
         override fun serialize(encoder: Encoder, value: TagName) {
             encoder.encodeString(value.value)

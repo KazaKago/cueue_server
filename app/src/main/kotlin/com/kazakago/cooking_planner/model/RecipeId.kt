@@ -13,7 +13,7 @@ data class RecipeId(val value: Long) {
 
     object Serializer : KSerializer<RecipeId> {
 
-        override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("id", PrimitiveKind.LONG)
+        override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("recipe_id", PrimitiveKind.LONG)
 
         override fun serialize(encoder: Encoder, value: RecipeId) {
             encoder.encodeLong(value.value)

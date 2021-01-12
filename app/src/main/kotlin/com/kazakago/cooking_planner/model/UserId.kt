@@ -13,7 +13,7 @@ data class UserId(val value: Long) {
 
     object Serializer : KSerializer<UserId> {
 
-        override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("id", PrimitiveKind.LONG)
+        override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("user_id", PrimitiveKind.LONG)
 
         override fun serialize(encoder: Encoder, value: UserId) {
             encoder.encodeLong(value.value)
