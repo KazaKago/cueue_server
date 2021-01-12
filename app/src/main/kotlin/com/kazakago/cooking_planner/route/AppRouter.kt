@@ -10,7 +10,6 @@ import com.kazakago.cooking_planner.repository.RecipeRepository
 import com.kazakago.cooking_planner.repository.TagRepository
 import com.kazakago.cooking_planner.repository.UserRepository
 import io.ktor.application.*
-import io.ktor.request.*
 import io.ktor.routing.*
 
 fun Application.appRouting() {
@@ -43,7 +42,7 @@ fun Application.appRouting() {
                 recipesController.index(call, afterId, tagName)
             }
             post {
-                recipesController.create(call, call.receive())
+                recipesController.create(call, call.receiveOrThrow())
             }
         }
         route("/recipes/{id}") {
@@ -53,7 +52,7 @@ fun Application.appRouting() {
             }
             patch {
                 val recipeId = call.parameters.getLong("id").let { RecipeId(it) }
-                recipeController.update(call, recipeId, call.receive())
+                recipeController.update(call, recipeId, call.receiveOrThrow())
             }
             delete {
                 val recipeId = call.parameters.getLong("id").let { RecipeId(it) }
@@ -65,7 +64,7 @@ fun Application.appRouting() {
                 tagsController.index(call)
             }
             post {
-                tagsController.create(call, call.receive())
+                tagsController.create(call, call.receiveOrThrow())
             }
         }
         route("/tags/{name}") {
@@ -75,7 +74,7 @@ fun Application.appRouting() {
             }
             patch {
                 val tagName = call.parameters.getString("name").let { TagName(it) }
-                tagController.update(call, tagName, call.receive())
+                tagController.update(call, tagName, call.receiveOrThrow())
             }
             delete {
                 val tagName = call.parameters.getString("name").let { TagName(it) }
@@ -88,7 +87,7 @@ fun Application.appRouting() {
                 menusController.index(call, afterId)
             }
             post {
-                menusController.create(call, call.receive())
+                menusController.create(call, call.receiveOrThrow())
             }
         }
         route("/menus/{id}") {
@@ -98,7 +97,7 @@ fun Application.appRouting() {
             }
             patch {
                 val menuId = call.parameters.getLong("id").let { MenuId(it) }
-                menuController.update(call, menuId, call.receive())
+                menuController.update(call, menuId, call.receiveOrThrow())
             }
             delete {
                 val menuId = call.parameters.getLong("id").let { MenuId(it) }

@@ -1,7 +1,18 @@
 package com.kazakago.cooking_planner.route
 
+import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
+import io.ktor.request.*
+
+suspend inline fun <reified T : Any> ApplicationCall.receiveOrThrow(): T {
+    try {
+        return receive()
+    } catch (exception: Exception) {
+        println(exception)
+        throw ParameterConversionException("N/A", T::class.qualifiedName ?: "")
+    }
+}
 
 fun Parameters.getInt(name: String): Int {
     return getIntOrNull(name) ?: throw MissingRequestParameterException(name)
