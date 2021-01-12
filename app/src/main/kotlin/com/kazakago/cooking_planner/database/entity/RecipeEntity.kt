@@ -12,6 +12,8 @@ class RecipeEntity(id: EntityID<Long>) : LongEntity(id) {
 
     var title by RecipesTable.title
     var description by RecipesTable.description
+    var createdAt by RecipesTable.createdAt
+    var updatedAt by RecipesTable.updatedAt
     var tags by TagEntity via RecipeTagsRelationsTable
     var menus by MenuEntity via MenuRecipesRelationsTable
 }

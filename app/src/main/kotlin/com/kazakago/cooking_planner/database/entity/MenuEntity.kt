@@ -12,5 +12,7 @@ class MenuEntity(id: EntityID<Long>) : LongEntity(id) {
     var memo by MenusTable.memo
     var date by MenusTable.date
     var timeFrame by MenusTable.timeFrame
+    var createdAt by MenusTable.createdAt
+    var updatedAt by MenusTable.updatedAt
     var recipes by RecipeEntity via MenuRecipesRelationsTable
 }
