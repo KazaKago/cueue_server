@@ -38,7 +38,7 @@ class TagRepository(private val tagMapper: TagMapper) {
 
     suspend fun updateTag(tagName: TagName, tag: TagRegistrationData) {
         newSuspendedTransaction(db = DbSettings.db) {
-            TagEntity.find { TagsTable.name eq tag.name.value }.first().apply {
+            TagEntity.find { TagsTable.name eq tagName.value }.first().apply {
                 name = tag.name.value
             }
         }
