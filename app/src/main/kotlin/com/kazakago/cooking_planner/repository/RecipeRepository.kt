@@ -5,18 +5,18 @@ import com.kazakago.cooking_planner.database.entity.TagEntity
 import com.kazakago.cooking_planner.database.setting.DbSettings
 import com.kazakago.cooking_planner.database.table.RecipesTable
 import com.kazakago.cooking_planner.database.table.TagsTable
-import com.kazakago.cooking_planner.mapper.RecipeTagsMapper
+import com.kazakago.cooking_planner.mapper.RecipeMapper
 import com.kazakago.cooking_planner.model.RecipeId
 import com.kazakago.cooking_planner.model.RecipeRegistrationData
-import com.kazakago.cooking_planner.model.RecipeTags
+import com.kazakago.cooking_planner.model.Recipe
 import com.kazakago.cooking_planner.model.TagName
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.emptySized
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
-class RecipeRepository(private val recipeTagsMapper: RecipeTagsMapper) {
+class RecipeRepository(private val recipeMapper: RecipeMapper) {
 
-    suspend fun getRecipeTagsList(afterId: RecipeId?, tagName: TagName?): List<RecipeTags> {
+    suspend fun getRecipes(afterId: RecipeId?, tagName: TagName?): List<Recipe> {
         return newSuspendedTransaction(db = DbSettings.db) {
             val recipes = if (tagName != null) {
                 val tag = TagEntity.find { TagsTable.name eq tagName.value }.firstOrNull()
@@ -32,14 +32,14 @@ class RecipeRepository(private val recipeTagsMapper: RecipeTagsMapper) {
                 0
             }
             recipes.limit(20, offset)
-                .map { recipeTagsMapper.toModel(it) }
+                .map { recipeMapper.toModel(it) }
         }
     }
 
-    suspend fun getRecipeTags(recipeId: RecipeId): RecipeTags {
+    suspend fun getRecipe(recipeId: RecipeId): Recipe {
         return newSuspendedTransaction(db = DbSettings.db) {
             val recipe = RecipeEntity.findById(recipeId.value) ?: throw NoSuchElementException()
-            recipeTagsMapper.toModel(recipe)
+            recipeMapper.toModel(recipe)
         }
     }
 

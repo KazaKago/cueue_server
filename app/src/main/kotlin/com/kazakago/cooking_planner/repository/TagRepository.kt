@@ -12,7 +12,7 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 
 class TagRepository(private val tagMapper: TagMapper) {
 
-    suspend fun getTagList(): List<Tag> {
+    suspend fun getTags(): List<Tag> {
         return newSuspendedTransaction(db = DbSettings.db) {
             val tag = TagEntity.all()
             tag.map { tagMapper.toModel(it) }

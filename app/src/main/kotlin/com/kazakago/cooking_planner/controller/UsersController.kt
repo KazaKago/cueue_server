@@ -5,7 +5,7 @@ import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
 
-class UserController(private val userRepository: UserRepository) {
+class UsersController(private val userRepository: UserRepository) {
 
     suspend fun index(call: ApplicationCall) {
         val users = userRepository.getUsers()

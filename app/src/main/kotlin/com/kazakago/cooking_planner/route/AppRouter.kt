@@ -15,13 +15,13 @@ import io.ktor.routing.*
 
 fun Application.appRouting() {
     val rootController = RootController()
-    val userController = UserController(UserRepository(UserMapper()))
-    val recipesController = RecipesController(RecipeRepository(RecipeTagsMapper(TagMapper())))
-    val recipeController = RecipeController(RecipeRepository(RecipeTagsMapper(TagMapper())))
+    val userController = UsersController(UserRepository(UserMapper()))
+    val recipesController = RecipesController(RecipeRepository(RecipeMapper(TagMapper())))
+    val recipeController = RecipeController(RecipeRepository(RecipeMapper(TagMapper())))
     val tagsController = TagsController(TagRepository(TagMapper()))
     val tagController = TagController(TagRepository(TagMapper()))
-    val menusController = MenusController(MenuRepository(MenuRecipesMapper(TimeFrameMapper(), RecipeMapper())))
-    val menuController = MenuController(MenuRepository(MenuRecipesMapper(TimeFrameMapper(), RecipeMapper())))
+    val menusController = MenusController(MenuRepository(MenuMapper(TimeFrameMapper(), RecipeSummaryMapper())))
+    val menuController = MenuController(MenuRepository(MenuMapper(TimeFrameMapper(), RecipeSummaryMapper())))
     routing {
         route("/") {
             get {

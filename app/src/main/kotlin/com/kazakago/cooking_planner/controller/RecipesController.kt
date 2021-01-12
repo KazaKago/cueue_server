@@ -11,7 +11,7 @@ import io.ktor.response.*
 class RecipesController(private val recipeRepository: RecipeRepository) {
 
     suspend fun index(call: ApplicationCall, afterId: RecipeId?, tagName: TagName?) {
-        val recipes = recipeRepository.getRecipeTagsList(afterId, tagName)
+        val recipes = recipeRepository.getRecipes(afterId, tagName)
         call.respond(HttpStatusCode.OK, recipes)
     }
 

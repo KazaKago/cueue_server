@@ -11,4 +11,6 @@ data class Recipe(
     val title: String,
     @SerialName("description")
     val description: String,
+    @SerialName("tags")
+    val tags: List<Tag>,
 )

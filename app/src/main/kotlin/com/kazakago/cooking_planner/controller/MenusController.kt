@@ -10,7 +10,7 @@ import io.ktor.response.*
 class MenusController(private val menuRepository: MenuRepository) {
 
     suspend fun index(call: ApplicationCall, afterId: MenuId?) {
-        val menus = menuRepository.getMenuRecipesList(afterId)
+        val menus = menuRepository.getMenus(afterId)
         call.respond(HttpStatusCode.OK, menus)
     }
 

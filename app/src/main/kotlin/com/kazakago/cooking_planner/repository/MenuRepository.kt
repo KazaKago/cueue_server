@@ -4,17 +4,17 @@ import com.kazakago.cooking_planner.database.entity.MenuEntity
 import com.kazakago.cooking_planner.database.entity.RecipeEntity
 import com.kazakago.cooking_planner.database.setting.DbSettings
 import com.kazakago.cooking_planner.database.table.MenusTable
-import com.kazakago.cooking_planner.mapper.MenuRecipesMapper
+import com.kazakago.cooking_planner.mapper.MenuMapper
 import com.kazakago.cooking_planner.mapper.rawValue
 import com.kazakago.cooking_planner.model.MenuId
-import com.kazakago.cooking_planner.model.MenuRecipes
+import com.kazakago.cooking_planner.model.Menu
 import com.kazakago.cooking_planner.model.MenuRegistrationData
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
-class MenuRepository(private val menuRecipesMapper: MenuRecipesMapper) {
+class MenuRepository(private val menuMapper: MenuMapper) {
 
-    suspend fun getMenuRecipesList(afterId: MenuId?): List<MenuRecipes> {
+    suspend fun getMenus(afterId: MenuId?): List<Menu> {
         return newSuspendedTransaction(db = DbSettings.db) {
             val menus = MenuEntity.all()
                 .orderBy(MenusTable.id to SortOrder.DESC)
@@ -24,14 +24,14 @@ class MenuRepository(private val menuRecipesMapper: MenuRecipesMapper) {
                 0
             }
             menus.limit(20, offset)
-                .map { menuRecipesMapper.toModel(it) }
+                .map { menuMapper.toModel(it) }
         }
     }
 
-    suspend fun getMenuRecipes(menuId: MenuId): MenuRecipes {
+    suspend fun getMenu(menuId: MenuId): Menu {
         return newSuspendedTransaction(db = DbSettings.db) {
             val recipe = MenuEntity.findById(menuId.value) ?: throw NoSuchElementException()
-            menuRecipesMapper.toModel(recipe)
+            menuMapper.toModel(recipe)
         }
     }
 

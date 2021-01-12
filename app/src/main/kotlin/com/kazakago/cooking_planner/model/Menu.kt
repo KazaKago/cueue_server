@@ -15,4 +15,6 @@ data class Menu(
     val date: LocalDateTime,
     @SerialName("time_frame")
     val timeFrame: TimeFrame,
+    @SerialName("recipes")
+    val recipes: List<RecipeSummary>,
 )
