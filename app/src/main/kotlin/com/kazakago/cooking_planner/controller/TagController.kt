@@ -9,8 +9,8 @@ import io.ktor.response.*
 class TagController(private val tagRepository: TagRepository) {
 
     suspend fun index(call: ApplicationCall, tagName: TagName) {
-        val recipe = tagRepository.getTagRecipes(tagName)
-        call.respond(HttpStatusCode.OK, recipe)
+        val tag = tagRepository.getTag(tagName)
+        call.respond(HttpStatusCode.OK, tag)
     }
 
     suspend fun delete(call: ApplicationCall, tagName: TagName) {

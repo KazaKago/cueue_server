@@ -3,19 +3,36 @@ package com.kazakago.cooking_planner.repository
 import com.kazakago.cooking_planner.database.entity.RecipeEntity
 import com.kazakago.cooking_planner.database.entity.TagEntity
 import com.kazakago.cooking_planner.database.setting.DbSettings
+import com.kazakago.cooking_planner.database.table.RecipesTable
 import com.kazakago.cooking_planner.database.table.TagsTable
 import com.kazakago.cooking_planner.mapper.RecipeTagsMapper
 import com.kazakago.cooking_planner.model.RecipeId
 import com.kazakago.cooking_planner.model.RecipeRegistrationData
 import com.kazakago.cooking_planner.model.RecipeTags
+import com.kazakago.cooking_planner.model.TagName
+import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.emptySized
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
 class RecipeRepository(private val recipeTagsMapper: RecipeTagsMapper) {
 
-    suspend fun getRecipeTagsList(): List<RecipeTags> {
+    suspend fun getRecipeTagsList(afterId: RecipeId?, tagName: TagName?): List<RecipeTags> {
         return newSuspendedTransaction(db = DbSettings.db) {
-            val recipes = RecipeEntity.all()
-            recipes.map { recipeTagsMapper.toModel(it) }
+            val recipes = if (tagName != null) {
+                val tag = TagEntity.find { TagsTable.name eq tagName.value }.firstOrNull()
+                tag?.recipes ?: emptySized()
+            } else {
+                RecipeEntity.all()
+            }.apply {
+                orderBy(RecipesTable.id to SortOrder.DESC)
+            }
+            val offset = if (afterId != null) {
+                recipes.indexOfFirst { it.id.value == afterId.value }.toLong() + 1
+            } else {
+                0
+            }
+            recipes.limit(20, offset)
+                .map { recipeTagsMapper.toModel(it) }
         }
     }
 

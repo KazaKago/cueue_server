@@ -2,27 +2,35 @@ package com.kazakago.cooking_planner.route
 
 import io.ktor.features.*
 import io.ktor.http.*
-import io.ktor.util.*
 
-inline fun Parameters.getAsInt(name: String, block: (parameter: Int) -> Unit) {
-    val parameter = try {
-        getOrFail(name).toInt()
+fun Parameters.getInt(name: String): Int {
+    return getIntOrNull(name) ?: throw MissingRequestParameterException(name)
+}
+
+fun Parameters.getIntOrNull(name: String): Int? {
+    return try {
+        get(name)?.toInt()
     } catch (exception: NumberFormatException) {
         throw MissingRequestParameterException(name)
     }
-    block(parameter)
 }
 
-inline fun Parameters.getAsLong(name: String, block: (parameter: Long) -> Unit) {
-    val parameter = try {
-        getOrFail(name).toLong()
+fun Parameters.getLong(name: String): Long {
+    return getLongOrNull(name) ?: throw MissingRequestParameterException(name)
+}
+
+fun Parameters.getLongOrNull(name: String): Long? {
+    return try {
+        get(name)?.toLong()
     } catch (exception: NumberFormatException) {
         throw MissingRequestParameterException(name)
     }
-    block(parameter)
 }
 
-inline fun Parameters.getAsString(name: String, block: (parameter: String) -> Unit) {
-    val parameter = getOrFail(name)
-    block(parameter)
+fun Parameters.getString(name: String): String {
+    return getStringOrNull(name) ?: throw MissingRequestParameterException(name)
+}
+
+fun Parameters.getStringOrNull(name: String): String? {
+    return get(name)
 }

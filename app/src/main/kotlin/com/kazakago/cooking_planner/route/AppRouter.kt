@@ -18,41 +18,80 @@ fun Application.appRouting() {
     val userController = UserController(UserRepository(UserMapper()))
     val recipesController = RecipesController(RecipeRepository(RecipeTagsMapper(TagMapper())))
     val recipeController = RecipeController(RecipeRepository(RecipeTagsMapper(TagMapper())))
-    val tagsController = TagsController(TagRepository(TagMapper(), TagRecipesMapper(RecipeMapper())))
-    val tagController = TagController(TagRepository(TagMapper(), TagRecipesMapper(RecipeMapper())))
+    val tagsController = TagsController(TagRepository(TagMapper()))
+    val tagController = TagController(TagRepository(TagMapper()))
     val menusController = MenusController(MenuRepository(MenuRecipesMapper(TimeFrameMapper(), RecipeMapper())))
     val menuController = MenuController(MenuRepository(MenuRecipesMapper(TimeFrameMapper(), RecipeMapper())))
     routing {
         route("/") {
-            get { rootController.index(call) }
+            get {
+                rootController.index(call)
+            }
         }
         route("/users") {
-            get { userController.index(call) }
-            post { userController.create(call) }
+            get {
+                userController.index(call)
+            }
+            post {
+                userController.create(call)
+            }
         }
         route("/recipes") {
-            get { recipesController.index(call) }
-            post { recipesController.create(call, call.receive()) }
+            get {
+                val afterId = call.request.queryParameters.getLongOrNull("after_id")?.let { RecipeId(it) }
+                val tagName = call.request.queryParameters.getStringOrNull("tag_name")?.let { TagName(it) }
+                recipesController.index(call, afterId, tagName)
+            }
+            post {
+                recipesController.create(call, call.receive())
+            }
         }
         route("/recipes/{id}") {
-            get { call.parameters.getAsLong("id") { recipeController.index(call, RecipeId(it)) } }
-            delete { call.parameters.getAsLong("id") { recipeController.delete(call, RecipeId(it)) } }
+            get {
+                val recipeId = call.parameters.getLong("id").let { RecipeId(it) }
+                recipeController.index(call, recipeId)
+            }
+            delete {
+                val recipeId = call.parameters.getLong("id").let { RecipeId(it) }
+                recipeController.delete(call, recipeId)
+            }
         }
         route("/tags") {
-            get { tagsController.index(call) }
-            post { tagsController.create(call, call.receive()) }
+            get {
+                tagsController.index(call)
+            }
+            post {
+                tagsController.create(call, call.receive())
+            }
         }
         route("/tags/{name}") {
-            get { call.parameters.getAsString("name") { tagController.index(call, TagName(it)) } }
-            delete { call.parameters.getAsString("name") { tagController.delete(call, TagName(it)) } }
+            get {
+                val tagName = call.parameters.getString("name").let { TagName(it) }
+                tagController.index(call, tagName)
+            }
+            delete {
+                val tagName = call.parameters.getString("name").let { TagName(it) }
+                tagController.delete(call, tagName)
+            }
         }
         route("/menus") {
-            get { menusController.index(call) }
-            post { menusController.create(call, call.receive()) }
+            get {
+                val afterId = call.request.queryParameters.getLongOrNull("after_id")?.let { MenuId(it) }
+                menusController.index(call, afterId)
+            }
+            post {
+                menusController.create(call, call.receive())
+            }
         }
         route("/menus/{id}") {
-            get { call.parameters.getAsLong("id") { menuController.index(call, MenuId(it)) } }
-            delete { call.parameters.getAsLong("id") { menuController.delete(call, MenuId(it)) } }
+            get {
+                val menuId = call.parameters.getLong("id").let { MenuId(it) }
+                menuController.index(call, menuId)
+            }
+            delete {
+                val menuId = call.parameters.getLong("id").let { MenuId(it) }
+                menuController.delete(call, menuId)
+            }
         }
     }
 }

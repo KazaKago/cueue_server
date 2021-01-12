@@ -12,8 +12,8 @@ class ErrorController {
         when (exception) {
             is NoSuchElementException -> call.respond(HttpStatusCode.NotFound)
             is EntityDuplicateException -> call.respond(HttpStatusCode.Conflict)
-            is IllegalArgumentException -> call.respond(HttpStatusCode.BadRequest)
             is MissingRequestParameterException -> call.respond(HttpStatusCode.BadRequest)
+            else -> throw exception
         }
     }
 }
