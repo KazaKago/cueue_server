@@ -13,8 +13,16 @@ suspend inline fun <reified T : Any> ApplicationCall.receiveOrThrow(): T {
     }
 }
 
+fun <T> Parameters.getInt(name: String, transform: ((param: Int) -> T)): T {
+    return transform(getInt(name))
+}
+
 fun Parameters.getInt(name: String): Int {
     return getIntOrNull(name) ?: throw MissingRequestParameterException(name)
+}
+
+fun <T> Parameters.getIntOrNull(name: String, transform: ((param: Int) -> T)): T? {
+    return getIntOrNull(name)?.let { transform(it) }
 }
 
 fun Parameters.getIntOrNull(name: String): Int? {
@@ -25,8 +33,16 @@ fun Parameters.getIntOrNull(name: String): Int? {
     }
 }
 
+fun <T> Parameters.getLong(name: String, transform: ((param: Long) -> T)): T {
+    return transform(getLong(name))
+}
+
 fun Parameters.getLong(name: String): Long {
     return getLongOrNull(name) ?: throw MissingRequestParameterException(name)
+}
+
+fun <T> Parameters.getLongOrNull(name: String, transform: ((param: Long) -> T)): T? {
+    return getLongOrNull(name)?.let { transform(it) }
 }
 
 fun Parameters.getLongOrNull(name: String): Long? {
@@ -37,8 +53,16 @@ fun Parameters.getLongOrNull(name: String): Long? {
     }
 }
 
+fun <T> Parameters.getString(name: String, transform: ((param: String) -> T)): T {
+    return transform(getString(name))
+}
+
 fun Parameters.getString(name: String): String {
     return getStringOrNull(name) ?: throw MissingRequestParameterException(name)
+}
+
+fun <T> Parameters.getStringOrNull(name: String, transform: ((param: String) -> T)): T? {
+    return getStringOrNull(name)?.let { transform(it) }
 }
 
 fun Parameters.getStringOrNull(name: String): String? {
