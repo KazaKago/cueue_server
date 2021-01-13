@@ -1,7 +1,7 @@
 package com.kazakago.cooking_planner.repository
 
 import com.kazakago.cooking_planner.database.entity.MenuEntity
-import com.kazakago.cooking_planner.database.entity.RecipeEntity
+import com.kazakago.cooking_planner.database.entity.RecipeSummaryEntity
 import com.kazakago.cooking_planner.database.setting.DbSettings
 import com.kazakago.cooking_planner.database.table.MenusTable
 import com.kazakago.cooking_planner.mapper.MenuMapper
@@ -44,7 +44,7 @@ class MenuRepository(private val menuMapper: MenuMapper) {
                 timeFrame = menu.timeFrame.rawValue()
             }.apply {
                 val rawRecipeIds = menu.recipeIds.map { it.value }
-                recipes = RecipeEntity.forIds(rawRecipeIds)
+                recipes = RecipeSummaryEntity.forIds(rawRecipeIds)
             }
         }
     }
@@ -57,7 +57,7 @@ class MenuRepository(private val menuMapper: MenuMapper) {
                 timeFrame = menu.timeFrame.rawValue()
                 updatedAt = LocalDateTime.now()
                 val rawRecipeIds = menu.recipeIds.map { it.value }
-                recipes = RecipeEntity.forIds(rawRecipeIds)
+                recipes = RecipeSummaryEntity.forIds(rawRecipeIds)
             }
         }
     }
