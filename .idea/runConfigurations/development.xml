@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="app" type="Application" factoryName="Application">
+  <configuration default="false" name="development" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="io.ktor.server.netty.EngineMain" />
     <module name="cooking_planner_server.app.main" />
     <method v="2">
