@@ -11,6 +11,7 @@ import com.kazakago.cooking_planner.model.MenuId
 import com.kazakago.cooking_planner.model.MenuRegistrationData
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import java.time.LocalDateTime
 
 class MenuRepository(private val menuMapper: MenuMapper) {
 
@@ -30,8 +31,8 @@ class MenuRepository(private val menuMapper: MenuMapper) {
 
     suspend fun getMenu(menuId: MenuId): Menu {
         return newSuspendedTransaction(db = DbSettings.db) {
-            val recipe = MenuEntity[menuId.value]
-            menuMapper.toModel(recipe)
+            val menu = MenuEntity[menuId.value]
+            menuMapper.toModel(menu)
         }
     }
 
@@ -54,6 +55,7 @@ class MenuRepository(private val menuMapper: MenuMapper) {
                 memo = menu.memo
                 date = menu.date
                 timeFrame = menu.timeFrame.rawValue()
+                updatedAt = LocalDateTime.now()
                 val rawRecipeIds = menu.recipeIds.map { it.value }
                 recipes = RecipeEntity.forIds(rawRecipeIds)
             }
@@ -62,8 +64,8 @@ class MenuRepository(private val menuMapper: MenuMapper) {
 
     suspend fun deleteMenu(menuId: MenuId) {
         newSuspendedTransaction(db = DbSettings.db) {
-            val recipe = RecipeEntity.findById(menuId.value) ?: throw NoSuchElementException()
-            recipe.delete()
+            val menu = MenuEntity[menuId.value]
+            menu.delete()
         }
     }
 }

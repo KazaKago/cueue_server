@@ -13,6 +13,7 @@ import com.kazakago.cooking_planner.model.TagName
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.emptySized
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import java.time.LocalDateTime
 
 class RecipeRepository(private val recipeMapper: RecipeMapper) {
 
@@ -60,6 +61,7 @@ class RecipeRepository(private val recipeMapper: RecipeMapper) {
             RecipeEntity[recipeId.value].apply {
                 title = recipe.title
                 description = recipe.description
+                updatedAt = LocalDateTime.now()
                 val rawTagNames = recipe.tagNames.map { it.value }
                 tags = TagEntity.find { TagsTable.name inList rawTagNames }
             }
@@ -68,7 +70,7 @@ class RecipeRepository(private val recipeMapper: RecipeMapper) {
 
     suspend fun deleteRecipe(recipeId: RecipeId) {
         newSuspendedTransaction(db = DbSettings.db) {
-            val recipe = RecipeEntity.findById(recipeId.value) ?: throw NoSuchElementException()
+            val recipe = RecipeEntity[recipeId.value]
             recipe.delete()
         }
     }

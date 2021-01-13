@@ -9,6 +9,7 @@ import com.kazakago.cooking_planner.model.Tag
 import com.kazakago.cooking_planner.model.TagName
 import com.kazakago.cooking_planner.model.TagRegistrationData
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import java.time.LocalDateTime
 
 class TagRepository(private val tagMapper: TagMapper) {
 
@@ -40,6 +41,7 @@ class TagRepository(private val tagMapper: TagMapper) {
         newSuspendedTransaction(db = DbSettings.db) {
             TagEntity.find { TagsTable.name eq tagName.value }.first().apply {
                 name = tag.name.value
+                updatedAt = LocalDateTime.now()
             }
         }
     }

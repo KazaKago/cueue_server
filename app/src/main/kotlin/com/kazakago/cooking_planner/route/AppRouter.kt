@@ -5,6 +5,7 @@ import com.kazakago.cooking_planner.mapper.*
 import com.kazakago.cooking_planner.model.MenuId
 import com.kazakago.cooking_planner.model.RecipeId
 import com.kazakago.cooking_planner.model.TagName
+import com.kazakago.cooking_planner.model.UserId
 import com.kazakago.cooking_planner.repository.MenuRepository
 import com.kazakago.cooking_planner.repository.RecipeRepository
 import com.kazakago.cooking_planner.repository.TagRepository
@@ -14,7 +15,8 @@ import io.ktor.routing.*
 
 fun Application.appRouting() {
     val rootController = RootController()
-    val userController = UsersController(UserRepository(UserMapper()))
+    val usersController = UsersController(UserRepository(UserMapper()))
+    val userController = UserController(UserRepository(UserMapper()))
     val recipesController = RecipesController(RecipeRepository(RecipeMapper(TagMapper())))
     val recipeController = RecipeController(RecipeRepository(RecipeMapper(TagMapper())))
     val tagsController = TagsController(TagRepository(TagMapper()))
@@ -29,10 +31,24 @@ fun Application.appRouting() {
         }
         route("/users") {
             get {
-                userController.index(call)
+                usersController.index(call)
             }
             post {
-                userController.create(call)
+                usersController.create(call, call.receiveOrThrow())
+            }
+        }
+        route("/users/{id}") {
+            get {
+                val userId = call.parameters.getLong("id").let { UserId(it) }
+                userController.index(call, userId)
+            }
+            patch {
+                val userId = call.parameters.getLong("id").let { UserId(it) }
+                userController.update(call, userId, call.receiveOrThrow())
+            }
+            delete {
+                val userId = call.parameters.getLong("id").let { UserId(it) }
+                userController.delete(call, userId)
             }
         }
         route("/recipes") {
