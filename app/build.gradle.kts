@@ -7,7 +7,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "6.1.0"
 }
 
-group = "com.kazakago.cooking_planner"
+group = "com.kazakago.cueue"
 version = "1.0.0-SNAPSHOT"
 
 application {

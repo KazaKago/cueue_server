@@ -1,2 +1,2 @@
-rootProject.name = "cooking_planner"
+rootProject.name = "cueue"
 include("app")
