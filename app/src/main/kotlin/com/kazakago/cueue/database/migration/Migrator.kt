@@ -8,12 +8,14 @@ object Migrator {
 
     fun execute() {
         transaction {
-            SchemaUtils.create(UsersTable)
             SchemaUtils.create(RecipesTable)
             SchemaUtils.create(TagsTable)
             SchemaUtils.create(RecipeTagsRelationsTable)
             SchemaUtils.create(MenusTable)
             SchemaUtils.create(MenuRecipesRelationsTable)
+            SchemaUtils.create(UsersTable)
+            SchemaUtils.create(WorkspacesTable)
+            SchemaUtils.create(UserWorkspacesRelationsTable)
         }
     }
 }
