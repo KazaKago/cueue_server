@@ -1,6 +1,8 @@
 package com.kazakago.cueue.route
 
+import com.kazakago.cueue.exception.UnauthorizedException
 import io.ktor.application.*
+import io.ktor.auth.*
 import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.request.*
@@ -67,4 +69,12 @@ fun <T> Parameters.getStringOrNull(name: String, transform: ((param: String) -> 
 
 fun Parameters.getStringOrNull(name: String): String? {
     return get(name)
+}
+
+inline fun <reified T : Principal> ApplicationCall.requirePrincipal(): T {
+    return try {
+        principal()!!
+    } catch (exception: Exception) {
+        throw UnauthorizedException()
+    }
 }
