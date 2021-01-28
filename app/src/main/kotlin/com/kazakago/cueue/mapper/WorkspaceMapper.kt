@@ -6,7 +6,7 @@ import com.kazakago.cueue.model.WorkspaceId
 
 class WorkspaceMapper {
 
-    fun toModel(workspace: WorkspaceEntity): Workspace {
+    suspend fun toModel(workspace: WorkspaceEntity): Workspace {
         return Workspace(
             id = WorkspaceId(workspace.id.value),
             name = workspace.name,

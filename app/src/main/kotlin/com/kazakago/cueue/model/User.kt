@@ -7,6 +7,4 @@ import kotlinx.serialization.Serializable
 data class User(
     @SerialName("id")
     val id: UserId,
-    @SerialName("workspace")
-    val workspace: Workspace,
 )

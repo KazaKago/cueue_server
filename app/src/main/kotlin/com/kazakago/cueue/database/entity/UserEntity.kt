@@ -5,6 +5,7 @@ import com.kazakago.cueue.database.table.UsersTable
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
 class UserEntity(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<UserEntity>(UsersTable)
@@ -14,7 +15,9 @@ class UserEntity(id: EntityID<Long>) : LongEntity(id) {
     var updatedAt by UsersTable.updatedAt
     var workspaces by WorkspaceEntity via UserWorkspacesRelationsTable
 
-    fun defaultWorkSpace(): WorkspaceEntity {
-        return workspaces.firstOrNull { it.isDefault() } ?: workspaces.first()
+    suspend fun defaultWorkSpace(): WorkspaceEntity {
+        return newSuspendedTransaction {
+            workspaces.firstOrNull { it.isDefault() } ?: workspaces.first()
+        }
     }
 }

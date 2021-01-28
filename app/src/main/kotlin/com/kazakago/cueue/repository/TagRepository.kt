@@ -1,60 +1,54 @@
 package com.kazakago.cueue.repository
 
 import com.kazakago.cueue.database.entity.TagEntity
+import com.kazakago.cueue.database.entity.WorkspaceEntity
 import com.kazakago.cueue.database.setting.DbSettings
 import com.kazakago.cueue.database.table.TagsTable
 import com.kazakago.cueue.exception.EntityDuplicateException
-import com.kazakago.cueue.mapper.TagMapper
-import com.kazakago.cueue.model.Tag
 import com.kazakago.cueue.model.TagName
 import com.kazakago.cueue.model.TagRegistrationData
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import java.time.LocalDateTime
 
-class TagRepository(private val tagMapper: TagMapper) {
+class TagRepository {
 
-    suspend fun getTags(): List<Tag> {
+    suspend fun getTags(workspace: WorkspaceEntity): List<TagEntity> {
         return newSuspendedTransaction(db = DbSettings.db) {
-            TagEntity.all()
-        }.let {
-            it.map { tag -> tagMapper.toModel(tag) }
+            TagEntity.find { TagsTable.workspaceId eq workspace.id.value }.toList()
         }
     }
 
-    suspend fun getTag(tagName: TagName): Tag {
+    suspend fun getTag(workspace: WorkspaceEntity, tagName: TagName): TagEntity {
         return newSuspendedTransaction(db = DbSettings.db) {
-            TagEntity.find { TagsTable.name eq tagName.value }.first()
-        }.let {
-            tagMapper.toModel(it)
+            TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.name eq tagName.value) }.first()
         }
     }
 
-    suspend fun createTag(tag: TagRegistrationData): Tag {
+    suspend fun createTag(workspace: WorkspaceEntity, tag: TagRegistrationData): TagEntity {
         return newSuspendedTransaction(db = DbSettings.db) {
-            val existingTag = TagEntity.find { TagsTable.name eq tag.name.value }
+            val existingTag = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.name eq tag.name.value) }
             if (!existingTag.empty()) throw EntityDuplicateException()
             TagEntity.new {
-                name = tag.name.value
+                this.name = tag.name.value
+                this.workspace = workspace
             }
-        }.let {
-            tagMapper.toModel(it)
         }
     }
 
-    suspend fun updateTag(tagName: TagName, tag: TagRegistrationData) {
+    suspend fun updateTag(workspace: WorkspaceEntity, tagName: TagName, tag: TagRegistrationData): TagEntity {
         return newSuspendedTransaction(db = DbSettings.db) {
-            TagEntity.find { TagsTable.name eq tagName.value }.first().apply {
-                name = tag.name.value
-                updatedAt = LocalDateTime.now()
+            TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.name eq tagName.value) }.first().apply {
+                this.name = tag.name.value
+                this.workspace = workspace
+                this.updatedAt = LocalDateTime.now()
             }
-        }.let {
-            tagMapper.toModel(it)
         }
     }
 
-    suspend fun deleteTag(tagName: TagName) {
+    suspend fun deleteTag(workspace: WorkspaceEntity, tagName: TagName) {
         newSuspendedTransaction(db = DbSettings.db) {
-            val tags = TagEntity.find { TagsTable.name eq tagName.value }
+            val tags = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.name eq tagName.value) }
             if (tags.empty()) throw NoSuchElementException()
             tags.map { it.delete() }
         }

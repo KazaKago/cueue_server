@@ -14,6 +14,7 @@ class RecipeEntity(id: EntityID<Long>) : LongEntity(id) {
     var description by RecipesTable.description
     var createdAt by RecipesTable.createdAt
     var updatedAt by RecipesTable.updatedAt
+    var workspace by WorkspaceEntity referencedOn RecipesTable.workspaceId
     var tags by TagEntity via RecipeTagsRelationsTable
     var menus by MenuEntity via MenuRecipesRelationsTable
 }

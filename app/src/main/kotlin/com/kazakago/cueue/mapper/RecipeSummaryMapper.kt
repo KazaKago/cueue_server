@@ -6,7 +6,7 @@ import com.kazakago.cueue.model.RecipeSummary
 
 class RecipeSummaryMapper {
 
-    fun toModel(recipe: RecipeSummaryEntity): RecipeSummary {
+    suspend fun toModel(recipe: RecipeSummaryEntity): RecipeSummary {
         return RecipeSummary(
             id = RecipeId(recipe.id.value),
             title = recipe.title,

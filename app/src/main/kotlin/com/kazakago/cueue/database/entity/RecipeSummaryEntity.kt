@@ -10,4 +10,5 @@ class RecipeSummaryEntity(id: EntityID<Long>) : LongEntity(id) {
 
     var title by RecipesTable.title
     var description by RecipesTable.description
+    var workspace by WorkspaceEntity referencedOn RecipesTable.workspaceId
 }

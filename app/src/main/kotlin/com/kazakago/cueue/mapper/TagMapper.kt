@@ -6,7 +6,7 @@ import com.kazakago.cueue.model.TagName
 
 class TagMapper {
 
-    fun toModel(tag: TagEntity): Tag {
+    suspend fun toModel(tag: TagEntity): Tag {
         return Tag(
             name = TagName(tag.name),
         )

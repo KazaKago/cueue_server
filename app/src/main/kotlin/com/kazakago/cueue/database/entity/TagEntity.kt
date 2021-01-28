@@ -12,5 +12,6 @@ class TagEntity(id: EntityID<Long>) : LongEntity(id) {
     var name by TagsTable.name
     var createdAt by TagsTable.createdAt
     var updatedAt by TagsTable.updatedAt
+    var workspace by WorkspaceEntity referencedOn TagsTable.workspaceId
     var recipes by RecipeEntity via RecipeTagsRelationsTable
 }
