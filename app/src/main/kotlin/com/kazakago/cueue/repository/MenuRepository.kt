@@ -25,19 +25,21 @@ class MenuRepository(private val menuMapper: MenuMapper) {
                 0
             }
             menus.limit(20, offset)
-                .map { menuMapper.toModel(it) }
+        }.map {
+            menuMapper.toModel(it)
         }
     }
 
     suspend fun getMenu(menuId: MenuId): Menu {
         return newSuspendedTransaction(db = DbSettings.db) {
-            val menu = MenuEntity[menuId.value]
-            menuMapper.toModel(menu)
+            MenuEntity[menuId.value]
+        }.let {
+            menuMapper.toModel(it)
         }
     }
 
-    suspend fun createMenu(menu: MenuRegistrationData) {
-        newSuspendedTransaction(db = DbSettings.db) {
+    suspend fun createMenu(menu: MenuRegistrationData): Menu {
+        return newSuspendedTransaction(db = DbSettings.db) {
             MenuEntity.new {
                 memo = menu.memo
                 date = menu.date
@@ -46,11 +48,13 @@ class MenuRepository(private val menuMapper: MenuMapper) {
                 val rawRecipeIds = menu.recipeIds.map { it.value }
                 recipes = RecipeSummaryEntity.forIds(rawRecipeIds)
             }
+        }.let {
+            menuMapper.toModel(it)
         }
     }
 
-    suspend fun updateMenu(menuId: MenuId, menu: MenuRegistrationData) {
-        newSuspendedTransaction(db = DbSettings.db) {
+    suspend fun updateMenu(menuId: MenuId, menu: MenuRegistrationData): Menu {
+        return newSuspendedTransaction(db = DbSettings.db) {
             MenuEntity[menuId.value].apply {
                 memo = menu.memo
                 date = menu.date
@@ -59,6 +63,8 @@ class MenuRepository(private val menuMapper: MenuMapper) {
                 val rawRecipeIds = menu.recipeIds.map { it.value }
                 recipes = RecipeSummaryEntity.forIds(rawRecipeIds)
             }
+        }.let {
+            menuMapper.toModel(it)
         }
     }
 

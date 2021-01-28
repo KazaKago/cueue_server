@@ -2,52 +2,34 @@ package com.kazakago.cueue.repository
 
 import com.kazakago.cueue.database.entity.UserEntity
 import com.kazakago.cueue.database.setting.DbSettings
+import com.kazakago.cueue.database.table.UsersTable
 import com.kazakago.cueue.mapper.UserMapper
+import com.kazakago.cueue.model.UID
 import com.kazakago.cueue.model.User
-import com.kazakago.cueue.model.UserId
-import com.kazakago.cueue.model.UserRegistrationData
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
-import java.time.LocalDateTime
 
 class UserRepository(private val userMapper: UserMapper) {
 
-    suspend fun getUsers(): List<User> {
+    suspend fun getUser(uid: UID): User {
         return newSuspendedTransaction(db = DbSettings.db) {
-            val users = UserEntity.all()
-            users.map { userMapper.toModel(it) }
-        }
-    }
-
-    suspend fun getUser(userId: UserId): User {
-        return newSuspendedTransaction(db = DbSettings.db) {
-            val user = UserEntity[userId.value]
+            val user = UserEntity.find { UsersTable.uid eq uid.value }.first()
             userMapper.toModel(user)
         }
     }
 
-    suspend fun createUser(user: UserRegistrationData) {
-        newSuspendedTransaction(db = DbSettings.db) {
+    suspend fun existUser(uid: UID): Boolean {
+        return newSuspendedTransaction(db = DbSettings.db) {
+            UserEntity.find { UsersTable.uid eq uid.value }.empty().not()
+        }
+    }
+
+    suspend fun createUser(_uid: UID): User {
+        return newSuspendedTransaction(db = DbSettings.db) {
             UserEntity.new {
-                email = user.email.value
-                nickname = user.nickname
+                uid = _uid.value
             }
-        }
-    }
-
-    suspend fun updateUser(userId: UserId, user: UserRegistrationData) {
-        newSuspendedTransaction(db = DbSettings.db) {
-            UserEntity[userId.value].apply {
-                email = user.email.value
-                nickname = user.nickname
-                updatedAt = LocalDateTime.now()
-            }
-        }
-    }
-
-    suspend fun deleteUser(userId: UserId) {
-        newSuspendedTransaction(db = DbSettings.db) {
-            val user = UserEntity[userId.value]
-            user.delete()
+        }.let {
+            userMapper.toModel(it)
         }
     }
 }

@@ -13,4 +13,8 @@ class WorkspaceEntity(id: EntityID<Long>) : LongEntity(id) {
     var createdAt by WorkspacesTable.createdAt
     var updatedAt by WorkspacesTable.updatedAt
     var users by UserEntity via UserWorkspacesRelationsTable
+
+    fun isDefault(): Boolean {
+        return name == WorkspacesTable.DEFAULT_NAME
+    }
 }

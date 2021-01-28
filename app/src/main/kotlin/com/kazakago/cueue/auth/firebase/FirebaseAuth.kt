@@ -4,6 +4,7 @@ import com.google.firebase.ErrorCode
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
+import com.google.firebase.auth.FirebaseToken
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.http.*
@@ -13,13 +14,13 @@ import io.ktor.response.*
 class FirebaseAuthenticationProvider internal constructor(config: Configuration) : AuthenticationProvider(config) {
 
     internal val token: (ApplicationCall) -> String? = config.token
-    internal val principle: ((uid: String) -> Principal?)? = config.principal
+    internal val principle: ((verifiedToken: FirebaseToken) -> Principal?)? = config.principal
 
     class Configuration internal constructor(name: String?) : AuthenticationProvider.Configuration(name) {
 
         internal var token: (ApplicationCall) -> String? = { call -> call.request.parseAuthorizationToken() }
 
-        internal var principal: ((uid: String) -> Principal?)? = null
+        internal var principal: ((verifiedToken: FirebaseToken) -> Principal?)? = null
 
         internal fun build() = FirebaseAuthenticationProvider(this)
     }
@@ -30,8 +31,8 @@ fun Authentication.Configuration.firebase(name: String? = null, configure: Fireb
     provider.pipeline.intercept(AuthenticationPipeline.RequestAuthentication) { context ->
         try {
             val token = provider.token(call) ?: throw FirebaseAuthException(FirebaseException(ErrorCode.UNAUTHENTICATED, "No token could be found", null))
-            val uid = FirebaseAuth.getInstance().verifyIdToken(token).uid
-            provider.principle?.let { it.invoke(uid)?.let { principle -> context.principal(principle) } }
+            val verifiedToken = FirebaseAuth.getInstance().verifyIdToken(token)
+            provider.principle?.let { it.invoke(verifiedToken)?.let { principle -> context.principal(principle) } }
         } catch (cause: Throwable) {
             val message = if (cause is FirebaseAuthException) {
                 "Authentication failed: ${cause.message ?: cause.javaClass.simpleName}"
@@ -46,6 +47,6 @@ fun Authentication.Configuration.firebase(name: String? = null, configure: Fireb
     register(provider)
 }
 
-fun ApplicationRequest.parseAuthorizationToken(): String? = authorization()?.let {
+private fun ApplicationRequest.parseAuthorizationToken(): String? = authorization()?.let {
     it.split(" ")[1]
 }

@@ -15,34 +15,40 @@ class TagRepository(private val tagMapper: TagMapper) {
 
     suspend fun getTags(): List<Tag> {
         return newSuspendedTransaction(db = DbSettings.db) {
-            val tag = TagEntity.all()
-            tag.map { tagMapper.toModel(it) }
+            TagEntity.all()
+        }.let {
+            it.map { tag -> tagMapper.toModel(tag) }
         }
     }
 
     suspend fun getTag(tagName: TagName): Tag {
         return newSuspendedTransaction(db = DbSettings.db) {
-            val tag = TagEntity.find { TagsTable.name eq tagName.value }.first()
-            tagMapper.toModel(tag)
+            TagEntity.find { TagsTable.name eq tagName.value }.first()
+        }.let {
+            tagMapper.toModel(it)
         }
     }
 
-    suspend fun createTag(tag: TagRegistrationData) {
-        newSuspendedTransaction(db = DbSettings.db) {
+    suspend fun createTag(tag: TagRegistrationData): Tag {
+        return newSuspendedTransaction(db = DbSettings.db) {
             val existingTag = TagEntity.find { TagsTable.name eq tag.name.value }
             if (!existingTag.empty()) throw EntityDuplicateException()
             TagEntity.new {
                 name = tag.name.value
             }
+        }.let {
+            tagMapper.toModel(it)
         }
     }
 
     suspend fun updateTag(tagName: TagName, tag: TagRegistrationData) {
-        newSuspendedTransaction(db = DbSettings.db) {
+        return newSuspendedTransaction(db = DbSettings.db) {
             TagEntity.find { TagsTable.name eq tagName.value }.first().apply {
                 name = tag.name.value
                 updatedAt = LocalDateTime.now()
             }
+        }.let {
+            tagMapper.toModel(it)
         }
     }
 

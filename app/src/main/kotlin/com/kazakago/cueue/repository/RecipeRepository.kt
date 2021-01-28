@@ -33,19 +33,21 @@ class RecipeRepository(private val recipeMapper: RecipeMapper) {
                 0
             }
             recipes.limit(20, offset)
-                .map { recipeMapper.toModel(it) }
+        }.map {
+            recipeMapper.toModel(it)
         }
     }
 
     suspend fun getRecipe(recipeId: RecipeId): Recipe {
         return newSuspendedTransaction(db = DbSettings.db) {
-            val recipe = RecipeEntity[recipeId.value]
-            recipeMapper.toModel(recipe)
+            RecipeEntity[recipeId.value]
+        }.let {
+            recipeMapper.toModel(it)
         }
     }
 
-    suspend fun createRecipe(recipe: RecipeRegistrationData) {
-        newSuspendedTransaction(db = DbSettings.db) {
+    suspend fun createRecipe(recipe: RecipeRegistrationData): Recipe {
+        return newSuspendedTransaction(db = DbSettings.db) {
             RecipeEntity.new {
                 title = recipe.title
                 description = recipe.description
@@ -53,11 +55,13 @@ class RecipeRepository(private val recipeMapper: RecipeMapper) {
                 val rawTagNames = recipe.tagNames.map { it.value }
                 tags = TagEntity.find { TagsTable.name inList rawTagNames }
             }
+        }.let {
+            recipeMapper.toModel(it)
         }
     }
 
-    suspend fun updateRecipe(recipeId: RecipeId, recipe: RecipeRegistrationData) {
-        newSuspendedTransaction(db = DbSettings.db) {
+    suspend fun updateRecipe(recipeId: RecipeId, recipe: RecipeRegistrationData): Recipe {
+        return newSuspendedTransaction(db = DbSettings.db) {
             RecipeEntity[recipeId.value].apply {
                 title = recipe.title
                 description = recipe.description
@@ -65,6 +69,8 @@ class RecipeRepository(private val recipeMapper: RecipeMapper) {
                 val rawTagNames = recipe.tagNames.map { it.value }
                 tags = TagEntity.find { TagsTable.name inList rawTagNames }
             }
+        }.let {
+            recipeMapper.toModel(it)
         }
     }
 
