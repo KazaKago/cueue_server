@@ -1,12 +1,12 @@
 package com.kazakago.cueue.mapper
 
-import com.kazakago.cueue.database.entity.RecipeSummaryEntity
+import com.kazakago.cueue.database.entity.RecipeEntity
 import com.kazakago.cueue.model.RecipeId
 import com.kazakago.cueue.model.RecipeSummary
 
 class RecipeSummaryMapper {
 
-    suspend fun toModel(recipe: RecipeSummaryEntity): RecipeSummary {
+    fun toModel(recipe: RecipeEntity): RecipeSummary {
         return RecipeSummary(
             id = RecipeId(recipe.id.value),
             title = recipe.title,

@@ -1,10 +1,11 @@
 package com.kazakago.cueue.repository
 
 import com.kazakago.cueue.database.entity.MenuEntity
-import com.kazakago.cueue.database.entity.RecipeSummaryEntity
+import com.kazakago.cueue.database.entity.RecipeEntity
 import com.kazakago.cueue.database.entity.WorkspaceEntity
 import com.kazakago.cueue.database.setting.DbSettings
 import com.kazakago.cueue.database.table.MenusTable
+import com.kazakago.cueue.database.table.RecipesTable
 import com.kazakago.cueue.mapper.rawValue
 import com.kazakago.cueue.model.MenuId
 import com.kazakago.cueue.model.MenuRegistrationData
@@ -43,7 +44,7 @@ class MenuRepository {
                 this.workspace = workspace
             }.apply {
                 val rawRecipeIds = menu.recipeIds.map { it.value }
-                this.recipes = RecipeSummaryEntity.forIds(rawRecipeIds)
+                this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id inList rawRecipeIds) }
             }
         }
     }
@@ -57,7 +58,7 @@ class MenuRepository {
                 this.updatedAt = LocalDateTime.now()
                 this.workspace = workspace
                 val rawRecipeIds = menu.recipeIds.map { it.value }
-                this.recipes = RecipeSummaryEntity.forIds(rawRecipeIds)
+                this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id inList rawRecipeIds) }
             }
         }
     }

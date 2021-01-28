@@ -4,7 +4,7 @@ import com.kazakago.cueue.model.TimeFrame
 
 class TimeFrameMapper {
 
-    suspend fun toModel(timeFrame: String): TimeFrame {
+    fun toModel(timeFrame: String): TimeFrame {
         return TimeFrame.values().first { it.rawValue() == timeFrame }
     }
 }

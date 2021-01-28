@@ -50,7 +50,7 @@ class RecipeRepository {
                 this.workspace = workspace
             }.apply {
                 val rawTagNames = recipe.tagNames.map { it.value }
-                this.tags = TagEntity.find { TagsTable.name inList rawTagNames }
+                this.tags = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.name inList rawTagNames) }
             }
         }
     }
@@ -63,7 +63,7 @@ class RecipeRepository {
                 this.updatedAt = LocalDateTime.now()
                 this.workspace = workspace
                 val rawTagNames = recipe.tagNames.map { it.value }
-                this.tags = TagEntity.find { TagsTable.name inList rawTagNames }
+                this.tags = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.name inList rawTagNames) }
             }
         }
     }
