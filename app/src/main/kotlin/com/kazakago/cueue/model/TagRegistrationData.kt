@@ -7,4 +7,6 @@ import kotlinx.serialization.Serializable
 data class TagRegistrationData(
     @SerialName("name")
     val name: TagName,
+    @SerialName("recipe_ids")
+    val recipeIds: List<RecipeId> = emptyList(),
 )

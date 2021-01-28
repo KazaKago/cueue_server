@@ -1,12 +1,16 @@
 package com.kazakago.cueue.repository
 
+import com.kazakago.cueue.database.entity.RecipeEntity
 import com.kazakago.cueue.database.entity.TagEntity
 import com.kazakago.cueue.database.entity.WorkspaceEntity
 import com.kazakago.cueue.database.setting.DbSettings
+import com.kazakago.cueue.database.table.RecipesTable
 import com.kazakago.cueue.database.table.TagsTable
 import com.kazakago.cueue.exception.EntityDuplicateException
 import com.kazakago.cueue.model.TagName
 import com.kazakago.cueue.model.TagRegistrationData
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import java.time.LocalDateTime
@@ -32,6 +36,9 @@ class TagRepository {
             TagEntity.new {
                 this.name = tag.name.value
                 this.workspace = workspace
+            }.apply {
+                val rawRecipeIds = tag.recipeIds.map { it.value }
+                this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id inList rawRecipeIds) }
             }
         }
     }
@@ -42,6 +49,8 @@ class TagRepository {
                 this.name = tag.name.value
                 this.workspace = workspace
                 this.updatedAt = LocalDateTime.now()
+                val rawRecipeIds = tag.recipeIds.map { it.value }
+                this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id inList rawRecipeIds) }
             }
         }
     }

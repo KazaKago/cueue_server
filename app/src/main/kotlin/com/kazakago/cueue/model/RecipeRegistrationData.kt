@@ -10,5 +10,5 @@ data class RecipeRegistrationData(
     @SerialName("description")
     val description: String,
     @SerialName("tag_names")
-    val tagNames: List<TagName>,
+    val tagNames: List<TagName> = emptyList(),
 )

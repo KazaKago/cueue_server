@@ -14,5 +14,5 @@ data class MenuRegistrationData(
     @SerialName("time_frame")
     val timeFrame: TimeFrame,
     @SerialName("recipe_ids")
-    val recipeIds: List<RecipeId>,
+    val recipeIds: List<RecipeId> = emptyList(),
 )
