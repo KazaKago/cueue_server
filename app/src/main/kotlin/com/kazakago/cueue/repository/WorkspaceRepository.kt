@@ -4,6 +4,8 @@ import com.kazakago.cueue.database.entity.UserEntity
 import com.kazakago.cueue.database.entity.WorkspaceEntity
 import com.kazakago.cueue.database.setting.DbSettings
 import com.kazakago.cueue.database.table.WorkspacesTable
+import com.kazakago.cueue.mapper.rawValue
+import com.kazakago.cueue.model.WorkspaceType
 import org.jetbrains.exposed.sql.SizedCollection
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
@@ -13,7 +15,7 @@ class WorkspaceRepository {
         return newSuspendedTransaction(db = DbSettings.db) {
             WorkspaceEntity.new {
                 this.name = WorkspacesTable.PERSONAL_DEFAULT_NAME
-                this.isPersonal = true
+                this.type = WorkspaceType.Personal.rawValue()
             }.apply {
                 this.users = SizedCollection(user)
             }

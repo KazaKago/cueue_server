@@ -17,7 +17,7 @@ class UserEntity(id: EntityID<Long>) : LongEntity(id) {
 
     suspend fun personalWorkSpace(): WorkspaceEntity {
         return newSuspendedTransaction {
-            workspaces.first { it.isPersonal }
+            workspaces.first { it.isPersonal() }
         }
     }
 }

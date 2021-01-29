@@ -8,7 +8,7 @@ object WorkspacesTable : LongIdTable() {
     const val PERSONAL_DEFAULT_NAME = "personal"
 
     val name = text("name")
-    val isPersonal = bool("is_personal")
+    val type = text("type")
     val createdAt = datetime("created_at").clientDefault { LocalDateTime.now() }
     val updatedAt = datetime("updated_at").clientDefault { LocalDateTime.now() }
 }
