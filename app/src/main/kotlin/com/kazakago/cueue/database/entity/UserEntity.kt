@@ -15,9 +15,9 @@ class UserEntity(id: EntityID<Long>) : LongEntity(id) {
     var updatedAt by UsersTable.updatedAt
     var workspaces by WorkspaceEntity via UserWorkspacesRelationsTable
 
-    suspend fun defaultWorkSpace(): WorkspaceEntity {
+    suspend fun personalWorkSpace(): WorkspaceEntity {
         return newSuspendedTransaction {
-            workspaces.firstOrNull { it.isDefault() } ?: workspaces.first()
+            workspaces.first { it.isPersonal }
         }
     }
 }

@@ -12,7 +12,7 @@ class UsersController(private val userRepository: UserRepository, private val wo
     suspend fun create(call: ApplicationCall, firebaseUser: FirebaseUser) {
         if (!userRepository.existUser(firebaseUser.uid)) {
             val user = userRepository.createUser(firebaseUser.uid)
-            workspaceRepository.createWorkspace(user)
+            workspaceRepository.createPersonalWorkspace(user)
             call.respond(HttpStatusCode.Created)
         } else {
             call.respond(HttpStatusCode.OK)

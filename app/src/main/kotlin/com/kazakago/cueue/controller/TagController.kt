@@ -14,19 +14,19 @@ class TagController(private val userRepository: UserRepository, private val tagR
 
     suspend fun index(call: ApplicationCall, firebaseUser: FirebaseUser, tagName: TagName) {
         val user = userRepository.getUser(firebaseUser.uid)
-        val tag = tagRepository.getTag(user.defaultWorkSpace(), tagName)
+        val tag = tagRepository.getTag(user.personalWorkSpace(), tagName)
         call.respond(HttpStatusCode.OK, tagMapper.toModel(tag))
     }
 
     suspend fun update(call: ApplicationCall, firebaseUser: FirebaseUser, tagName: TagName, tag: TagRegistrationData) {
         val user = userRepository.getUser(firebaseUser.uid)
-        tagRepository.updateTag(user.defaultWorkSpace(), tagName, tag)
+        tagRepository.updateTag(user.personalWorkSpace(), tagName, tag)
         call.respond(HttpStatusCode.NoContent)
     }
 
     suspend fun delete(call: ApplicationCall, firebaseUser: FirebaseUser, tagName: TagName) {
         val user = userRepository.getUser(firebaseUser.uid)
-        tagRepository.deleteTag(user.defaultWorkSpace(), tagName)
+        tagRepository.deleteTag(user.personalWorkSpace(), tagName)
         call.respond(HttpStatusCode.NoContent)
     }
 }

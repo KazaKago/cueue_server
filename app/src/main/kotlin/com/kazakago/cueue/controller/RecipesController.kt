@@ -15,13 +15,13 @@ class RecipesController(private val userRepository: UserRepository, private val 
 
     suspend fun index(call: ApplicationCall, firebaseUser: FirebaseUser, afterId: RecipeId?, tagName: TagName?) {
         val user = userRepository.getUser(firebaseUser.uid)
-        val recipes = recipeRepository.getRecipes(user.defaultWorkSpace(), afterId, tagName)
+        val recipes = recipeRepository.getRecipes(user.personalWorkSpace(), afterId, tagName)
         call.respond(HttpStatusCode.OK, recipes.map { recipeMapper.toModel(it) })
     }
 
     suspend fun create(call: ApplicationCall, firebaseUser: FirebaseUser, recipe: RecipeRegistrationData) {
         val user = userRepository.getUser(firebaseUser.uid)
-        recipeRepository.createRecipe(user.defaultWorkSpace(), recipe)
+        recipeRepository.createRecipe(user.personalWorkSpace(), recipe)
         call.respond(HttpStatusCode.Created)
     }
 }
