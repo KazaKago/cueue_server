@@ -1,24 +1,23 @@
 package com.kazakago.cueue.route
 
 import com.kazakago.cueue.controller.*
-import com.kazakago.cueue.mapper.*
 import com.kazakago.cueue.model.MenuId
 import com.kazakago.cueue.model.RecipeId
 import com.kazakago.cueue.model.TagName
-import com.kazakago.cueue.repository.*
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.routing.*
+import org.koin.ktor.ext.inject
 
 fun Application.appRouting() {
-    val rootController = RootController()
-    val usersController = UsersController(UserRepository(), WorkspaceRepository())
-    val recipesController = RecipesController(UserRepository(), RecipeRepository(), RecipeMapper(TagMapper()))
-    val recipeController = RecipeController(UserRepository(), RecipeRepository(), RecipeMapper(TagMapper()))
-    val tagsController = TagsController(UserRepository(), TagRepository(), TagMapper())
-    val tagController = TagController(UserRepository(), TagRepository(), TagMapper())
-    val menusController = MenusController(UserRepository(), MenuRepository(), MenuMapper(TimeFrameMapper(), RecipeSummaryMapper()))
-    val menuController = MenuController(UserRepository(), MenuRepository(), MenuMapper(TimeFrameMapper(), RecipeSummaryMapper()))
+    val rootController by inject<RootController>()
+    val usersController by inject<UsersController>()
+    val recipesController by inject<RecipesController>()
+    val recipeController by inject<RecipeController>()
+    val tagsController by inject<TagsController>()
+    val tagController by inject<TagController>()
+    val menusController by inject<MenusController>()
+    val menuController by inject<MenuController>()
     routing {
         route("/") {
             get {

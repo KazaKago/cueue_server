@@ -46,6 +46,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc:0.28.1")
     implementation("org.jetbrains.exposed:exposed-java-time:0.28.1")
     implementation("org.postgresql:postgresql:42.2.18")
+    implementation("org.koin:koin-ktor:2.2.2")
     implementation("com.google.firebase:firebase-admin:7.1.0")
     implementation("ch.qos.logback:logback-classic:1.2.3")
 
