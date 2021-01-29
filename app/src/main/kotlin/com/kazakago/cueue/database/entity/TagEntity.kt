@@ -2,9 +2,11 @@ package com.kazakago.cueue.database.entity
 
 import com.kazakago.cueue.database.table.RecipeTagsRelationsTable
 import com.kazakago.cueue.database.table.TagsTable
+import org.jetbrains.exposed.dao.EntityBatchUpdate
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
+import java.time.LocalDateTime
 
 class TagEntity(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<TagEntity>(TagsTable)
@@ -14,4 +16,9 @@ class TagEntity(id: EntityID<Long>) : LongEntity(id) {
     var updatedAt by TagsTable.updatedAt
     var workspace by WorkspaceEntity referencedOn TagsTable.workspaceId
     var recipes by RecipeEntity via RecipeTagsRelationsTable
+
+    override fun flush(batch: EntityBatchUpdate?): Boolean {
+        updatedAt = LocalDateTime.now()
+        return super.flush(batch)
+    }
 }

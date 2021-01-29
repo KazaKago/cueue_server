@@ -55,7 +55,6 @@ class MenuRepository {
                 this.memo = menu.memo
                 this.date = menu.date
                 this.timeFrame = menu.timeFrame.rawValue()
-                this.updatedAt = LocalDateTime.now()
                 this.workspace = workspace
                 val rawRecipeIds = menu.recipeIds.map { it.value }
                 this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id inList rawRecipeIds) }
