@@ -34,24 +34,24 @@ fun Application.appRouting() {
                 }
                 route("/recipes") {
                     get {
-                        val afterId = call.request.queryParameters.getLongOrNull("after_id") { RecipeId(it) }
-                        val tagName = call.request.queryParameters.getStringOrNull("tag_name") { TagName(it) }
+                        val afterId = call.request.queryParameters.getLong("after_id") { RecipeId(it) }
+                        val tagName = call.request.queryParameters.getString("tag_name") { TagName(it) }
                         recipesController.index(call, call.requirePrincipal(), afterId, tagName)
                     }
                     post {
-                        recipesController.create(call, call.requirePrincipal(), call.receiveOrThrow())
+                        recipesController.create(call, call.requirePrincipal(), call.requireReceive())
                     }
                     route("/{id}") {
                         get {
-                            val recipeId = call.parameters.getLong("id") { RecipeId(it) }
+                            val recipeId = call.parameters.requireLong("id") { RecipeId(it) }
                             recipeController.index(call, call.requirePrincipal(), recipeId)
                         }
                         patch {
-                            val recipeId = call.parameters.getLong("id") { RecipeId(it) }
-                            recipeController.update(call, call.requirePrincipal(), recipeId, call.receiveOrThrow())
+                            val recipeId = call.parameters.requireLong("id") { RecipeId(it) }
+                            recipeController.update(call, call.requirePrincipal(), recipeId, call.requireReceive())
                         }
                         delete {
-                            val recipeId = call.parameters.getLong("id") { RecipeId(it) }
+                            val recipeId = call.parameters.requireLong("id") { RecipeId(it) }
                             recipeController.delete(call, call.requirePrincipal(), recipeId)
                         }
                     }
@@ -61,42 +61,42 @@ fun Application.appRouting() {
                         tagsController.index(call, call.requirePrincipal())
                     }
                     post {
-                        tagsController.create(call, call.requirePrincipal(), call.receiveOrThrow())
+                        tagsController.create(call, call.requirePrincipal(), call.requireReceive())
                     }
                     route("/{name}") {
                         get {
-                            val tagName = call.parameters.getString("name") { TagName(it) }
+                            val tagName = call.parameters.requireString("name") { TagName(it) }
                             tagController.index(call, call.requirePrincipal(), tagName)
                         }
                         patch {
-                            val tagName = call.parameters.getString("name") { TagName(it) }
-                            tagController.update(call, call.requirePrincipal(), tagName, call.receiveOrThrow())
+                            val tagName = call.parameters.requireString("name") { TagName(it) }
+                            tagController.update(call, call.requirePrincipal(), tagName, call.requireReceive())
                         }
                         delete {
-                            val tagName = call.parameters.getString("name") { TagName(it) }
+                            val tagName = call.parameters.requireString("name") { TagName(it) }
                             tagController.delete(call, call.requirePrincipal(), tagName)
                         }
                     }
                 }
                 route("/menus") {
                     get {
-                        val afterId = call.request.queryParameters.getLongOrNull("after_id") { MenuId(it) }
+                        val afterId = call.request.queryParameters.getLong("after_id") { MenuId(it) }
                         menusController.index(call, call.requirePrincipal(), afterId)
                     }
                     post {
-                        menusController.create(call, call.requirePrincipal(), call.receiveOrThrow())
+                        menusController.create(call, call.requirePrincipal(), call.requireReceive())
                     }
                     route("/{id}") {
                         get {
-                            val menuId = call.parameters.getLong("id") { MenuId(it) }
+                            val menuId = call.parameters.requireLong("id") { MenuId(it) }
                             menuController.index(call, call.requirePrincipal(), menuId)
                         }
                         patch {
-                            val menuId = call.parameters.getLong("id") { MenuId(it) }
-                            menuController.update(call, call.requirePrincipal(), menuId, call.receiveOrThrow())
+                            val menuId = call.parameters.requireLong("id") { MenuId(it) }
+                            menuController.update(call, call.requirePrincipal(), menuId, call.requireReceive())
                         }
                         delete {
-                            val menuId = call.parameters.getLong("id") { MenuId(it) }
+                            val menuId = call.parameters.requireLong("id") { MenuId(it) }
                             menuController.delete(call, call.requirePrincipal(), menuId)
                         }
                     }

@@ -7,7 +7,7 @@ import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.request.*
 
-suspend inline fun <reified T : Any> ApplicationCall.receiveOrThrow(): T {
+suspend inline fun <reified T : Any> ApplicationCall.requireReceive(): T {
     try {
         return receive()
     } catch (exception: Exception) {
@@ -15,19 +15,19 @@ suspend inline fun <reified T : Any> ApplicationCall.receiveOrThrow(): T {
     }
 }
 
-fun <T> Parameters.getInt(name: String, transform: ((param: Int) -> T)): T {
-    return transform(getInt(name))
+inline fun <T> Parameters.requireInt(name: String, transform: ((param: Int) -> T)): T {
+    return transform(requireInt(name))
 }
 
-fun Parameters.getInt(name: String): Int {
-    return getIntOrNull(name) ?: throw MissingRequestParameterException(name)
+fun Parameters.requireInt(name: String): Int {
+    return getInt(name) ?: throw MissingRequestParameterException(name)
 }
 
-fun <T> Parameters.getIntOrNull(name: String, transform: ((param: Int) -> T)): T? {
-    return getIntOrNull(name)?.let { transform(it) }
+inline fun <T> Parameters.getInt(name: String, transform: ((param: Int) -> T)): T? {
+    return getInt(name)?.let { transform(it) }
 }
 
-fun Parameters.getIntOrNull(name: String): Int? {
+fun Parameters.getInt(name: String): Int? {
     return try {
         get(name)?.toInt()
     } catch (exception: NumberFormatException) {
@@ -35,19 +35,19 @@ fun Parameters.getIntOrNull(name: String): Int? {
     }
 }
 
-fun <T> Parameters.getLong(name: String, transform: ((param: Long) -> T)): T {
-    return transform(getLong(name))
+inline fun <T> Parameters.requireLong(name: String, transform: ((param: Long) -> T)): T {
+    return transform(requireLong(name))
 }
 
-fun Parameters.getLong(name: String): Long {
-    return getLongOrNull(name) ?: throw MissingRequestParameterException(name)
+fun Parameters.requireLong(name: String): Long {
+    return getLong(name) ?: throw MissingRequestParameterException(name)
 }
 
-fun <T> Parameters.getLongOrNull(name: String, transform: ((param: Long) -> T)): T? {
-    return getLongOrNull(name)?.let { transform(it) }
+inline fun <T> Parameters.getLong(name: String, transform: ((param: Long) -> T)): T? {
+    return getLong(name)?.let { transform(it) }
 }
 
-fun Parameters.getLongOrNull(name: String): Long? {
+fun Parameters.getLong(name: String): Long? {
     return try {
         get(name)?.toLong()
     } catch (exception: NumberFormatException) {
@@ -55,19 +55,19 @@ fun Parameters.getLongOrNull(name: String): Long? {
     }
 }
 
-fun <T> Parameters.getString(name: String, transform: ((param: String) -> T)): T {
-    return transform(getString(name))
+inline fun <T> Parameters.requireString(name: String, transform: ((param: String) -> T)): T {
+    return transform(requireString(name))
 }
 
-fun Parameters.getString(name: String): String {
-    return getStringOrNull(name) ?: throw MissingRequestParameterException(name)
+fun Parameters.requireString(name: String): String {
+    return getString(name) ?: throw MissingRequestParameterException(name)
 }
 
-fun <T> Parameters.getStringOrNull(name: String, transform: ((param: String) -> T)): T? {
-    return getStringOrNull(name)?.let { transform(it) }
+inline fun <T> Parameters.getString(name: String, transform: ((param: String) -> T)): T? {
+    return getString(name)?.let { transform(it) }
 }
 
-fun Parameters.getStringOrNull(name: String): String? {
+fun Parameters.getString(name: String): String? {
     return get(name)
 }
 
