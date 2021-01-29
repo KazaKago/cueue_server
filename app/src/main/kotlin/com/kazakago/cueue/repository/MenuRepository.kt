@@ -10,6 +10,7 @@ import com.kazakago.cueue.mapper.rawValue
 import com.kazakago.cueue.model.MenuId
 import com.kazakago.cueue.model.MenuRegistrationData
 import com.kazakago.cueue.model.MenuUpdatingData
+import io.ktor.features.*
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
@@ -23,7 +24,7 @@ class MenuRepository {
                 .orderBy(MenusTable.id to SortOrder.DESC)
             val offset = if (afterId != null) {
                 val index = menus.indexOfFirst { it.id.value == afterId.value }
-                if (index < 0) throw NoSuchElementException()
+                if (index < 0) throw MissingRequestParameterException("after_id (${afterId.value})")
                 index + 1L
             } else {
                 0L

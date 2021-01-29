@@ -10,6 +10,7 @@ import com.kazakago.cueue.model.RecipeId
 import com.kazakago.cueue.model.RecipeRegistrationData
 import com.kazakago.cueue.model.RecipeUpdatingData
 import com.kazakago.cueue.model.TagName
+import io.ktor.features.*
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.emptySized
@@ -21,8 +22,8 @@ class RecipeRepository {
     suspend fun getRecipes(workspace: WorkspaceEntity, afterId: RecipeId?, tagName: TagName?): List<RecipeEntity> {
         return newSuspendedTransaction(db = DbSettings.db) {
             val recipes = if (tagName != null) {
-                val tag = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.name eq tagName.value) }.firstOrNull()
-                tag?.recipes ?: emptySized()
+                val tag = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.name eq tagName.value) }.firstOrNull() ?: throw MissingRequestParameterException("tag_name (${tagName.value})")
+                tag.recipes
             } else {
                 RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) }
             }.apply {
@@ -30,7 +31,7 @@ class RecipeRepository {
             }
             val offset = if (afterId != null) {
                 val index = recipes.indexOfFirst { it.id.value == afterId.value }
-                if (index < 0) throw NoSuchElementException()
+                if (index < 0) throw MissingRequestParameterException("after_id (${afterId.value})")
                 index + 1L
             } else {
                 0L
