@@ -22,9 +22,11 @@ class MenuRepository {
             val menus = MenuEntity.find { MenusTable.workspaceId eq workspace.id.value }
                 .orderBy(MenusTable.id to SortOrder.DESC)
             val offset = if (afterId != null) {
-                menus.indexOfFirst { it.id.value == afterId.value }.toLong() + 1
+                val index = menus.indexOfFirst { it.id.value == afterId.value }
+                if (index < 0) throw NoSuchElementException()
+                index + 1L
             } else {
-                0
+                0L
             }
             menus.limit(20, offset).toList()
         }
