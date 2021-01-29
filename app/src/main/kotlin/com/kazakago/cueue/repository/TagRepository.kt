@@ -12,6 +12,7 @@ import com.kazakago.cueue.model.TagRegistrationData
 import com.kazakago.cueue.model.TagUpdatingData
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import java.time.LocalDateTime
 
 class TagRepository {
 
@@ -49,6 +50,7 @@ class TagRepository {
                     val rawRecipeIds = recipeIds.map { it.value }
                     this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id inList rawRecipeIds) }
                 }
+                this.updatedAt = LocalDateTime.now()
             }
         }
     }

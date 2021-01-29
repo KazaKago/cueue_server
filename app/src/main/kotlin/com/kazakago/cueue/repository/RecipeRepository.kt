@@ -14,6 +14,7 @@ import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.emptySized
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import java.time.LocalDateTime
 
 class RecipeRepository {
 
@@ -64,6 +65,7 @@ class RecipeRepository {
                     val rawTagNames = tagNames.map { it.value }
                     this.tags = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.name inList rawTagNames) }
                 }
+                this.updatedAt = LocalDateTime.now()
             }
         }
     }

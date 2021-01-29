@@ -13,6 +13,7 @@ import com.kazakago.cueue.model.MenuUpdatingData
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import java.time.LocalDateTime
 
 class MenuRepository {
 
@@ -59,6 +60,7 @@ class MenuRepository {
                     val rawRecipeIds = recipeIds.map { it.value }
                     this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id inList rawRecipeIds) }
                 }
+                this.updatedAt = LocalDateTime.now()
             }
         }
     }
