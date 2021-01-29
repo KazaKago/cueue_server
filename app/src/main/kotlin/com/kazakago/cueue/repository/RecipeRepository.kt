@@ -8,6 +8,7 @@ import com.kazakago.cueue.database.table.RecipesTable
 import com.kazakago.cueue.database.table.TagsTable
 import com.kazakago.cueue.model.RecipeId
 import com.kazakago.cueue.model.RecipeRegistrationData
+import com.kazakago.cueue.model.RecipeUpdatingData
 import com.kazakago.cueue.model.TagName
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
@@ -54,14 +55,15 @@ class RecipeRepository {
         }
     }
 
-    suspend fun updateRecipe(workspace: WorkspaceEntity, recipeId: RecipeId, recipe: RecipeRegistrationData): RecipeEntity {
+    suspend fun updateRecipe(workspace: WorkspaceEntity, recipeId: RecipeId, recipe: RecipeUpdatingData): RecipeEntity {
         return newSuspendedTransaction(db = DbSettings.db) {
             RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id eq recipeId.value) }.first().apply {
-                this.title = recipe.title
-                this.description = recipe.description
-                this.workspace = workspace
-                val rawTagNames = recipe.tagNames.map { it.value }
-                this.tags = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.name inList rawTagNames) }
+                recipe.title?.let { this.title = it }
+                recipe.description?.let { this.description = it }
+                recipe.tagNames?.let { tagNames ->
+                    val rawTagNames = tagNames.map { it.value }
+                    this.tags = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.name inList rawTagNames) }
+                }
             }
         }
     }

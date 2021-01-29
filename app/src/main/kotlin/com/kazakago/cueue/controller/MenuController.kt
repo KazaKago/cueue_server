@@ -3,7 +3,7 @@ package com.kazakago.cueue.controller
 import com.kazakago.cueue.mapper.MenuMapper
 import com.kazakago.cueue.model.FirebaseUser
 import com.kazakago.cueue.model.MenuId
-import com.kazakago.cueue.model.MenuRegistrationData
+import com.kazakago.cueue.model.MenuUpdatingData
 import com.kazakago.cueue.repository.MenuRepository
 import com.kazakago.cueue.repository.UserRepository
 import io.ktor.application.*
@@ -18,7 +18,7 @@ class MenuController(private val userRepository: UserRepository, private val men
         call.respond(HttpStatusCode.OK, menuMapper.toModel(menu))
     }
 
-    suspend fun update(call: ApplicationCall, firebaseUser: FirebaseUser, menuId: MenuId, menu: MenuRegistrationData) {
+    suspend fun update(call: ApplicationCall, firebaseUser: FirebaseUser, menuId: MenuId, menu: MenuUpdatingData) {
         val user = userRepository.getUser(firebaseUser.uid)
         menuRepository.updateMenu(user.personalWorkSpace(), menuId, menu)
         call.respond(HttpStatusCode.NoContent)

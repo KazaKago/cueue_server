@@ -3,7 +3,7 @@ package com.kazakago.cueue.controller
 import com.kazakago.cueue.mapper.RecipeMapper
 import com.kazakago.cueue.model.FirebaseUser
 import com.kazakago.cueue.model.RecipeId
-import com.kazakago.cueue.model.RecipeRegistrationData
+import com.kazakago.cueue.model.RecipeUpdatingData
 import com.kazakago.cueue.repository.RecipeRepository
 import com.kazakago.cueue.repository.UserRepository
 import io.ktor.application.*
@@ -18,7 +18,7 @@ class RecipeController(private val userRepository: UserRepository, private val r
         call.respond(HttpStatusCode.OK, recipeMapper.toModel(recipe))
     }
 
-    suspend fun update(call: ApplicationCall, firebaseUser: FirebaseUser, recipeId: RecipeId, recipe: RecipeRegistrationData) {
+    suspend fun update(call: ApplicationCall, firebaseUser: FirebaseUser, recipeId: RecipeId, recipe: RecipeUpdatingData) {
         val user = userRepository.getUser(firebaseUser.uid)
         recipeRepository.updateRecipe(user.personalWorkSpace(), recipeId, recipe)
         call.respond(HttpStatusCode.NoContent)

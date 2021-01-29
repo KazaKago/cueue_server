@@ -9,10 +9,10 @@ import com.kazakago.cueue.database.table.RecipesTable
 import com.kazakago.cueue.mapper.rawValue
 import com.kazakago.cueue.model.MenuId
 import com.kazakago.cueue.model.MenuRegistrationData
+import com.kazakago.cueue.model.MenuUpdatingData
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
-import java.time.LocalDateTime
 
 class MenuRepository {
 
@@ -49,15 +49,16 @@ class MenuRepository {
         }
     }
 
-    suspend fun updateMenu(workspace: WorkspaceEntity, menuId: MenuId, menu: MenuRegistrationData): MenuEntity {
+    suspend fun updateMenu(workspace: WorkspaceEntity, menuId: MenuId, menu: MenuUpdatingData): MenuEntity {
         return newSuspendedTransaction(db = DbSettings.db) {
             MenuEntity.find { (MenusTable.workspaceId eq workspace.id.value) and (MenusTable.id eq menuId.value) }.first().apply {
-                this.memo = menu.memo
-                this.date = menu.date
-                this.timeFrame = menu.timeFrame.rawValue()
-                this.workspace = workspace
-                val rawRecipeIds = menu.recipeIds.map { it.value }
-                this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id inList rawRecipeIds) }
+                menu.memo?.let { this.memo = it }
+                menu.date?.let { this.date = it }
+                menu.timeFrame?.let { this.timeFrame = it.rawValue() }
+                menu.recipeIds?.let { recipeIds ->
+                    val rawRecipeIds = recipeIds.map { it.value }
+                    this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id inList rawRecipeIds) }
+                }
             }
         }
     }
