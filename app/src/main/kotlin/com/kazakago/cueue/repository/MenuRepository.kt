@@ -3,7 +3,6 @@ package com.kazakago.cueue.repository
 import com.kazakago.cueue.database.entity.MenuEntity
 import com.kazakago.cueue.database.entity.RecipeEntity
 import com.kazakago.cueue.database.entity.WorkspaceEntity
-import com.kazakago.cueue.database.setting.DbSettings
 import com.kazakago.cueue.database.table.MenusTable
 import com.kazakago.cueue.database.table.RecipesTable
 import com.kazakago.cueue.mapper.rawValue
@@ -19,7 +18,7 @@ import java.time.LocalDateTime
 class MenuRepository {
 
     suspend fun getMenus(workspace: WorkspaceEntity, afterId: MenuId?): List<MenuEntity> {
-        return newSuspendedTransaction(db = DbSettings.db) {
+        return newSuspendedTransaction {
             val menus = MenuEntity.find { MenusTable.workspaceId eq workspace.id.value }
                 .orderBy(MenusTable.id to SortOrder.DESC)
             val offset = if (afterId != null) {
@@ -34,13 +33,13 @@ class MenuRepository {
     }
 
     suspend fun getMenu(workspace: WorkspaceEntity, menuId: MenuId): MenuEntity {
-        return newSuspendedTransaction(db = DbSettings.db) {
+        return newSuspendedTransaction {
             MenuEntity.find { (MenusTable.workspaceId eq workspace.id.value) and (MenusTable.id eq menuId.value) }.first()
         }
     }
 
     suspend fun createMenu(workspace: WorkspaceEntity, menu: MenuRegistrationData): MenuEntity {
-        return newSuspendedTransaction(db = DbSettings.db) {
+        return newSuspendedTransaction {
             MenuEntity.new {
                 this.memo = menu.memo
                 this.date = menu.date
@@ -54,7 +53,7 @@ class MenuRepository {
     }
 
     suspend fun updateMenu(workspace: WorkspaceEntity, menuId: MenuId, menu: MenuUpdatingData): MenuEntity {
-        return newSuspendedTransaction(db = DbSettings.db) {
+        return newSuspendedTransaction {
             MenuEntity.find { (MenusTable.workspaceId eq workspace.id.value) and (MenusTable.id eq menuId.value) }.first().apply {
                 menu.memo?.let { this.memo = it }
                 menu.date?.let { this.date = it }
@@ -69,7 +68,7 @@ class MenuRepository {
     }
 
     suspend fun deleteMenu(workspace: WorkspaceEntity, menuId: MenuId) {
-        newSuspendedTransaction(db = DbSettings.db) {
+        newSuspendedTransaction {
             val menu = MenuEntity.find { (MenusTable.workspaceId eq workspace.id.value) and (MenusTable.id eq menuId.value) }.first()
             menu.delete()
         }

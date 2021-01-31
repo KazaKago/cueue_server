@@ -1,8 +1,8 @@
 package com.kazakago.cueue.config.database
 
-import com.kazakago.cueue.database.setting.DbSettings
 import io.ktor.application.*
 import io.ktor.util.*
+import org.jetbrains.exposed.sql.Database
 
 class Database {
 
@@ -10,8 +10,9 @@ class Database {
         override val key: AttributeKey<Unit> = AttributeKey("Database")
 
         override fun install(pipeline: Application, configure: Unit.() -> Unit) {
-            DbSettings.initialize(
+            Database.connect(
                 url = pipeline.environment.config.property("app.database.url").getString(),
+                driver = "org.postgresql.Driver",
                 user = pipeline.environment.config.property("app.database.user").getString(),
                 password = pipeline.environment.config.property("app.database.password").getString(),
             )

@@ -3,7 +3,6 @@ package com.kazakago.cueue.repository
 import com.kazakago.cueue.database.entity.RecipeEntity
 import com.kazakago.cueue.database.entity.TagEntity
 import com.kazakago.cueue.database.entity.WorkspaceEntity
-import com.kazakago.cueue.database.setting.DbSettings
 import com.kazakago.cueue.database.table.RecipesTable
 import com.kazakago.cueue.database.table.TagsTable
 import com.kazakago.cueue.model.RecipeId
@@ -13,14 +12,13 @@ import com.kazakago.cueue.model.TagName
 import io.ktor.features.*
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.emptySized
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import java.time.LocalDateTime
 
 class RecipeRepository {
 
     suspend fun getRecipes(workspace: WorkspaceEntity, afterId: RecipeId?, tagName: TagName?): List<RecipeEntity> {
-        return newSuspendedTransaction(db = DbSettings.db) {
+        return newSuspendedTransaction {
             val recipes = if (tagName != null) {
                 val tag = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.name eq tagName.value) }.firstOrNull() ?: throw MissingRequestParameterException("tag_name (${tagName.value})")
                 tag.recipes
@@ -41,13 +39,13 @@ class RecipeRepository {
     }
 
     suspend fun getRecipe(workspace: WorkspaceEntity, recipeId: RecipeId): RecipeEntity {
-        return newSuspendedTransaction(db = DbSettings.db) {
+        return newSuspendedTransaction {
             RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id eq recipeId.value) }.first()
         }
     }
 
     suspend fun createRecipe(workspace: WorkspaceEntity, recipe: RecipeRegistrationData): RecipeEntity {
-        return newSuspendedTransaction(db = DbSettings.db) {
+        return newSuspendedTransaction {
             RecipeEntity.new {
                 this.title = recipe.title
                 this.description = recipe.description
@@ -60,7 +58,7 @@ class RecipeRepository {
     }
 
     suspend fun updateRecipe(workspace: WorkspaceEntity, recipeId: RecipeId, recipe: RecipeUpdatingData): RecipeEntity {
-        return newSuspendedTransaction(db = DbSettings.db) {
+        return newSuspendedTransaction {
             RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id eq recipeId.value) }.first().apply {
                 recipe.title?.let { this.title = it }
                 recipe.description?.let { this.description = it }
@@ -74,7 +72,7 @@ class RecipeRepository {
     }
 
     suspend fun deleteRecipe(workspace: WorkspaceEntity, recipeId: RecipeId) {
-        newSuspendedTransaction(db = DbSettings.db) {
+        newSuspendedTransaction {
             val recipe = RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id eq recipeId.value) }.first()
             recipe.delete()
         }

@@ -1,6 +1,5 @@
-package com.kazakago.cueue.config.firebase
+package com.kazakago.cueue.auth.firebase
 
-import com.kazakago.cueue.auth.firebase.FirebaseAuthenticationProvider
 import com.kazakago.cueue.model.Email
 import com.kazakago.cueue.model.FirebaseUser
 import com.kazakago.cueue.model.UID

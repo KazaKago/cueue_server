@@ -4,6 +4,7 @@ plugins {
     application
     kotlin("jvm")
     kotlin("plugin.serialization")
+    id("org.flywaydb.flyway") version "7.5.2"
     id("com.github.johnrengelman.shadow") version "6.1.0"
 }
 
@@ -46,6 +47,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc:0.28.1")
     implementation("org.jetbrains.exposed:exposed-java-time:0.28.1")
     implementation("org.postgresql:postgresql:42.2.18")
+    implementation("org.flywaydb:flyway-core:7.5.2")
     implementation("org.koin:koin-ktor:2.2.2")
     implementation("com.google.firebase:firebase-admin:7.1.0")
     implementation("ch.qos.logback:logback-classic:1.2.3")
