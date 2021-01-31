@@ -1,4 +1,4 @@
-package com.kazakago.cueue.mapper.id
+package com.kazakago.cueue.mapper.di
 
 import com.kazakago.cueue.mapper.*
 import org.koin.dsl.module
