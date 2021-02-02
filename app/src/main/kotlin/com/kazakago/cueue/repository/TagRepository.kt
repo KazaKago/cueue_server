@@ -9,6 +9,7 @@ import com.kazakago.cueue.exception.EntityDuplicateException
 import com.kazakago.cueue.model.TagName
 import com.kazakago.cueue.model.TagRegistrationData
 import com.kazakago.cueue.model.TagUpdatingData
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import java.time.LocalDateTime
@@ -17,7 +18,9 @@ class TagRepository {
 
     suspend fun getTags(workspace: WorkspaceEntity): List<TagEntity> {
         return newSuspendedTransaction {
-            TagEntity.find { TagsTable.workspaceId eq workspace.id.value }.toList()
+            TagEntity.find { TagsTable.workspaceId eq workspace.id.value }
+                .orderBy(TagsTable.id to SortOrder.ASC)
+                .toList()
         }
     }
 
