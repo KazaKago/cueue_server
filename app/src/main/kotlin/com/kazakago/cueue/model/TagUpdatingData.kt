@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TagUpdatingData(
     @SerialName("name")
-    val name: String?,
+    val name: String? = null,
     @SerialName("recipe_ids")
-    val recipeIds: List<RecipeId>?,
+    val recipeIds: List<RecipeId>? = null,
 )
