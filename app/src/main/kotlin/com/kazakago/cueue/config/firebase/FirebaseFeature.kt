@@ -15,15 +15,15 @@ class Firebase {
 
         override fun install(pipeline: Application, configure: Unit.() -> Unit) {
             val file = File(pipeline.environment.config.property("app.google.credentials").getString())
-            val options = if (file.exists()) {
+            if (file.exists()) {
                 val serviceAccount = FileInputStream(file)
-                FirebaseOptions.builder()
+                val options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build()
+                FirebaseApp.initializeApp(options)
             } else {
-                FirebaseOptions.builder().build()
+                FirebaseApp.initializeApp()
             }
-            FirebaseApp.initializeApp(options)
         }
     }
 }
