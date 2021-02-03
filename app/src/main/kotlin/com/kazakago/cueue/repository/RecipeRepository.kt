@@ -5,7 +5,10 @@ import com.kazakago.cueue.database.entity.TagEntity
 import com.kazakago.cueue.database.entity.WorkspaceEntity
 import com.kazakago.cueue.database.table.RecipesTable
 import com.kazakago.cueue.database.table.TagsTable
-import com.kazakago.cueue.model.*
+import com.kazakago.cueue.model.RecipeId
+import com.kazakago.cueue.model.RecipeRegistrationData
+import com.kazakago.cueue.model.RecipeUpdatingData
+import com.kazakago.cueue.model.TagId
 import io.ktor.features.*
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
@@ -45,10 +48,10 @@ class RecipeRepository {
         return newSuspendedTransaction {
             RecipeEntity.new {
                 this.title = recipe.title
-                this.description = recipe.description
+                this.description = recipe.description ?: ""
                 this.workspace = workspace
             }.apply {
-                val rawTagIds = recipe.tagIds.map { it.value }
+                val rawTagIds = recipe.tagIds?.map { it.value } ?: emptyList()
                 this.tags = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.id inList rawTagIds) }
             }
         }

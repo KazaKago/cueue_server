@@ -7,12 +7,12 @@ import java.time.LocalDate
 @Serializable
 data class MenuUpdatingData(
     @SerialName("memo")
-    val memo: String? = null,
+    val memo: String?,
     @SerialName("date")
     @Serializable(with = LocalDateSerializer::class)
-    val date: LocalDate? = null,
+    val date: LocalDate?,
     @SerialName("time_frame")
-    val timeFrame: TimeFrame? = null,
+    val timeFrame: TimeFrame?,
     @SerialName("recipe_ids")
-    val recipeIds: List<RecipeId>? = null,
+    val recipeIds: List<RecipeId>?,
 )

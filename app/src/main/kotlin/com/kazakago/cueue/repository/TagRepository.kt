@@ -35,7 +35,7 @@ class TagRepository {
                 this.name = tag.name
                 this.workspace = workspace
             }.apply {
-                val rawRecipeIds = tag.recipeIds.map { it.value }
+                val rawRecipeIds = tag.recipeIds?.map { it.value } ?: emptyList()
                 this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id inList rawRecipeIds) }
             }
         }

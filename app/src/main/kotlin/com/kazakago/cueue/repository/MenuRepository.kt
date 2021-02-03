@@ -41,12 +41,12 @@ class MenuRepository {
     suspend fun createMenu(workspace: WorkspaceEntity, menu: MenuRegistrationData): MenuEntity {
         return newSuspendedTransaction {
             MenuEntity.new {
-                this.memo = menu.memo
+                this.memo = menu.memo ?: ""
                 this.date = menu.date
                 this.timeFrame = menu.timeFrame.rawValue()
                 this.workspace = workspace
             }.apply {
-                val rawRecipeIds = menu.recipeIds.map { it.value }
+                val rawRecipeIds = menu.recipeIds?.map { it.value } ?: emptyList()
                 this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id inList rawRecipeIds) }
             }
         }

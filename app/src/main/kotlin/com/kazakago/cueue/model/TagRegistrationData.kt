@@ -8,5 +8,5 @@ data class TagRegistrationData(
     @SerialName("name")
     val name: String,
     @SerialName("recipe_ids")
-    val recipeIds: List<RecipeId> = emptyList(),
+    val recipeIds: List<RecipeId>?,
 )
