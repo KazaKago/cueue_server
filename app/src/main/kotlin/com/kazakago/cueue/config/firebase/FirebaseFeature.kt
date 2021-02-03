@@ -5,6 +5,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import io.ktor.application.*
 import io.ktor.util.*
+import java.io.File
 import java.io.FileInputStream
 
 class Firebase {
@@ -13,10 +14,15 @@ class Firebase {
         override val key: AttributeKey<Unit> = AttributeKey("Firebase")
 
         override fun install(pipeline: Application, configure: Unit.() -> Unit) {
-            val serviceAccount = FileInputStream(pipeline.environment.config.property("app.google.credentials").getString())
-            val options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .build()
+            val file = File(pipeline.environment.config.property("app.google.credentials").getString())
+            val options = if (file.exists()) {
+                val serviceAccount = FileInputStream(file)
+                FirebaseOptions.builder()
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .build()
+            } else {
+                FirebaseOptions.builder().build()
+            }
             FirebaseApp.initializeApp(options)
         }
     }
