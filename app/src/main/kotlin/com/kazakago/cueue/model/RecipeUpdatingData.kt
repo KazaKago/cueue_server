@@ -9,6 +9,6 @@ data class RecipeUpdatingData(
     val title: String? = null,
     @SerialName("description")
     val description: String? = null,
-    @SerialName("tag_names")
-    val tagNames: List<TagName>? = null,
+    @SerialName("tag_ids")
+    val tagIds: List<TagId>? = null,
 )

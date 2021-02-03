@@ -5,10 +5,7 @@ import com.kazakago.cueue.database.entity.TagEntity
 import com.kazakago.cueue.database.entity.WorkspaceEntity
 import com.kazakago.cueue.database.table.RecipesTable
 import com.kazakago.cueue.database.table.TagsTable
-import com.kazakago.cueue.model.RecipeId
-import com.kazakago.cueue.model.RecipeRegistrationData
-import com.kazakago.cueue.model.RecipeUpdatingData
-import com.kazakago.cueue.model.TagName
+import com.kazakago.cueue.model.*
 import io.ktor.features.*
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
@@ -17,10 +14,10 @@ import java.time.LocalDateTime
 
 class RecipeRepository {
 
-    suspend fun getRecipes(workspace: WorkspaceEntity, afterId: RecipeId?, tagName: TagName?): List<RecipeEntity> {
+    suspend fun getRecipes(workspace: WorkspaceEntity, afterId: RecipeId?, tagId: TagId?): List<RecipeEntity> {
         return newSuspendedTransaction {
-            val recipes = if (tagName != null) {
-                val tag = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.name eq tagName.value) }.firstOrNull() ?: throw MissingRequestParameterException("tag_name (${tagName.value})")
+            val recipes = if (tagId != null) {
+                val tag = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.id eq tagId.value) }.firstOrNull() ?: throw MissingRequestParameterException("tag_id (${tagId.value})")
                 tag.recipes
             } else {
                 RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) }
@@ -51,8 +48,8 @@ class RecipeRepository {
                 this.description = recipe.description
                 this.workspace = workspace
             }.apply {
-                val rawTagNames = recipe.tagNames.map { it.value }
-                this.tags = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.name inList rawTagNames) }
+                val rawTagIds = recipe.tagIds.map { it.value }
+                this.tags = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.id inList rawTagIds) }
             }
         }
     }
@@ -62,9 +59,9 @@ class RecipeRepository {
             RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id eq recipeId.value) }.first().apply {
                 recipe.title?.let { this.title = it }
                 recipe.description?.let { this.description = it }
-                recipe.tagNames?.let { tagNames ->
-                    val rawTagNames = tagNames.map { it.value }
-                    this.tags = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.name inList rawTagNames) }
+                recipe.tagIds?.let { tagIds ->
+                    val rawTagIds = tagIds.map { it.value }
+                    this.tags = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.id inList rawTagIds) }
                 }
                 this.updatedAt = LocalDateTime.now()
             }

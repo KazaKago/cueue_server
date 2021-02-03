@@ -3,7 +3,7 @@ package com.kazakago.cueue.route
 import com.kazakago.cueue.controller.*
 import com.kazakago.cueue.model.MenuId
 import com.kazakago.cueue.model.RecipeId
-import com.kazakago.cueue.model.TagName
+import com.kazakago.cueue.model.TagId
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.routing.*
@@ -34,8 +34,8 @@ fun Application.appRouting() {
                 route("/recipes") {
                     get {
                         val afterId = call.request.queryParameters.getLong("after_id") { RecipeId(it) }
-                        val tagName = call.request.queryParameters.getString("tag_name") { TagName(it) }
-                        recipesController.index(call, call.requirePrincipal(), afterId, tagName)
+                        val tagId = call.request.queryParameters.getLong("tag_id") { TagId(it) }
+                        recipesController.index(call, call.requirePrincipal(), afterId, tagId)
                     }
                     post {
                         recipesController.create(call, call.requirePrincipal(), call.requireReceive())
@@ -62,18 +62,18 @@ fun Application.appRouting() {
                     post {
                         tagsController.create(call, call.requirePrincipal(), call.requireReceive())
                     }
-                    route("/{name}") {
+                    route("/{id}") {
                         get {
-                            val tagName = call.parameters.requireString("name") { TagName(it) }
-                            tagController.index(call, call.requirePrincipal(), tagName)
+                            val tagId = call.parameters.requireLong("id") { TagId(it) }
+                            tagController.index(call, call.requirePrincipal(), tagId)
                         }
                         patch {
-                            val tagName = call.parameters.requireString("name") { TagName(it) }
-                            tagController.update(call, call.requirePrincipal(), tagName, call.requireReceive())
+                            val tagId = call.parameters.requireLong("id") { TagId(it) }
+                            tagController.update(call, call.requirePrincipal(), tagId, call.requireReceive())
                         }
                         delete {
-                            val tagName = call.parameters.requireString("name") { TagName(it) }
-                            tagController.delete(call, call.requirePrincipal(), tagName)
+                            val tagId = call.parameters.requireLong("id") { TagId(it) }
+                            tagController.delete(call, call.requirePrincipal(), tagId)
                         }
                     }
                 }
