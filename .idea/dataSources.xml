@@ -8,7 +8,7 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/postgres</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="PostgreSQL - heroku" uuid="e391bfbe-cb3d-48b7-86f2-c33955c36ca7">
+    <data-source source="LOCAL" name="PostgreSQL - staging" uuid="e391bfbe-cb3d-48b7-86f2-c33955c36ca7">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
