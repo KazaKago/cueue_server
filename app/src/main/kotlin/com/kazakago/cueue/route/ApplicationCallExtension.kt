@@ -11,7 +11,7 @@ suspend inline fun <reified T : Any> ApplicationCall.requireReceive(): T {
     try {
         return receive()
     } catch (exception: Exception) {
-        throw ParameterConversionException("N/A", T::class.qualifiedName ?: "")
+        throw ParameterConversionException("N/A", T::class.qualifiedName ?: "", exception)
     }
 }
 

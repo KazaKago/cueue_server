@@ -11,6 +11,7 @@ import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
 class ErrorController {
 
     suspend fun handle(call: ApplicationCall, exception: Exception) {
+        call.application.environment.log.info(createLogMessage(exception))
         when (exception) {
             is NoSuchElementException -> call.respond(HttpStatusCode.NotFound)
             is EntityNotFoundException -> call.respond(HttpStatusCode.NotFound)
@@ -19,5 +20,9 @@ class ErrorController {
             is UnauthorizedException -> call.respond(HttpStatusCode.Unauthorized)
             else -> throw exception
         }
+    }
+
+    private fun createLogMessage(throwable: Throwable): String {
+        return throwable.toString() + if (throwable.cause != null) "\ncause: ${createLogMessage(throwable.cause!!)}" else ""
     }
 }
