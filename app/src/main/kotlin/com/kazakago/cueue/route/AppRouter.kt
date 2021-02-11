@@ -6,11 +6,13 @@ import com.kazakago.cueue.model.RecipeId
 import com.kazakago.cueue.model.TagId
 import io.ktor.application.*
 import io.ktor.auth.*
+import io.ktor.request.*
 import io.ktor.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.appRouting() {
     val rootController by inject<RootController>()
+    val callbackController by inject<CallbackController>()
     val usersController by inject<UsersController>()
     val recipesController by inject<RecipesController>()
     val recipeController by inject<RecipeController>()
@@ -22,6 +24,9 @@ fun Application.appRouting() {
         route("/") {
             get {
                 rootController.index(call)
+            }
+            post("/callback/sign_in_with_apple") {
+                callbackController.create(call, call.receiveText())
             }
         }
         route("/api") {

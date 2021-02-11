@@ -5,6 +5,7 @@ import org.koin.dsl.module
 
 val controllerModules = module {
     single { RootController() }
+    single { CallbackController() }
     single { UsersController(get(), get()) }
     single { RecipesController(get(), get(), get()) }
     single { RecipeController(get(), get(), get()) }
