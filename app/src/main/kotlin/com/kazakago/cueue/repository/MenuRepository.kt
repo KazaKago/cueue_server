@@ -9,9 +9,9 @@ import com.kazakago.cueue.mapper.rawValue
 import com.kazakago.cueue.model.MenuId
 import com.kazakago.cueue.model.MenuRegistrationData
 import com.kazakago.cueue.model.MenuUpdatingData
+import com.kazakago.cueue.model.TimeFrame
 import io.ktor.features.*
-import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import java.time.LocalDateTime
 
@@ -19,8 +19,18 @@ class MenuRepository {
 
     suspend fun getMenus(workspace: WorkspaceEntity, afterId: MenuId?): List<MenuEntity> {
         return newSuspendedTransaction {
+            val timeFrameExpression = Case()
+                .When(Op.build { MenusTable.timeFrame eq TimeFrame.Dinner.rawValue() }, intLiteral(1))
+                .When(Op.build { MenusTable.timeFrame eq TimeFrame.SnackTime.rawValue() }, intLiteral(2))
+                .When(Op.build { MenusTable.timeFrame eq TimeFrame.Lunch.rawValue() }, intLiteral(3))
+                .When(Op.build { MenusTable.timeFrame eq TimeFrame.Breakfast.rawValue() }, intLiteral(4))
+                .Else(intLiteral(5))
             val menus = MenuEntity.find { MenusTable.workspaceId eq workspace.id.value }
-                .orderBy(MenusTable.id to SortOrder.DESC)
+                .orderBy(
+                    MenusTable.date to SortOrder.DESC,
+                    timeFrameExpression to SortOrder.ASC,
+                    MenusTable.id to SortOrder.DESC
+                )
             val offset = if (afterId != null) {
                 val index = menus.indexOfFirst { it.id.value == afterId.value }
                 if (index < 0) throw MissingRequestParameterException("after_id (${afterId.value})")
