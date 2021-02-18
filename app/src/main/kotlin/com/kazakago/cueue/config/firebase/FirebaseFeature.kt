@@ -14,7 +14,7 @@ class Firebase {
         override val key: AttributeKey<Unit> = AttributeKey("Firebase")
 
         override fun install(pipeline: Application, configure: Unit.() -> Unit) {
-            val file = File(pipeline.environment.config.property("app.google.credentials").getString())
+            val file = File(pipeline.environment.config.property("app.firebase.credentials").getString())
             if (file.exists()) {
                 val serviceAccount = FileInputStream(file)
                 val options = FirebaseOptions.builder()
