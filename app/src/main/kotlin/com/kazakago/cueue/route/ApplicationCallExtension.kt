@@ -75,6 +75,6 @@ inline fun <reified T : Principal> ApplicationCall.requirePrincipal(): T {
     return try {
         principal()!!
     } catch (exception: Exception) {
-        throw UnauthorizedException()
+        throw UnauthorizedException(exception)
     }
 }

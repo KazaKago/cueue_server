@@ -1,5 +1,6 @@
 package com.kazakago.cueue.repository
 
+import com.google.firebase.cloud.StorageClient
 import com.kazakago.cueue.database.entity.RecipeEntity
 import com.kazakago.cueue.database.entity.TagEntity
 import com.kazakago.cueue.database.entity.WorkspaceEntity
@@ -49,6 +50,11 @@ class RecipeRepository {
             RecipeEntity.new {
                 this.title = recipe.title
                 this.description = recipe.description ?: ""
+                this.image = recipe.decodedImage?.let {
+                    val bucket = StorageClient.getInstance().bucket()
+                    val blob = bucket.create(it.createFilePath(workspace), it.imageByte, it.mimeType)
+                    blob.name
+                }
                 this.workspace = workspace
             }.apply {
                 val rawTagIds = recipe.tagIds?.map { it.value } ?: emptyList()
@@ -62,6 +68,11 @@ class RecipeRepository {
             RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id eq recipeId.value) }.first().apply {
                 recipe.title?.let { this.title = it }
                 recipe.description?.let { this.description = it }
+                recipe.decodedImage?.let {
+                    val bucket = StorageClient.getInstance().bucket()
+                    val blob = bucket.create(it.createFilePath(workspace), it.imageByte, it.mimeType)
+                    this.image = blob.name
+                }
                 recipe.tagIds?.let { tagIds ->
                     val rawTagIds = tagIds.map { it.value }
                     this.tags = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.id inList rawTagIds) }

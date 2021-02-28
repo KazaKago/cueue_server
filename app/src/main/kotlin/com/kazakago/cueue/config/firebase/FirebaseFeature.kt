@@ -21,6 +21,7 @@ class Firebase {
                 val serviceAccount = FileInputStream(file)
                 val options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .setStorageBucket(pipeline.environment.config.property("app.firebase.storage_bucket_name").getString())
                     .build()
                 FirebaseApp.initializeApp(options)
             } else {

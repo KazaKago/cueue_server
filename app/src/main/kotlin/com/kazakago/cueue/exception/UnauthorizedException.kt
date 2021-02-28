@@ -1,3 +1,3 @@
 package com.kazakago.cueue.exception
 
-class UnauthorizedException : Exception()
+class UnauthorizedException(cause: Throwable) : Exception(cause)

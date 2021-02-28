@@ -1,6 +1,6 @@
 package com.kazakago.cueue.controller
 
-import com.kazakago.cueue.exception.EntityDuplicateException
+import com.kazakago.cueue.exception.ImageDecodeException
 import com.kazakago.cueue.exception.UnauthorizedException
 import io.ktor.application.*
 import io.ktor.features.*
@@ -15,9 +15,9 @@ class ErrorController {
         when (exception) {
             is NoSuchElementException -> call.respond(HttpStatusCode.NotFound)
             is EntityNotFoundException -> call.respond(HttpStatusCode.NotFound)
-            is EntityDuplicateException -> call.respond(HttpStatusCode.Conflict)
             is BadRequestException -> call.respond(HttpStatusCode.BadRequest)
             is UnauthorizedException -> call.respond(HttpStatusCode.Unauthorized)
+            is ImageDecodeException -> call.respond(HttpStatusCode.BadRequest)
             else -> throw exception
         }
     }
