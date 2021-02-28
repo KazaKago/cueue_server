@@ -66,18 +66,21 @@ class RecipeRepository {
     suspend fun updateRecipe(workspace: WorkspaceEntity, recipeId: RecipeId, recipe: RecipeUpdatingData): RecipeEntity {
         return newSuspendedTransaction {
             RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id eq recipeId.value) }.first().apply {
-                recipe.title?.let { this.title = it }
-                recipe.description?.let { this.description = it }
+                recipe.title?.let { title = it }
+                recipe.description?.let { description = it }
                 recipe.decodedImage?.let {
                     val bucket = StorageClient.getInstance().bucket()
+                    if (image != null) {
+                        bucket.get(image).delete()
+                    }
                     val blob = bucket.create(it.createFilePath(workspace), it.imageByte, it.mimeType)
-                    this.image = blob.name
+                    image = blob.name
                 }
                 recipe.tagIds?.let { tagIds ->
                     val rawTagIds = tagIds.map { it.value }
-                    this.tags = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.id inList rawTagIds) }
+                    tags = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.id inList rawTagIds) }
                 }
-                this.updatedAt = LocalDateTime.now()
+                updatedAt = LocalDateTime.now()
             }
         }
     }
@@ -85,6 +88,10 @@ class RecipeRepository {
     suspend fun deleteRecipe(workspace: WorkspaceEntity, recipeId: RecipeId) {
         newSuspendedTransaction {
             val recipe = RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id eq recipeId.value) }.first()
+            if (recipe.image != null) {
+                val bucket = StorageClient.getInstance().bucket()
+                bucket.get(recipe.image).delete()
+            }
             recipe.delete()
         }
     }
