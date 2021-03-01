@@ -52,7 +52,7 @@ class RecipeRepository {
                 this.description = recipe.description ?: ""
                 this.image = recipe.decodedImage?.let {
                     val bucket = StorageClient.getInstance().bucket()
-                    val blob = bucket.create(it.createFilePath(workspace), it.imageByte, it.mimeType)
+                    val blob = bucket.create(it.filePath, it.imageByte, it.mimeType)
                     blob.name
                 }
                 this.workspace = workspace
@@ -73,7 +73,7 @@ class RecipeRepository {
                     if (image != null) {
                         bucket.get(image).delete()
                     }
-                    val blob = bucket.create(it.createFilePath(workspace), it.imageByte, it.mimeType)
+                    val blob = bucket.create(it.filePath, it.imageByte, it.mimeType)
                     image = blob.name
                 }
                 recipe.tagIds?.let { tagIds ->

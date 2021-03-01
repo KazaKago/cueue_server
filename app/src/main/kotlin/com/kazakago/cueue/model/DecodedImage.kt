@@ -1,6 +1,5 @@
 package com.kazakago.cueue.model
 
-import com.kazakago.cueue.database.entity.WorkspaceEntity
 import com.kazakago.cueue.exception.ImageDecodeException
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
@@ -18,7 +17,8 @@ class DecodedImage(imageDataUri: String) {
     }
 
     val imageByte: ByteArray
-    val mimeType: String
+    val mimeType = DecodedImage.mimeType
+    val filePath = "images/${UUID.randomUUID()}.$extension"
 
     init {
         try {
@@ -26,14 +26,9 @@ class DecodedImage(imageDataUri: String) {
                 Base64.getDecoder().decode(it)
             }
             imageByte = scaleImage(originalImageByte)
-            mimeType = DecodedImage.mimeType
         } catch (exception: Exception) {
             throw ImageDecodeException(exception)
         }
-    }
-
-    fun createFilePath(workspace: WorkspaceEntity): String {
-        return "workspaces/${workspace.id.value}/images/${UUID.randomUUID()}.$extension"
     }
 
     private fun scaleImage(originalImageByte: ByteArray): ByteArray {
