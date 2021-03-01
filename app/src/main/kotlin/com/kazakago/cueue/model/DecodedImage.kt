@@ -12,26 +12,33 @@ class DecodedImage(imageDataUri: String) {
 
     companion object {
         private const val extension = "webp"
-        private const val mimeType = "image/$extension"
         private const val shrinkMaxSize = 1280
     }
 
     val imageByte: ByteArray
-    val mimeType = DecodedImage.mimeType
+    val mimeType = "image/$extension"
     val filePath = "images/${UUID.randomUUID()}.$extension"
 
     init {
         try {
-            val originalImageByte = imageDataUri.substring((imageDataUri.indexOf("base64,") + "base64,".length) until imageDataUri.length).let {
-                Base64.getDecoder().decode(it)
-            }
-            imageByte = scaleImage(originalImageByte)
+            val rawImageData = getRawImageData(imageDataUri)
+            val originalImageByte = Base64.getDecoder().decode(rawImageData)
+            imageByte = getScaledImage(originalImageByte)
         } catch (exception: Exception) {
             throw ImageDecodeException(exception)
         }
     }
 
-    private fun scaleImage(originalImageByte: ByteArray): ByteArray {
+    private fun getRawImageData(imageDataUri: String): String {
+        val rawImageDataIndex = imageDataUri.indexOf("base64,")
+        return if (rawImageDataIndex != -1) {
+            imageDataUri.substring((rawImageDataIndex + "base64,".length) until imageDataUri.length)
+        } else {
+            imageDataUri
+        }
+    }
+
+    private fun getScaledImage(originalImageByte: ByteArray): ByteArray {
         return ByteArrayInputStream(originalImageByte).use { inputStream ->
             val originalImage = ImageIO.read(inputStream)
             val originalMaxSize = max(originalImage.width, originalImage.height)
