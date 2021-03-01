@@ -12,7 +12,7 @@ class RecipeMapper(private val tagMapper: TagMapper) {
             id = RecipeId(recipe.id.value),
             title = recipe.title,
             description = recipe.description,
-            image = recipe.createImageUrl().toString(),
+            image = recipe.createImageUrl()?.toString(),
             tags = newSuspendedTransaction { recipe.tags.map { tagMapper.toModel(it) } }
         )
     }

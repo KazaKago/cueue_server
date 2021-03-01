@@ -26,6 +26,6 @@ class RecipeEntity(id: EntityID<Long>) : LongEntity(id) {
         if (image == null) return null
         val bucket = StorageClient.getInstance().bucket()
         val blob = bucket.get(image)
-        return blob.signUrl(1, TimeUnit.DAYS)
+        return blob?.signUrl(1, TimeUnit.DAYS)
     }
 }

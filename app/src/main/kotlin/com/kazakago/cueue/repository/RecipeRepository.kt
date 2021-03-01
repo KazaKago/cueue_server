@@ -71,7 +71,7 @@ class RecipeRepository {
                 recipe.decodedImage?.let {
                     val bucket = StorageClient.getInstance().bucket()
                     if (image != null) {
-                        bucket.get(image).delete()
+                        bucket.get(image)?.delete()
                     }
                     val blob = bucket.create(it.filePath, it.imageByte, it.mimeType)
                     image = blob.name
@@ -90,7 +90,7 @@ class RecipeRepository {
             val recipe = RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id eq recipeId.value) }.first()
             if (recipe.image != null) {
                 val bucket = StorageClient.getInstance().bucket()
-                bucket.get(recipe.image).delete()
+                bucket.get(recipe.image)?.delete()
             }
             recipe.delete()
         }
