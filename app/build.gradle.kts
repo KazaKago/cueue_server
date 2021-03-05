@@ -52,6 +52,7 @@ dependencies {
     implementation("com.google.firebase:firebase-admin:7.1.0")
     implementation("ch.qos.logback:logback-classic:1.2.3")
     implementation("org.sejda.imageio:webp-imageio:0.1.6")
+    implementation("com.drewnoakes:metadata-extractor:2.15.0")
 
     testImplementation("io.ktor:ktor-server-tests:1.4.3")
 }
