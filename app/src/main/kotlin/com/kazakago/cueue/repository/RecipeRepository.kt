@@ -1,5 +1,6 @@
 package com.kazakago.cueue.repository
 
+import com.google.cloud.storage.Acl
 import com.google.cloud.storage.Bucket
 import com.kazakago.cueue.database.entity.RecipeEntity
 import com.kazakago.cueue.database.entity.TagEntity
@@ -52,6 +53,7 @@ class RecipeRepository(private val bucket: Bucket) {
                 this.description = recipe.description ?: ""
                 this.image = recipe.decodedImage?.let {
                     val blob = bucket.create(it.filePath, it.imageByte, it.mimeType)
+                    blob.createAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
                     blob.name
                 }
                 this.workspace = workspace
@@ -70,6 +72,7 @@ class RecipeRepository(private val bucket: Bucket) {
                 recipe.decodedImage?.let {
                     if (this.image != null) bucket.get(this.image)?.delete()
                     val blob = bucket.create(it.filePath, it.imageByte, it.mimeType)
+                    blob.createAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
                     this.image = blob.name
                 }
                 recipe.tagIds?.let { tagIds ->
