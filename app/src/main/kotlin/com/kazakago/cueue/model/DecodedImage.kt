@@ -1,7 +1,6 @@
 package com.kazakago.cueue.model
 
 import com.drew.imaging.ImageMetadataReader
-import com.drew.imaging.jpeg.JpegMetadataReader
 import com.drew.metadata.exif.ExifIFD0Directory
 import com.kazakago.cueue.exception.ImageDecodeException
 import java.awt.geom.AffineTransform
@@ -60,12 +59,12 @@ class DecodedImage(imageDataUri: String) {
     private fun getRotateDegree(inputStream: InputStream): Double {
         val metadata = ImageMetadataReader.readMetadata(inputStream)
         val exif = metadata.getFirstDirectoryOfType(ExifIFD0Directory::class.java)
-        return when (exif.getInt(ExifIFD0Directory.TAG_ORIENTATION)) {
+        return when (exif?.getInt(ExifIFD0Directory.TAG_ORIENTATION)) {
             1 -> 0.0
             6 -> 90.0
             3 -> 180.0
             8 -> 270.0
-            else -> throw IllegalStateException()
+            else -> 0.0
         }
     }
 
