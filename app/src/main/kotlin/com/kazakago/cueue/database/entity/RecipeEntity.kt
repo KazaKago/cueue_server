@@ -1,6 +1,6 @@
 package com.kazakago.cueue.database.entity
 
-import com.google.firebase.cloud.StorageClient
+import com.google.cloud.storage.Bucket
 import com.kazakago.cueue.database.table.MenuRecipesRelationsTable
 import com.kazakago.cueue.database.table.RecipeTagsRelationsTable
 import com.kazakago.cueue.database.table.RecipesTable
@@ -22,9 +22,8 @@ class RecipeEntity(id: EntityID<Long>) : LongEntity(id) {
     var tags by TagEntity via RecipeTagsRelationsTable
     var menus by MenuEntity via MenuRecipesRelationsTable
 
-    fun createImageUrl(): URL? {
+    fun createImageUrl(bucket: Bucket): URL? {
         if (image == null) return null
-        val bucket = StorageClient.getInstance().bucket()
         val blob = bucket.get(image)
         return blob?.signUrl(1, TimeUnit.DAYS)
     }

@@ -1,6 +1,6 @@
 package com.kazakago.cueue.repository
 
-import com.google.firebase.cloud.StorageClient
+import com.google.cloud.storage.Bucket
 import com.kazakago.cueue.database.entity.RecipeEntity
 import com.kazakago.cueue.database.entity.TagEntity
 import com.kazakago.cueue.database.entity.WorkspaceEntity
@@ -16,7 +16,7 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import java.time.LocalDateTime
 
-class RecipeRepository {
+class RecipeRepository(private val bucket: Bucket) {
 
     suspend fun getRecipes(workspace: WorkspaceEntity, afterId: RecipeId?, tagId: TagId?): List<RecipeEntity> {
         return newSuspendedTransaction {
@@ -51,7 +51,6 @@ class RecipeRepository {
                 this.title = recipe.title
                 this.description = recipe.description ?: ""
                 this.image = recipe.decodedImage?.let {
-                    val bucket = StorageClient.getInstance().bucket()
                     val blob = bucket.create(it.filePath, it.imageByte, it.mimeType)
                     blob.name
                 }
@@ -66,21 +65,18 @@ class RecipeRepository {
     suspend fun updateRecipe(workspace: WorkspaceEntity, recipeId: RecipeId, recipe: RecipeUpdatingData): RecipeEntity {
         return newSuspendedTransaction {
             RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id eq recipeId.value) }.first().apply {
-                recipe.title?.let { title = it }
-                recipe.description?.let { description = it }
+                recipe.title?.let { this.title = it }
+                recipe.description?.let { this.description = it }
                 recipe.decodedImage?.let {
-                    val bucket = StorageClient.getInstance().bucket()
-                    if (image != null) {
-                        bucket.get(image)?.delete()
-                    }
+                    if (this.image != null) bucket.get(this.image)?.delete()
                     val blob = bucket.create(it.filePath, it.imageByte, it.mimeType)
-                    image = blob.name
+                    this.image = blob.name
                 }
                 recipe.tagIds?.let { tagIds ->
                     val rawTagIds = tagIds.map { it.value }
-                    tags = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.id inList rawTagIds) }
+                    this.tags = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.id inList rawTagIds) }
                 }
-                updatedAt = LocalDateTime.now()
+                this.updatedAt = LocalDateTime.now()
             }
         }
     }
@@ -88,10 +84,7 @@ class RecipeRepository {
     suspend fun deleteRecipe(workspace: WorkspaceEntity, recipeId: RecipeId) {
         newSuspendedTransaction {
             val recipe = RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id eq recipeId.value) }.first()
-            if (recipe.image != null) {
-                val bucket = StorageClient.getInstance().bucket()
-                bucket.get(recipe.image)?.delete()
-            }
+            if (recipe.image != null) bucket.get(recipe.image)?.delete()
             recipe.delete()
         }
     }
