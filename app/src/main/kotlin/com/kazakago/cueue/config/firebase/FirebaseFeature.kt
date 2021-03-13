@@ -20,12 +20,13 @@ class Firebase {
             StorageBucket.bucketName = pipeline.environment.config.property("app.firebase.storage_bucket_name").getString()
             val file = File(pipeline.environment.config.property("app.firebase.credentials").getString())
             if (file.exists()) {
-                val serviceAccount = FileInputStream(file)
-                val options = FirebaseOptions.builder()
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                    .setStorageBucket(StorageBucket.bucketName)
-                    .build()
-                FirebaseApp.initializeApp(options)
+                FileInputStream(file).use {
+                    val options = FirebaseOptions.builder()
+                        .setCredentials(GoogleCredentials.fromStream(it))
+                        .setStorageBucket(StorageBucket.bucketName)
+                        .build()
+                    FirebaseApp.initializeApp(options)
+                }
             } else {
                 FirebaseApp.initializeApp()
             }
