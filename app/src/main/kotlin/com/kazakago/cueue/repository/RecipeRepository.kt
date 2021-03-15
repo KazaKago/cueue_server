@@ -7,25 +7,23 @@ import com.kazakago.cueue.database.entity.WorkspaceEntity
 import com.kazakago.cueue.database.table.ContentsTable
 import com.kazakago.cueue.database.table.RecipesTable
 import com.kazakago.cueue.database.table.TagsTable
-import com.kazakago.cueue.model.RecipeId
-import com.kazakago.cueue.model.RecipeRegistrationData
-import com.kazakago.cueue.model.RecipeUpdatingData
-import com.kazakago.cueue.model.TagId
+import com.kazakago.cueue.mapper.RecipeMapper
+import com.kazakago.cueue.model.*
 import io.ktor.features.*
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import java.time.LocalDateTime
 
-class RecipeRepository {
+class RecipeRepository(private val recipeMapper: RecipeMapper) {
 
-    suspend fun getRecipes(workspace: WorkspaceEntity, afterId: RecipeId?, tagId: TagId?): List<RecipeEntity> {
+    suspend fun getRecipes(workspaceId: WorkspaceId, afterId: RecipeId?, tagId: TagId?): List<Recipe> {
         return newSuspendedTransaction {
             val recipes = if (tagId != null) {
-                val tag = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.id eq tagId.value) }.firstOrNull() ?: throw MissingRequestParameterException("tag_id (${tagId.value})")
+                val tag = TagEntity.find { (TagsTable.workspaceId eq workspaceId.value) and (TagsTable.id eq tagId.value) }.firstOrNull() ?: throw MissingRequestParameterException("tag_id (${tagId.value})")
                 tag.recipes
             } else {
-                RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) }
+                RecipeEntity.find { (RecipesTable.workspaceId eq workspaceId.value) }
             }.apply {
                 orderBy(RecipesTable.id to SortOrder.DESC)
             }
@@ -36,35 +34,38 @@ class RecipeRepository {
             } else {
                 0L
             }
-            recipes.limit(20, offset).toList()
+            val entities = recipes.limit(20, offset).toList()
+            entities.map { recipeMapper.toModel(it) }
         }
     }
 
-    suspend fun getRecipe(workspace: WorkspaceEntity, recipeId: RecipeId): RecipeEntity {
+    suspend fun getRecipe(workspaceId: WorkspaceId, recipeId: RecipeId): Recipe {
         return newSuspendedTransaction {
-            RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id eq recipeId.value) }.first()
+            val entity = RecipeEntity.find { (RecipesTable.workspaceId eq workspaceId.value) and (RecipesTable.id eq recipeId.value) }.first()
+            recipeMapper.toModel(entity)
         }
     }
 
-    suspend fun createRecipe(workspace: WorkspaceEntity, recipe: RecipeRegistrationData): RecipeEntity {
+    suspend fun createRecipe(workspaceId: WorkspaceId, recipe: RecipeRegistrationData): Recipe {
         return newSuspendedTransaction {
-            RecipeEntity.new {
+            val entity = RecipeEntity.new {
                 this.title = recipe.title
                 this.description = recipe.description ?: ""
-                this.workspace = workspace
+                this.workspace = WorkspaceEntity[workspaceId.value]
             }.apply {
                 recipe.imageKey?.let { imageKey ->
                     ContentEntity.find { ContentsTable.key eq imageKey }.map { it.recipe = this }
                 }
                 val rawTagIds = recipe.tagIds?.map { it.value } ?: emptyList()
-                this.tags = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.id inList rawTagIds) }
+                this.tags = TagEntity.find { (TagsTable.workspaceId eq workspaceId.value) and (TagsTable.id inList rawTagIds) }
             }
+            recipeMapper.toModel(entity)
         }
     }
 
-    suspend fun updateRecipe(workspace: WorkspaceEntity, recipeId: RecipeId, recipe: RecipeUpdatingData): RecipeEntity {
+    suspend fun updateRecipe(workspaceId: WorkspaceId, recipeId: RecipeId, recipe: RecipeUpdatingData): Recipe {
         return newSuspendedTransaction {
-            RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id eq recipeId.value) }.first().apply {
+            val entity = RecipeEntity.find { (RecipesTable.workspaceId eq workspaceId.value) and (RecipesTable.id eq recipeId.value) }.first().apply {
                 this.title = recipe.title
                 this.description = recipe.description ?: ""
                 this.images.map { it.recipe = null }
@@ -72,15 +73,16 @@ class RecipeRepository {
                     ContentEntity.find { ContentsTable.key eq imageKey }.map { it.recipe = this }
                 }
                 val rawTagIds = recipe.tagIds?.map { it.value } ?: emptyList()
-                this.tags = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.id inList rawTagIds) }
+                this.tags = TagEntity.find { (TagsTable.workspaceId eq workspaceId.value) and (TagsTable.id inList rawTagIds) }
                 this.updatedAt = LocalDateTime.now()
             }
+            recipeMapper.toModel(entity)
         }
     }
 
-    suspend fun deleteRecipe(workspace: WorkspaceEntity, recipeId: RecipeId) {
+    suspend fun deleteRecipe(workspaceId: WorkspaceId, recipeId: RecipeId) {
         newSuspendedTransaction {
-            val recipe = RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id eq recipeId.value) }.first()
+            val recipe = RecipeEntity.find { (RecipesTable.workspaceId eq workspaceId.value) and (RecipesTable.id eq recipeId.value) }.first()
             recipe.delete()
         }
     }

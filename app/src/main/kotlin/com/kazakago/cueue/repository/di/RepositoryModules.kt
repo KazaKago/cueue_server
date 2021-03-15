@@ -5,9 +5,9 @@ import org.koin.dsl.module
 
 val repositoryModules = module {
     single { ContentRepository(get()) }
-    single { UserRepository() }
-    single { WorkspaceRepository() }
-    single { RecipeRepository() }
-    single { TagRepository() }
-    single { MenuRepository() }
+    single { UserRepository(get()) }
+    single { WorkspaceRepository(get()) }
+    single { RecipeRepository(get()) }
+    single { TagRepository(get()) }
+    single { MenuRepository(get()) }
 }

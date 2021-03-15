@@ -4,6 +4,8 @@ import com.kazakago.cueue.mapper.*
 import org.koin.dsl.module
 
 val mapperModules = module {
+    single { UserMapper(get()) }
+    single { WorkspaceMapper() }
     single { RecipeMapper(get()) }
     single { TagMapper() }
     single { MenuMapper(get(), get()) }

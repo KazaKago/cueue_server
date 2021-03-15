@@ -5,56 +5,59 @@ import com.kazakago.cueue.database.entity.TagEntity
 import com.kazakago.cueue.database.entity.WorkspaceEntity
 import com.kazakago.cueue.database.table.RecipesTable
 import com.kazakago.cueue.database.table.TagsTable
-import com.kazakago.cueue.model.TagId
-import com.kazakago.cueue.model.TagRegistrationData
-import com.kazakago.cueue.model.TagUpdatingData
+import com.kazakago.cueue.mapper.TagMapper
+import com.kazakago.cueue.model.*
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import java.time.LocalDateTime
 
-class TagRepository {
+class TagRepository(private val tagMapper: TagMapper) {
 
-    suspend fun getTags(workspace: WorkspaceEntity): List<TagEntity> {
+    suspend fun getTags(workspaceId: WorkspaceId): List<Tag> {
         return newSuspendedTransaction {
-            TagEntity.find { TagsTable.workspaceId eq workspace.id.value }
+            val entities = TagEntity.find { TagsTable.workspaceId eq workspaceId.value }
                 .orderBy(TagsTable.id to SortOrder.ASC)
                 .toList()
+            entities.map { tagMapper.toModel(it) }
         }
     }
 
-    suspend fun getTag(workspace: WorkspaceEntity, tagId: TagId): TagEntity {
+    suspend fun getTag(workspaceId: WorkspaceId, tagId: TagId): Tag {
         return newSuspendedTransaction {
-            TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.id eq tagId.value) }.first()
+            val entity = TagEntity.find { (TagsTable.workspaceId eq workspaceId.value) and (TagsTable.id eq tagId.value) }.first()
+            tagMapper.toModel(entity)
         }
     }
 
-    suspend fun createTag(workspace: WorkspaceEntity, tag: TagRegistrationData): TagEntity {
+    suspend fun createTag(workspaceId: WorkspaceId, tag: TagRegistrationData): Tag {
         return newSuspendedTransaction {
-            TagEntity.new {
+            val entity = TagEntity.new {
                 this.name = tag.name
-                this.workspace = workspace
+                this.workspace = WorkspaceEntity[workspaceId.value]
             }.apply {
                 val rawRecipeIds = tag.recipeIds?.map { it.value } ?: emptyList()
-                this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id inList rawRecipeIds) }
+                this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspaceId.value) and (RecipesTable.id inList rawRecipeIds) }
             }
+            tagMapper.toModel(entity)
         }
     }
 
-    suspend fun updateTag(workspace: WorkspaceEntity, tagId: TagId, tag: TagUpdatingData): TagEntity {
+    suspend fun updateTag(workspaceId: WorkspaceId, tagId: TagId, tag: TagUpdatingData): Tag {
         return newSuspendedTransaction {
-            TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.id eq tagId.value) }.first().apply {
+            val entity = TagEntity.find { (TagsTable.workspaceId eq workspaceId.value) and (TagsTable.id eq tagId.value) }.first().apply {
                 this.name = tag.name
                 val rawRecipeIds = tag.recipeIds?.map { it.value } ?: emptyList()
-                this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id inList rawRecipeIds) }
+                this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspaceId.value) and (RecipesTable.id inList rawRecipeIds) }
                 this.updatedAt = LocalDateTime.now()
             }
+            tagMapper.toModel(entity)
         }
     }
 
-    suspend fun deleteTag(workspace: WorkspaceEntity, tagId: TagId) {
+    suspend fun deleteTag(workspaceId: WorkspaceId, tagId: TagId) {
         newSuspendedTransaction {
-            val tags = TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.id eq tagId.value) }
+            val tags = TagEntity.find { (TagsTable.workspaceId eq workspaceId.value) and (TagsTable.id eq tagId.value) }
             if (tags.empty()) throw NoSuchElementException()
             tags.map { it.delete() }
         }

@@ -1,6 +1,5 @@
 package com.kazakago.cueue.controller
 
-import com.kazakago.cueue.mapper.RecipeMapper
 import com.kazakago.cueue.model.FirebaseUser
 import com.kazakago.cueue.model.RecipeId
 import com.kazakago.cueue.model.RecipeUpdatingData
@@ -10,23 +9,23 @@ import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
 
-class RecipeController(private val userRepository: UserRepository, private val recipeRepository: RecipeRepository, private val recipeMapper: RecipeMapper) {
+class RecipeController(private val userRepository: UserRepository, private val recipeRepository: RecipeRepository) {
 
     suspend fun index(call: ApplicationCall, firebaseUser: FirebaseUser, recipeId: RecipeId) {
         val user = userRepository.getUser(firebaseUser.uid)
-        val entity = recipeRepository.getRecipe(user.personalWorkSpace(), recipeId)
-        call.respond(HttpStatusCode.OK, recipeMapper.toModel(entity))
+        val model = recipeRepository.getRecipe(user.personalWorkspace.id, recipeId)
+        call.respond(HttpStatusCode.OK, model)
     }
 
     suspend fun update(call: ApplicationCall, firebaseUser: FirebaseUser, recipeId: RecipeId, recipe: RecipeUpdatingData) {
         val user = userRepository.getUser(firebaseUser.uid)
-        val entity = recipeRepository.updateRecipe(user.personalWorkSpace(), recipeId, recipe)
-        call.respond(HttpStatusCode.OK, recipeMapper.toModel(entity))
+        val model = recipeRepository.updateRecipe(user.personalWorkspace.id, recipeId, recipe)
+        call.respond(HttpStatusCode.OK, model)
     }
 
     suspend fun delete(call: ApplicationCall, firebaseUser: FirebaseUser, recipeId: RecipeId) {
         val user = userRepository.getUser(firebaseUser.uid)
-        recipeRepository.deleteRecipe(user.personalWorkSpace(), recipeId)
+        recipeRepository.deleteRecipe(user.personalWorkspace.id, recipeId)
         call.respond(HttpStatusCode.NoContent)
     }
 }

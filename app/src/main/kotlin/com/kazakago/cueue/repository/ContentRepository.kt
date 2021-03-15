@@ -8,9 +8,8 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 
 class ContentRepository(private val bucket: Bucket) {
 
-    suspend fun createImage(imageData: String): String {
+    suspend fun createImage(image: DecodedImage): String {
         return newSuspendedTransaction {
-            val image = DecodedImage(imageData)
             val blob = bucket.create(image.filePath, image.imageByte, image.mimeType)
             blob.createAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
             ContentEntity.new {
