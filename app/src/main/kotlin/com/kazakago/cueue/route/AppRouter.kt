@@ -37,10 +37,8 @@ fun Application.appRouting() {
                 }
             }
             route("/contents") {
-                route("/images") {
-                    post {
-                        contentsController.createImage(call, call.requireReceive())
-                    }
+                post {
+                    contentsController.create(call, call.requireReceive())
                 }
             }
             route("/recipes") {

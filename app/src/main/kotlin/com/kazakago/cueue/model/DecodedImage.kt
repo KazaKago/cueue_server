@@ -12,23 +12,22 @@ import java.util.*
 import javax.imageio.ImageIO
 import kotlin.math.*
 
-
-class DecodedImage(imageDataUri: String) {
+class DecodedImage(imageDataUri: String) : Content {
 
     companion object {
         private const val extension = "webp"
         private const val shrinkMaxSize = 1280
     }
 
-    val imageByte: ByteArray
-    val mimeType = "image/$extension"
-    val filePath = "images/${UUID.randomUUID()}.$extension"
+    override val imageByte: ByteArray
+    override val mimeType = "image/$extension"
+    override val filePath = "images/${UUID.randomUUID()}.$extension"
 
     init {
         try {
             val rawImageData = getRawImageData(imageDataUri)
-            val originalImageByte = Base64.getDecoder().decode(rawImageData)
-            imageByte = getFixedImage(originalImageByte)
+            val rawImageByte = Base64.getDecoder().decode(rawImageData)
+            imageByte = getFixedImage(rawImageByte)
         } catch (exception: Exception) {
             throw ImageDecodeException(exception)
         }

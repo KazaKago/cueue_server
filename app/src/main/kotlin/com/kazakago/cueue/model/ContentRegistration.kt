@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ImageRegistration(
+data class ContentRegistration(
     @SerialName("data")
     val data: String,
 )

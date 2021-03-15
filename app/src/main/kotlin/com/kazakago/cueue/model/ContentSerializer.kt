@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Image(
+data class ContentSerializer(
     @SerialName("key")
     val key: String,
 ) {
