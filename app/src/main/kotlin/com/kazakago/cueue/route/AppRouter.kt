@@ -12,6 +12,7 @@ import org.koin.ktor.ext.inject
 
 fun Application.appRouting() {
     val rootController by inject<RootController>()
+    val contentsController by inject<ContentsController>()
     val callbackController by inject<CallbackController>()
     val usersController by inject<UsersController>()
     val recipesController by inject<RecipesController>()
@@ -33,6 +34,13 @@ fun Application.appRouting() {
             route("/users") {
                 post {
                     usersController.create(call, call.requirePrincipal())
+                }
+            }
+            route("/contents") {
+                route("/images") {
+                    post {
+                        contentsController.createImage(call, call.requireReceive())
+                    }
                 }
             }
             route("/recipes") {

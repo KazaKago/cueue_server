@@ -65,13 +65,11 @@ class MenuRepository {
     suspend fun updateMenu(workspace: WorkspaceEntity, menuId: MenuId, menu: MenuUpdatingData): MenuEntity {
         return newSuspendedTransaction {
             MenuEntity.find { (MenusTable.workspaceId eq workspace.id.value) and (MenusTable.id eq menuId.value) }.first().apply {
-                menu.memo?.let { this.memo = it }
-                menu.date?.let { this.date = it }
-                menu.timeFrame?.let { this.timeFrame = it.rawValue() }
-                menu.recipeIds?.let { recipeIds ->
-                    val rawRecipeIds = recipeIds.map { it.value }
-                    this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id inList rawRecipeIds) }
-                }
+                this.memo = menu.memo ?: ""
+                this.date = menu.date
+                this.timeFrame = menu.timeFrame.rawValue()
+                val rawRecipeIds = menu.recipeIds?.map { it.value } ?: emptyList()
+                this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id inList rawRecipeIds) }
                 this.updatedAt = LocalDateTime.now()
             }
         }

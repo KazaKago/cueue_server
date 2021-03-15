@@ -44,11 +44,9 @@ class TagRepository {
     suspend fun updateTag(workspace: WorkspaceEntity, tagId: TagId, tag: TagUpdatingData): TagEntity {
         return newSuspendedTransaction {
             TagEntity.find { (TagsTable.workspaceId eq workspace.id.value) and (TagsTable.id eq tagId.value) }.first().apply {
-                tag.name?.let { this.name = it }
-                tag.recipeIds?.let { recipeIds ->
-                    val rawRecipeIds = recipeIds.map { it.value }
-                    this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id inList rawRecipeIds) }
-                }
+                this.name = tag.name
+                val rawRecipeIds = tag.recipeIds?.map { it.value } ?: emptyList()
+                this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspace.id.value) and (RecipesTable.id inList rawRecipeIds) }
                 this.updatedAt = LocalDateTime.now()
             }
         }

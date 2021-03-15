@@ -8,12 +8,14 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 class MenuMapper(private val timeFrameMapper: TimeFrameMapper, private val recipeSummaryMapper: RecipeSummaryMapper) {
 
     suspend fun toModel(menu: MenuEntity): Menu {
-        return Menu(
-            id = MenuId(menu.id.value),
-            memo = menu.memo,
-            date = menu.date,
-            timeFrame = timeFrameMapper.toModel(menu.timeFrame),
-            recipes = newSuspendedTransaction { menu.recipes.map { recipeSummaryMapper.toModel(it) } }
-        )
+        return newSuspendedTransaction {
+            Menu(
+                id = MenuId(menu.id.value),
+                memo = menu.memo,
+                date = menu.date,
+                timeFrame = timeFrameMapper.toModel(menu.timeFrame),
+                recipes = menu.recipes.map { recipeSummaryMapper.toModel(it) }
+            )
+        }
     }
 }

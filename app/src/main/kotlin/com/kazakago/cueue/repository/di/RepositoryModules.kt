@@ -4,9 +4,10 @@ import com.kazakago.cueue.repository.*
 import org.koin.dsl.module
 
 val repositoryModules = module {
+    single { ContentRepository(get()) }
     single { UserRepository() }
     single { WorkspaceRepository() }
-    single { RecipeRepository(get()) }
+    single { RecipeRepository() }
     single { TagRepository() }
     single { MenuRepository() }
 }
