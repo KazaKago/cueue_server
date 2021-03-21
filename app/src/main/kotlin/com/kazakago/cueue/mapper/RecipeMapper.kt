@@ -13,7 +13,7 @@ class RecipeMapper(private val tagMapper: TagMapper) {
             title = recipe.title,
             description = recipe.description,
             url = recipe.url,
-            image = recipe.images.firstOrNull()?.let { ContentSerializer(key = it.key) },
+            images = recipe.images.map { ContentSerializer(key = it.key) },
             tags = recipe.tags.map { tagMapper.toModel(it) }
         )
     }

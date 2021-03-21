@@ -13,8 +13,8 @@ data class Recipe(
     val description: String,
     @SerialName("url")
     val url: String?,
-    @SerialName("image")
-    val image: ContentSerializer?,
+    @SerialName("images")
+    val images: List<ContentSerializer>,
     @SerialName("tags")
     val tags: List<Tag>,
 )

@@ -54,7 +54,7 @@ class RecipeRepository(private val recipeMapper: RecipeMapper) {
                 this.url = recipe.url
                 this.workspace = WorkspaceEntity[workspaceId.value]
             }.apply {
-                recipe.imageKey?.let { imageKey ->
+                recipe.imageKeys?.map { imageKey ->
                     ContentEntity.find { ContentsTable.key eq imageKey }.map { it.recipe = this }
                 }
                 val rawTagIds = recipe.tagIds?.map { it.value } ?: emptyList()
@@ -71,7 +71,7 @@ class RecipeRepository(private val recipeMapper: RecipeMapper) {
                 this.description = recipe.description ?: ""
                 this.url = recipe.url
                 this.images.map { it.recipe = null }
-                recipe.imageKey?.let { imageKey ->
+                recipe.imageKeys?.map { imageKey ->
                     ContentEntity.find { ContentsTable.key eq imageKey }.map { it.recipe = this }
                 }
                 val rawTagIds = recipe.tagIds?.map { it.value } ?: emptyList()

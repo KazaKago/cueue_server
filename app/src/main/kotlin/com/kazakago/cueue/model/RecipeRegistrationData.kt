@@ -11,8 +11,8 @@ data class RecipeRegistrationData(
     val description: String? = null,
     @SerialName("url")
     val url: String? = null,
-    @SerialName("image_key")
-    val imageKey: String? = null,
+    @SerialName("image_keys")
+    val imageKeys: List<String>? = null,
     @SerialName("tag_ids")
     val tagIds: List<TagId>? = null,
 )
