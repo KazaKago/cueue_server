@@ -63,7 +63,7 @@ class MenuRepository(private val menuMapper: MenuMapper) {
         }
     }
 
-    suspend fun updateMenu(workspaceId: WorkspaceId, menuId: MenuId, menu: MenuUpdatingData): Menu {
+    suspend fun updateMenu(workspaceId: WorkspaceId, menuId: MenuId, menu: MenuRegistrationData): Menu {
         return newSuspendedTransaction {
             val entity = MenuEntity.find { (MenusTable.workspaceId eq workspaceId.value) and (MenusTable.id eq menuId.value) }.first().apply {
                 this.memo = menu.memo ?: ""

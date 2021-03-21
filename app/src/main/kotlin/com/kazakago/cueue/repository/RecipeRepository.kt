@@ -64,7 +64,7 @@ class RecipeRepository(private val recipeMapper: RecipeMapper) {
         }
     }
 
-    suspend fun updateRecipe(workspaceId: WorkspaceId, recipeId: RecipeId, recipe: RecipeUpdatingData): Recipe {
+    suspend fun updateRecipe(workspaceId: WorkspaceId, recipeId: RecipeId, recipe: RecipeRegistrationData): Recipe {
         return newSuspendedTransaction {
             val entity = RecipeEntity.find { (RecipesTable.workspaceId eq workspaceId.value) and (RecipesTable.id eq recipeId.value) }.first().apply {
                 this.title = recipe.title

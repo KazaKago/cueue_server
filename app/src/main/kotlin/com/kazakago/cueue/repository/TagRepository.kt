@@ -6,7 +6,10 @@ import com.kazakago.cueue.database.entity.WorkspaceEntity
 import com.kazakago.cueue.database.table.RecipesTable
 import com.kazakago.cueue.database.table.TagsTable
 import com.kazakago.cueue.mapper.TagMapper
-import com.kazakago.cueue.model.*
+import com.kazakago.cueue.model.Tag
+import com.kazakago.cueue.model.TagId
+import com.kazakago.cueue.model.TagRegistrationData
+import com.kazakago.cueue.model.WorkspaceId
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
@@ -43,7 +46,7 @@ class TagRepository(private val tagMapper: TagMapper) {
         }
     }
 
-    suspend fun updateTag(workspaceId: WorkspaceId, tagId: TagId, tag: TagUpdatingData): Tag {
+    suspend fun updateTag(workspaceId: WorkspaceId, tagId: TagId, tag: TagRegistrationData): Tag {
         return newSuspendedTransaction {
             val entity = TagEntity.find { (TagsTable.workspaceId eq workspaceId.value) and (TagsTable.id eq tagId.value) }.first().apply {
                 this.name = tag.name
