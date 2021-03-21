@@ -51,6 +51,7 @@ class RecipeRepository(private val recipeMapper: RecipeMapper) {
             val entity = RecipeEntity.new {
                 this.title = recipe.title
                 this.description = recipe.description ?: ""
+                this.url = recipe.url
                 this.workspace = WorkspaceEntity[workspaceId.value]
             }.apply {
                 recipe.imageKey?.let { imageKey ->
@@ -68,6 +69,7 @@ class RecipeRepository(private val recipeMapper: RecipeMapper) {
             val entity = RecipeEntity.find { (RecipesTable.workspaceId eq workspaceId.value) and (RecipesTable.id eq recipeId.value) }.first().apply {
                 this.title = recipe.title
                 this.description = recipe.description ?: ""
+                this.url = recipe.url
                 this.images.map { it.recipe = null }
                 recipe.imageKey?.let { imageKey ->
                     ContentEntity.find { ContentsTable.key eq imageKey }.map { it.recipe = this }

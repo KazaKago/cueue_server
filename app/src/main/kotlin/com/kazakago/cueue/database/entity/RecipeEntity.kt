@@ -13,6 +13,7 @@ class RecipeEntity(id: EntityID<Long>) : LongEntity(id) {
 
     var title by RecipesTable.title
     var description by RecipesTable.description
+    var url by RecipesTable.url
     val images by ContentEntity optionalReferrersOn ContentsTable.recipeId
     var createdAt by RecipesTable.createdAt
     var updatedAt by RecipesTable.updatedAt
