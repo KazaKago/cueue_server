@@ -12,7 +12,7 @@ group = "com.kazakago.cueue"
 version = "1.0.0-SNAPSHOT"
 
 application {
-    mainClass.set("io.ktor.server.netty.EngineMain")
+    mainClassName = "io.ktor.server.netty.EngineMain"
 }
 
 java {
