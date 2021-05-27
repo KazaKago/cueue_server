@@ -35,13 +35,17 @@ class RecipeRepository(private val recipeMapper: RecipeMapper) {
                 0L
             }
             val entities = recipes.limit(20, offset).toList()
-            entities.map { recipeMapper.toModel(it) }
+            entities.map {
+                it.images.orderBy(ContentsTable.recipeOrder to SortOrder.ASC)
+                recipeMapper.toModel(it)
+            }
         }
     }
 
     suspend fun getRecipe(workspaceId: WorkspaceId, recipeId: RecipeId): Recipe {
         return newSuspendedTransaction {
             val entity = RecipeEntity.find { (RecipesTable.workspaceId eq workspaceId.value) and (RecipesTable.id eq recipeId.value) }.first()
+            entity.images.orderBy(ContentsTable.recipeOrder to SortOrder.ASC)
             recipeMapper.toModel(entity)
         }
     }
@@ -54,9 +58,8 @@ class RecipeRepository(private val recipeMapper: RecipeMapper) {
                 this.url = recipe.url
                 this.workspace = WorkspaceEntity[workspaceId.value]
             }.apply {
-                recipe.imageKeys?.map { imageKey ->
-                    ContentEntity.find { ContentsTable.key eq imageKey }.map { it.recipe = this }
-                }
+                this.createImageRelations(recipe.imageKeys)
+                this.images.orderBy(ContentsTable.recipeOrder to SortOrder.ASC)
                 val rawTagIds = recipe.tagIds?.map { it.value } ?: emptyList()
                 this.tags = TagEntity.find { (TagsTable.workspaceId eq workspaceId.value) and (TagsTable.id inList rawTagIds) }
             }
@@ -70,10 +73,9 @@ class RecipeRepository(private val recipeMapper: RecipeMapper) {
                 this.title = recipe.title
                 this.description = recipe.description ?: ""
                 this.url = recipe.url
-                this.images.map { it.recipe = null }
-                recipe.imageKeys?.map { imageKey ->
-                    ContentEntity.find { ContentsTable.key eq imageKey }.map { it.recipe = this }
-                }
+                this.clearImageRelations()
+                this.createImageRelations(recipe.imageKeys)
+                this.images.orderBy(ContentsTable.recipeOrder to SortOrder.ASC)
                 val rawTagIds = recipe.tagIds?.map { it.value } ?: emptyList()
                 this.tags = TagEntity.find { (TagsTable.workspaceId eq workspaceId.value) and (TagsTable.id inList rawTagIds) }
                 this.updatedAt = LocalDateTime.now()
@@ -86,6 +88,22 @@ class RecipeRepository(private val recipeMapper: RecipeMapper) {
         newSuspendedTransaction {
             val recipe = RecipeEntity.find { (RecipesTable.workspaceId eq workspaceId.value) and (RecipesTable.id eq recipeId.value) }.first()
             recipe.delete()
+        }
+    }
+
+    private fun RecipeEntity.clearImageRelations() {
+        images.map {
+            it.recipe = null
+            it.recipeOrder = 0
+        }
+    }
+
+    private fun RecipeEntity.createImageRelations(imageKeys: List<String>?) {
+        imageKeys?.mapIndexed { index, imageKey ->
+            ContentEntity.find { ContentsTable.key eq imageKey }.map {
+                it.recipe = this
+                it.recipeOrder = index
+            }
         }
     }
 }
