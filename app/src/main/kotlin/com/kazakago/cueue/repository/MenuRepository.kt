@@ -8,7 +8,6 @@ import com.kazakago.cueue.database.table.RecipesTable
 import com.kazakago.cueue.mapper.MenuMapper
 import com.kazakago.cueue.mapper.rawValue
 import com.kazakago.cueue.model.*
-import io.ktor.features.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import java.time.LocalDateTime
@@ -17,25 +16,14 @@ class MenuRepository(private val menuMapper: MenuMapper) {
 
     suspend fun getMenus(workspaceId: WorkspaceId, afterId: MenuId?): List<Menu> {
         return newSuspendedTransaction {
-            val timeFrameExpression = Case()
-                .When(Op.build { MenusTable.timeFrame eq TimeFrame.Dinner.rawValue() }, intLiteral(1))
-                .When(Op.build { MenusTable.timeFrame eq TimeFrame.SnackTime.rawValue() }, intLiteral(2))
-                .When(Op.build { MenusTable.timeFrame eq TimeFrame.Lunch.rawValue() }, intLiteral(3))
-                .When(Op.build { MenusTable.timeFrame eq TimeFrame.Breakfast.rawValue() }, intLiteral(4))
-                .Else(intLiteral(5))
+            val timeFrameExpression = getTimeFrameExpression()
             val menus = MenuEntity.find { MenusTable.workspaceId eq workspaceId.value }
                 .orderBy(
                     MenusTable.date to SortOrder.DESC,
                     timeFrameExpression to SortOrder.ASC,
                     MenusTable.id to SortOrder.DESC
                 )
-            val offset = if (afterId != null) {
-                val index = menus.indexOfFirst { it.id.value == afterId.value }
-                if (index < 0) throw MissingRequestParameterException("after_id (${afterId.value})")
-                index + 1L
-            } else {
-                0L
-            }
+            val offset = menus.getOffset(afterId?.value)
             val entities = menus.limit(20, offset).toList()
             entities.map { menuMapper.toModel(it) }
         }
@@ -82,5 +70,14 @@ class MenuRepository(private val menuMapper: MenuMapper) {
             val menu = MenuEntity.find { (MenusTable.workspaceId eq workspaceId.value) and (MenusTable.id eq menuId.value) }.first()
             menu.delete()
         }
+    }
+
+    private fun getTimeFrameExpression(): Expression<Int> {
+        return Case()
+            .When(Op.build { MenusTable.timeFrame eq TimeFrame.Dinner.rawValue() }, intLiteral(1))
+            .When(Op.build { MenusTable.timeFrame eq TimeFrame.SnackTime.rawValue() }, intLiteral(2))
+            .When(Op.build { MenusTable.timeFrame eq TimeFrame.Lunch.rawValue() }, intLiteral(3))
+            .When(Op.build { MenusTable.timeFrame eq TimeFrame.Breakfast.rawValue() }, intLiteral(4))
+            .Else(intLiteral(5))
     }
 }

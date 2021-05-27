@@ -27,13 +27,7 @@ class RecipeRepository(private val recipeMapper: RecipeMapper) {
             }.apply {
                 orderBy(RecipesTable.id to SortOrder.DESC)
             }
-            val offset = if (afterId != null) {
-                val index = recipes.indexOfFirst { it.id.value == afterId.value }
-                if (index < 0) throw MissingRequestParameterException("after_id (${afterId.value})")
-                index + 1L
-            } else {
-                0L
-            }
+            val offset = recipes.getOffset(afterId?.value)
             val entities = recipes.limit(20, offset).toList()
             entities.map {
                 it.images.orderBy(ContentsTable.recipeOrder to SortOrder.ASC)
