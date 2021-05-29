@@ -7,7 +7,7 @@ val controllerModules = module {
     single { RootController() }
     single { ContentsController(get()) }
     single { CallbackController() }
-    single { UsersController(get(), get()) }
+    single { UsersController(get()) }
     single { RecipesController(get(), get()) }
     single { RecipeController(get(), get()) }
     single { TagsController(get(), get()) }
