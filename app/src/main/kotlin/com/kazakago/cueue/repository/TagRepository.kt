@@ -38,9 +38,6 @@ class TagRepository(private val tagMapper: TagMapper) {
             val entity = TagEntity.new {
                 this.name = tag.name
                 this.workspace = WorkspaceEntity[workspaceId.value]
-            }.apply {
-                val rawRecipeIds = tag.recipeIds?.map { it.value } ?: emptyList()
-                this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspaceId.value) and (RecipesTable.id inList rawRecipeIds) }
             }
             tagMapper.toModel(entity)
         }
@@ -50,8 +47,6 @@ class TagRepository(private val tagMapper: TagMapper) {
         return newSuspendedTransaction {
             val entity = TagEntity.find { (TagsTable.workspaceId eq workspaceId.value) and (TagsTable.id eq tagId.value) }.first().apply {
                 this.name = tag.name
-                val rawRecipeIds = tag.recipeIds?.map { it.value } ?: emptyList()
-                this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspaceId.value) and (RecipesTable.id inList rawRecipeIds) }
                 this.updatedAt = LocalDateTime.now()
             }
             tagMapper.toModel(entity)
