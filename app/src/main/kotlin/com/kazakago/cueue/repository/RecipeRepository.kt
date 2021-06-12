@@ -49,7 +49,6 @@ class RecipeRepository(private val recipeMapper: RecipeMapper, private val recip
                 this.workspace = WorkspaceEntity[workspaceId.value]
             }.apply {
                 this.createImageRelations(recipe.imageKeys)
-                this.images.orderBy(ContentsTable.recipeOrder to SortOrder.ASC)
                 val rawTagIds = recipe.tagIds?.map { it.value } ?: emptyList()
                 this.tags = TagEntity.find { (TagsTable.workspaceId eq workspaceId.value) and (TagsTable.id inList rawTagIds) }
             }
@@ -65,7 +64,6 @@ class RecipeRepository(private val recipeMapper: RecipeMapper, private val recip
                 this.url = recipe.url
                 this.clearImageRelations()
                 this.createImageRelations(recipe.imageKeys)
-                this.images.orderBy(ContentsTable.recipeOrder to SortOrder.ASC)
                 val rawTagIds = recipe.tagIds?.map { it.value } ?: emptyList()
                 this.tags = TagEntity.find { (TagsTable.workspaceId eq workspaceId.value) and (TagsTable.id inList rawTagIds) }
                 this.updatedAt = LocalDateTime.now()
