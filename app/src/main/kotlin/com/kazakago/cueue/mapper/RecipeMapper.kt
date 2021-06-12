@@ -24,6 +24,9 @@ class RecipeMapper(private val tagMapper: TagMapper) {
                 .orderBy(MenusTable.date to SortOrder.DESC)
                 .limit(5)
                 .map { it.date.toString() },
+            cookingCount = recipe.menus.count(),
+            createdAt = recipe.createdAt,
+            updatedAt = recipe.updatedAt,
         )
     }
 }

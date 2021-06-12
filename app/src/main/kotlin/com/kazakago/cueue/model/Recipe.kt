@@ -2,6 +2,7 @@ package com.kazakago.cueue.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.time.LocalDateTime
 
 @Serializable
 data class Recipe(
@@ -19,4 +20,12 @@ data class Recipe(
     val tags: List<Tag>,
     @SerialName("cooking_histories")
     val cookingHistories: List<String>,
+    @SerialName("cooking_count")
+    val cookingCount: Long,
+    @SerialName("created_at")
+    @Serializable(with = LocalDateTimeSerializer::class)
+    val createdAt: LocalDateTime,
+    @SerialName("updated_at")
+    @Serializable(with = LocalDateTimeSerializer::class)
+    val updatedAt: LocalDateTime,
 )
