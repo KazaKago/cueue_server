@@ -6,15 +6,16 @@ import com.kazakago.cueue.database.entity.WorkspaceEntity
 import com.kazakago.cueue.database.table.MenusTable
 import com.kazakago.cueue.database.table.RecipesTable
 import com.kazakago.cueue.mapper.MenuMapper
+import com.kazakago.cueue.mapper.MenuSummaryMapper
 import com.kazakago.cueue.mapper.rawValue
 import com.kazakago.cueue.model.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import java.time.LocalDateTime
 
-class MenuRepository(private val menuMapper: MenuMapper) {
+class MenuRepository(private val menuMapper: MenuMapper, private val menuSummaryMapper: MenuSummaryMapper) {
 
-    suspend fun getMenus(workspaceId: WorkspaceId, afterId: MenuId?): List<Menu> {
+    suspend fun getMenus(workspaceId: WorkspaceId, afterId: MenuId?): List<MenuSummary> {
         return newSuspendedTransaction {
             val timeFrameExpression = getTimeFrameExpression()
             val menus = MenuEntity.find { MenusTable.workspaceId eq workspaceId.value }
@@ -24,8 +25,7 @@ class MenuRepository(private val menuMapper: MenuMapper) {
                     MenusTable.id to SortOrder.DESC
                 )
             val offset = menus.getOffset(afterId?.value)
-            val entities = menus.limit(20, offset).toList()
-            entities.map { menuMapper.toModel(it) }
+            menus.limit(20, offset).map { menuSummaryMapper.toModel(it) }
         }
     }
 

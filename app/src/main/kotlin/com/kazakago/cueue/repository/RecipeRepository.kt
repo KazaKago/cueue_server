@@ -8,6 +8,7 @@ import com.kazakago.cueue.database.table.ContentsTable
 import com.kazakago.cueue.database.table.RecipesTable
 import com.kazakago.cueue.database.table.TagsTable
 import com.kazakago.cueue.mapper.RecipeMapper
+import com.kazakago.cueue.mapper.RecipeSummaryMapper
 import com.kazakago.cueue.model.*
 import io.ktor.features.*
 import org.jetbrains.exposed.sql.SortOrder
@@ -15,9 +16,9 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import java.time.LocalDateTime
 
-class RecipeRepository(private val recipeMapper: RecipeMapper) {
+class RecipeRepository(private val recipeMapper: RecipeMapper, private val recipeSummaryMapper: RecipeSummaryMapper) {
 
-    suspend fun getRecipes(workspaceId: WorkspaceId, afterId: RecipeId?, tagId: TagId?): List<Recipe> {
+    suspend fun getRecipes(workspaceId: WorkspaceId, afterId: RecipeId?, tagId: TagId?): List<RecipeSummary> {
         return newSuspendedTransaction {
             val recipes = if (tagId != null) {
                 val tag = TagEntity.find { (TagsTable.workspaceId eq workspaceId.value) and (TagsTable.id eq tagId.value) }.firstOrNull() ?: throw MissingRequestParameterException("tag_id (${tagId.value})")
@@ -28,18 +29,13 @@ class RecipeRepository(private val recipeMapper: RecipeMapper) {
                 orderBy(RecipesTable.id to SortOrder.DESC)
             }
             val offset = recipes.getOffset(afterId?.value)
-            val entities = recipes.limit(20, offset).toList()
-            entities.map {
-                it.images.orderBy(ContentsTable.recipeOrder to SortOrder.ASC)
-                recipeMapper.toModel(it)
-            }
+            recipes.limit(20, offset).map { recipeSummaryMapper.toModel(it) }
         }
     }
 
     suspend fun getRecipe(workspaceId: WorkspaceId, recipeId: RecipeId): Recipe {
         return newSuspendedTransaction {
             val entity = RecipeEntity.find { (RecipesTable.workspaceId eq workspaceId.value) and (RecipesTable.id eq recipeId.value) }.first()
-            entity.images.orderBy(ContentsTable.recipeOrder to SortOrder.ASC)
             recipeMapper.toModel(entity)
         }
     }

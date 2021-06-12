@@ -17,4 +17,6 @@ data class Recipe(
     val images: List<ContentSerializer>,
     @SerialName("tags")
     val tags: List<Tag>,
+    @SerialName("cooking_histories")
+    val cookingHistories: List<String>,
 )
