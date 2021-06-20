@@ -80,7 +80,7 @@ class RecipeRepository(private val recipeMapper: RecipeMapper, private val recip
     }
 
     private fun RecipeEntity.clearImageRelations() {
-        images.map {
+        ContentEntity.find { ContentsTable.recipeId eq id }.map {
             it.recipe = null
             it.recipeOrder = 0
         }
