@@ -5,7 +5,7 @@
 `Cueue` is management service of menu for meals every day.  
 This repository is server.
 
-# Repository
+# Project Repositories
 
 - [Server (this repository)](https://github.com/KazaKago/cueue_server)
 - [Client](https://github.com/KazaKago/cueue_flutter)
