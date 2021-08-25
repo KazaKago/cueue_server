@@ -47,8 +47,8 @@ class VersionCheckRouteSelector : RouteSelector() {
 }
 
 fun Route.versionCheck(build: Route.() -> Unit): Route {
-    val versionCheckedRoute = createChild(VersionCheckRouteSelector())
-    application.feature(VersionCheck).interceptPipeline(versionCheckedRoute)
-    versionCheckedRoute.build()
-    return versionCheckedRoute
+    return createChild(VersionCheckRouteSelector()).apply {
+        application.feature(VersionCheck).interceptPipeline(this)
+        build()
+    }
 }
