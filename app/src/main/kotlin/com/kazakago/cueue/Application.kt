@@ -6,6 +6,7 @@ import com.kazakago.cueue.config.database.Database
 import com.kazakago.cueue.config.database.Migration
 import com.kazakago.cueue.config.firebase.Firebase
 import com.kazakago.cueue.config.koin.register
+import com.kazakago.cueue.config.version.VersionCheck
 import com.kazakago.cueue.route.appRouting
 import com.kazakago.cueue.route.handle
 import io.ktor.application.*
@@ -18,6 +19,7 @@ fun Application.module() {
     install(Database)
     install(Migration)
     install(Firebase)
+    install(VersionCheck)
     install(DefaultHeaders)
     install(CallLogging)
     install(Koin) {
