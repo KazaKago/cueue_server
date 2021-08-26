@@ -8,13 +8,13 @@ import io.ktor.routing.*
 import io.ktor.util.*
 import net.swiftzer.semver.SemVer
 
-class VersionCheck {
+class Version {
 
-    companion object Feature : ApplicationFeature<Application, Unit, VersionCheck> {
-        override val key: AttributeKey<VersionCheck> = AttributeKey("Version")
+    companion object Feature : ApplicationFeature<Application, Unit, Version> {
+        override val key: AttributeKey<Version> = AttributeKey("Version")
 
-        override fun install(pipeline: Application, configure: Unit.() -> Unit): VersionCheck {
-            return VersionCheck()
+        override fun install(pipeline: Application, configure: Unit.() -> Unit): Version {
+            return Version()
         }
     }
 
@@ -40,15 +40,15 @@ class VersionCheck {
     }
 }
 
-class VersionCheckRouteSelector : RouteSelector() {
+class VersionRouteSelector : RouteSelector() {
     override fun evaluate(context: RoutingResolveContext, segmentIndex: Int): RouteSelectorEvaluation {
         return RouteSelectorEvaluation(true, RouteSelectorEvaluation.qualityTransparent)
     }
 }
 
 fun Route.versionCheck(build: Route.() -> Unit): Route {
-    return createChild(VersionCheckRouteSelector()).apply {
-        application.feature(VersionCheck).interceptPipeline(this)
+    return createChild(VersionRouteSelector()).apply {
+        application.feature(Version).interceptPipeline(this)
         build()
     }
 }
