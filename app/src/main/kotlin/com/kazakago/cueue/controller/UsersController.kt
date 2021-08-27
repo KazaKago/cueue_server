@@ -8,6 +8,11 @@ import io.ktor.response.*
 
 class UsersController(private val userRepository: UserRepository) {
 
+    suspend fun index(call: ApplicationCall, firebaseUser: FirebaseUser) {
+        val model = userRepository.getUser(firebaseUser.uid)
+        call.respond(HttpStatusCode.OK, model)
+    }
+
     suspend fun create(call: ApplicationCall, firebaseUser: FirebaseUser) {
         if (!userRepository.existUser(firebaseUser.uid)) {
             userRepository.createUser(firebaseUser.uid)

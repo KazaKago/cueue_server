@@ -13,8 +13,4 @@ class UserEntity(id: EntityID<Long>) : LongEntity(id) {
     var createdAt by UsersTable.createdAt
     var updatedAt by UsersTable.updatedAt
     var workspaces by WorkspaceEntity via UserWorkspacesRelationsTable
-
-    fun personalWorkSpace(): WorkspaceEntity {
-        return workspaces.first { it.isPersonal() }
-    }
 }

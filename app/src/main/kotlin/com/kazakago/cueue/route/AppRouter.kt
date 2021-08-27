@@ -6,6 +6,7 @@ import com.kazakago.cueue.controller.*
 import com.kazakago.cueue.model.MenuId
 import com.kazakago.cueue.model.RecipeId
 import com.kazakago.cueue.model.TagId
+import com.kazakago.cueue.model.WorkspaceId
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.request.*
@@ -36,6 +37,9 @@ fun Application.appRouting() {
             versionCheck {
                 authenticate {
                     route("/users") {
+                        get {
+                            usersController.index(call, call.requirePrincipal())
+                        }
                         post {
                             usersController.create(call, call.requirePrincipal())
                         }
@@ -45,72 +49,89 @@ fun Application.appRouting() {
                             contentsController.create(call, call.requireReceive())
                         }
                     }
-                    route("/recipes") {
-                        get {
-                            val afterId = call.request.queryParameters.getLong("after_id") { RecipeId(it) }
-                            val tagId = call.request.queryParameters.getLong("tag_id") { TagId(it) }
-                            recipesController.index(call, call.requirePrincipal(), afterId, tagId)
-                        }
-                        post {
-                            recipesController.create(call, call.requirePrincipal(), call.requireReceive())
-                        }
-                        route("/{id}") {
+                    route("/{workspace_id}") {
+                        route("/recipes") {
                             get {
-                                val recipeId = call.parameters.requireLong("id") { RecipeId(it) }
-                                recipeController.index(call, call.requirePrincipal(), recipeId)
+                                val workspaceId = call.parameters.requireLong("workspace_id") { WorkspaceId(it) }
+                                val afterId = call.request.queryParameters.getLong("after_id") { RecipeId(it) }
+                                val tagId = call.request.queryParameters.getLong("tag_id") { TagId(it) }
+                                recipesController.index(call, call.requirePrincipal(), workspaceId, afterId, tagId)
                             }
-                            patch {
-                                val recipeId = call.parameters.requireLong("id") { RecipeId(it) }
-                                recipeController.update(call, call.requirePrincipal(), recipeId, call.requireReceive())
+                            post {
+                                val workspaceId = call.parameters.requireLong("workspace_id") { WorkspaceId(it) }
+                                recipesController.create(call, call.requirePrincipal(), workspaceId, call.requireReceive())
                             }
-                            delete {
-                                val recipeId = call.parameters.requireLong("id") { RecipeId(it) }
-                                recipeController.delete(call, call.requirePrincipal(), recipeId)
+                            route("/{recipe_id}") {
+                                get {
+                                    val workspaceId = call.parameters.requireLong("workspace_id") { WorkspaceId(it) }
+                                    val recipeId = call.parameters.requireLong("recipe_id") { RecipeId(it) }
+                                    recipeController.index(call, call.requirePrincipal(), workspaceId, recipeId)
+                                }
+                                patch {
+                                    val workspaceId = call.parameters.requireLong("workspace_id") { WorkspaceId(it) }
+                                    val recipeId = call.parameters.requireLong("recipe_id") { RecipeId(it) }
+                                    recipeController.update(call, call.requirePrincipal(), workspaceId, recipeId, call.requireReceive())
+                                }
+                                delete {
+                                    val workspaceId = call.parameters.requireLong("workspace_id") { WorkspaceId(it) }
+                                    val recipeId = call.parameters.requireLong("recipe_id") { RecipeId(it) }
+                                    recipeController.delete(call, call.requirePrincipal(), workspaceId, recipeId)
+                                }
                             }
                         }
-                    }
-                    route("/tags") {
-                        get {
-                            tagsController.index(call, call.requirePrincipal())
-                        }
-                        post {
-                            tagsController.create(call, call.requirePrincipal(), call.requireReceive())
-                        }
-                        route("/{id}") {
+                        route("/tags") {
                             get {
-                                val tagId = call.parameters.requireLong("id") { TagId(it) }
-                                tagController.index(call, call.requirePrincipal(), tagId)
+                                val workspaceId = call.parameters.requireLong("workspace_id") { WorkspaceId(it) }
+                                tagsController.index(call, call.requirePrincipal(), workspaceId)
                             }
-                            patch {
-                                val tagId = call.parameters.requireLong("id") { TagId(it) }
-                                tagController.update(call, call.requirePrincipal(), tagId, call.requireReceive())
+                            post {
+                                val workspaceId = call.parameters.requireLong("workspace_id") { WorkspaceId(it) }
+                                tagsController.create(call, call.requirePrincipal(), workspaceId, call.requireReceive())
                             }
-                            delete {
-                                val tagId = call.parameters.requireLong("id") { TagId(it) }
-                                tagController.delete(call, call.requirePrincipal(), tagId)
+                            route("/{tag_id}") {
+                                get {
+                                    val workspaceId = call.parameters.requireLong("workspace_id") { WorkspaceId(it) }
+                                    val tagId = call.parameters.requireLong("tag_id") { TagId(it) }
+                                    tagController.index(call, call.requirePrincipal(), workspaceId, tagId)
+                                }
+                                patch {
+                                    val workspaceId = call.parameters.requireLong("workspace_id") { WorkspaceId(it) }
+                                    val tagId = call.parameters.requireLong("tag_id") { TagId(it) }
+                                    tagController.update(call, call.requirePrincipal(), workspaceId, tagId, call.requireReceive())
+                                }
+                                delete {
+                                    val workspaceId = call.parameters.requireLong("workspace_id") { WorkspaceId(it) }
+                                    val tagId = call.parameters.requireLong("tag_id") { TagId(it) }
+                                    tagController.delete(call, call.requirePrincipal(), workspaceId, tagId)
+                                }
                             }
                         }
-                    }
-                    route("/menus") {
-                        get {
-                            val afterId = call.request.queryParameters.getLong("after_id") { MenuId(it) }
-                            menusController.index(call, call.requirePrincipal(), afterId)
-                        }
-                        post {
-                            menusController.create(call, call.requirePrincipal(), call.requireReceive())
-                        }
-                        route("/{id}") {
+                        route("/menus") {
                             get {
-                                val menuId = call.parameters.requireLong("id") { MenuId(it) }
-                                menuController.index(call, call.requirePrincipal(), menuId)
+                                val workspaceId = call.parameters.requireLong("workspace_id") { WorkspaceId(it) }
+                                val afterId = call.request.queryParameters.getLong("after_id") { MenuId(it) }
+                                menusController.index(call, call.requirePrincipal(), workspaceId, afterId)
                             }
-                            patch {
-                                val menuId = call.parameters.requireLong("id") { MenuId(it) }
-                                menuController.update(call, call.requirePrincipal(), menuId, call.requireReceive())
+                            post {
+                                val workspaceId = call.parameters.requireLong("workspace_id") { WorkspaceId(it) }
+                                menusController.create(call, call.requirePrincipal(), workspaceId, call.requireReceive())
                             }
-                            delete {
-                                val menuId = call.parameters.requireLong("id") { MenuId(it) }
-                                menuController.delete(call, call.requirePrincipal(), menuId)
+                            route("/{menu_id}") {
+                                get {
+                                    val workspaceId = call.parameters.requireLong("workspace_id") { WorkspaceId(it) }
+                                    val menuId = call.parameters.requireLong("menu_id") { MenuId(it) }
+                                    menuController.index(call, call.requirePrincipal(), workspaceId, menuId)
+                                }
+                                patch {
+                                    val workspaceId = call.parameters.requireLong("workspace_id") { WorkspaceId(it) }
+                                    val menuId = call.parameters.requireLong("menu_id") { MenuId(it) }
+                                    menuController.update(call, call.requirePrincipal(), workspaceId, menuId, call.requireReceive())
+                                }
+                                delete {
+                                    val workspaceId = call.parameters.requireLong("workspace_id") { WorkspaceId(it) }
+                                    val menuId = call.parameters.requireLong("menu_id") { MenuId(it) }
+                                    menuController.delete(call, call.requirePrincipal(), workspaceId, menuId)
+                                }
                             }
                         }
                     }

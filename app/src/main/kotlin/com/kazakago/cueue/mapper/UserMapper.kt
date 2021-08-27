@@ -7,10 +7,9 @@ import com.kazakago.cueue.model.UserId
 class UserMapper(private val workspaceMapper: WorkspaceMapper) {
 
     fun toModel(user: UserEntity): User {
-        val personalWorkspace = user.personalWorkSpace()
         return User(
             id = UserId(user.id.value),
-            personalWorkspace = workspaceMapper.toModel(personalWorkspace),
+            workspaces = user.workspaces.map { workspaceMapper.toModel(it) },
         )
     }
 }
