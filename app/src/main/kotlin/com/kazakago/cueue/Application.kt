@@ -23,6 +23,7 @@ fun Application.module() {
     install(Version)
     install(Maintenance)
     install(DefaultHeaders)
+    install(XForwardedHeaderSupport)
     install(CallLogging)
     install(Koin) {
         register()
