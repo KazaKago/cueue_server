@@ -1,9 +1,7 @@
 package com.kazakago.cueue.repository
 
-import com.kazakago.cueue.database.entity.RecipeEntity
 import com.kazakago.cueue.database.entity.TagEntity
 import com.kazakago.cueue.database.entity.WorkspaceEntity
-import com.kazakago.cueue.database.table.RecipesTable
 import com.kazakago.cueue.database.table.TagsTable
 import com.kazakago.cueue.mapper.TagMapper
 import com.kazakago.cueue.model.Tag

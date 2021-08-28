@@ -11,8 +11,12 @@ data class User(
     @SerialName("workspaces")
     val workspaces: List<Workspace>,
 ) {
-    fun validate(workspaceId: WorkspaceId) {
-        val isContained = workspaces.map { it.id }.contains(workspaceId)
-        if (!isContained) throw NotFoundException()
+    fun validate(unsafeWorkspaceId: UnsafeWorkspaceId): WorkspaceId {
+        val isContained = workspaces.map { it.id.value }.contains(unsafeWorkspaceId.value)
+        if (isContained) {
+            return WorkspaceId(unsafeWorkspaceId.value)
+        } else {
+            throw NotFoundException()
+        }
     }
 }
