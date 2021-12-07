@@ -12,7 +12,7 @@ object AuthConfig {
                 uid = UID(verifiedToken.uid),
                 name = verifiedToken.name,
                 picture = verifiedToken.picture?.let { URL(it) },
-                email = Email(verifiedToken.email),
+                email = verifiedToken.email?.let { Email(it) },
                 isEmailVerified = verifiedToken.isEmailVerified
             )
         }
