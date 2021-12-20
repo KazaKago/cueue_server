@@ -29,7 +29,7 @@ class TagsController(private val userRepository: UserRepository, private val tag
     suspend fun order(call: ApplicationCall, firebaseUser: FirebaseUser, unsafeWorkspaceId: UnsafeWorkspaceId, tagSort: TagSortRegistrationData) {
         val user = userRepository.getUser(firebaseUser.uid)
         val workspaceId = unsafeWorkspaceId.validate(user)
-        tagRepository.updateTags(workspaceId, tagSort)
+        tagRepository.updateOrder(workspaceId, tagSort)
         call.respond(HttpStatusCode.OK)
     }
 }

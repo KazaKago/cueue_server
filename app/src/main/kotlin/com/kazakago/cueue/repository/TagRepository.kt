@@ -40,7 +40,7 @@ class TagRepository(private val tagMapper: TagMapper) {
         }
     }
 
-    suspend fun updateTags(workspaceId: WorkspaceId, tags: TagSortRegistrationData): List<Tag> {
+    suspend fun updateOrder(workspaceId: WorkspaceId, tags: TagSortRegistrationData): List<Tag> {
         return newSuspendedTransaction {
             tags.tagIds.mapIndexed { index, tagId ->
                 val entity = TagEntity.find { (TagsTable.workspaceId eq workspaceId.value) and (TagsTable.id eq tagId.value) }.first().apply {
