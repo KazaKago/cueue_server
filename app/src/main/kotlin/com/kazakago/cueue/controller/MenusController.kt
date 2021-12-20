@@ -14,14 +14,14 @@ class MenusController(private val userRepository: UserRepository, private val me
 
     suspend fun index(call: ApplicationCall, firebaseUser: FirebaseUser, unsafeWorkspaceId: UnsafeWorkspaceId, afterId: MenuId?) {
         val user = userRepository.getUser(firebaseUser.uid)
-        val workspaceId = user.validate(unsafeWorkspaceId)
+        val workspaceId = unsafeWorkspaceId.validate(user)
         val models = menuRepository.getMenus(workspaceId, afterId)
         call.respond(HttpStatusCode.OK, models)
     }
 
     suspend fun create(call: ApplicationCall, firebaseUser: FirebaseUser, unsafeWorkspaceId: UnsafeWorkspaceId, menu: MenuRegistrationData) {
         val user = userRepository.getUser(firebaseUser.uid)
-        val workspaceId = user.validate(unsafeWorkspaceId)
+        val workspaceId = unsafeWorkspaceId.validate(user)
         val model = menuRepository.createMenu(workspaceId, menu)
         call.respond(HttpStatusCode.Created, model)
     }

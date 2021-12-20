@@ -13,14 +13,14 @@ class TagsController(private val userRepository: UserRepository, private val tag
 
     suspend fun index(call: ApplicationCall, firebaseUser: FirebaseUser, unsafeWorkspaceId: UnsafeWorkspaceId) {
         val user = userRepository.getUser(firebaseUser.uid)
-        val workspaceId = user.validate(unsafeWorkspaceId)
+        val workspaceId = unsafeWorkspaceId.validate(user)
         val models = tagRepository.getTags(workspaceId)
         call.respond(HttpStatusCode.OK, models)
     }
 
     suspend fun create(call: ApplicationCall, firebaseUser: FirebaseUser, unsafeWorkspaceId: UnsafeWorkspaceId, tag: TagRegistrationData) {
         val user = userRepository.getUser(firebaseUser.uid)
-        val workspaceId = user.validate(unsafeWorkspaceId)
+        val workspaceId = unsafeWorkspaceId.validate(user)
         val model = tagRepository.createTag(workspaceId, tag)
         call.respond(HttpStatusCode.Created, model)
     }

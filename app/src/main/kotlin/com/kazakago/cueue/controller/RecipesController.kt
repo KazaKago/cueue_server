@@ -11,14 +11,14 @@ class RecipesController(private val userRepository: UserRepository, private val 
 
     suspend fun index(call: ApplicationCall, firebaseUser: FirebaseUser, unsafeWorkspaceId: UnsafeWorkspaceId, afterId: RecipeId?, tagId: TagId?) {
         val user = userRepository.getUser(firebaseUser.uid)
-        val workspaceId = user.validate(unsafeWorkspaceId)
+        val workspaceId = unsafeWorkspaceId.validate(user)
         val models = recipeRepository.getRecipes(workspaceId, afterId, tagId)
         call.respond(HttpStatusCode.OK, models)
     }
 
     suspend fun create(call: ApplicationCall, firebaseUser: FirebaseUser, unsafeWorkspaceId: UnsafeWorkspaceId, recipe: RecipeRegistrationData) {
         val user = userRepository.getUser(firebaseUser.uid)
-        val workspaceId = user.validate(unsafeWorkspaceId)
+        val workspaceId = unsafeWorkspaceId.validate(user)
         val model = recipeRepository.createRecipe(workspaceId, recipe)
         call.respond(HttpStatusCode.Created, model)
     }

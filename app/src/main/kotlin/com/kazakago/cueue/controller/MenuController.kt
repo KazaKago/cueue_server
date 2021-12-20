@@ -14,21 +14,21 @@ class MenuController(private val userRepository: UserRepository, private val men
 
     suspend fun index(call: ApplicationCall, firebaseUser: FirebaseUser, unsafeWorkspaceId: UnsafeWorkspaceId, menuId: MenuId) {
         val user = userRepository.getUser(firebaseUser.uid)
-        val workspaceId = user.validate(unsafeWorkspaceId)
+        val workspaceId = unsafeWorkspaceId.validate(user)
         val model = menuRepository.getMenu(workspaceId, menuId)
         call.respond(HttpStatusCode.OK, model)
     }
 
     suspend fun update(call: ApplicationCall, firebaseUser: FirebaseUser, unsafeWorkspaceId: UnsafeWorkspaceId, menuId: MenuId, menu: MenuRegistrationData) {
         val user = userRepository.getUser(firebaseUser.uid)
-        val workspaceId = user.validate(unsafeWorkspaceId)
+        val workspaceId = unsafeWorkspaceId.validate(user)
         val model = menuRepository.updateMenu(workspaceId, menuId, menu)
         call.respond(HttpStatusCode.OK, model)
     }
 
     suspend fun delete(call: ApplicationCall, firebaseUser: FirebaseUser, unsafeWorkspaceId: UnsafeWorkspaceId, menuId: MenuId) {
         val user = userRepository.getUser(firebaseUser.uid)
-        val workspaceId = user.validate(unsafeWorkspaceId)
+        val workspaceId = unsafeWorkspaceId.validate(user)
         menuRepository.deleteMenu(workspaceId, menuId)
         call.respond(HttpStatusCode.NoContent)
     }

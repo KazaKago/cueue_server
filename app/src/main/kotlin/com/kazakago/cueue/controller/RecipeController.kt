@@ -14,21 +14,21 @@ class RecipeController(private val userRepository: UserRepository, private val r
 
     suspend fun index(call: ApplicationCall, firebaseUser: FirebaseUser, unsafeWorkspaceId: UnsafeWorkspaceId, recipeId: RecipeId) {
         val user = userRepository.getUser(firebaseUser.uid)
-        val workspaceId = user.validate(unsafeWorkspaceId)
+        val workspaceId = unsafeWorkspaceId.validate(user)
         val model = recipeRepository.getRecipe(workspaceId, recipeId)
         call.respond(HttpStatusCode.OK, model)
     }
 
     suspend fun update(call: ApplicationCall, firebaseUser: FirebaseUser, unsafeWorkspaceId: UnsafeWorkspaceId, recipeId: RecipeId, recipe: RecipeRegistrationData) {
         val user = userRepository.getUser(firebaseUser.uid)
-        val workspaceId = user.validate(unsafeWorkspaceId)
+        val workspaceId = unsafeWorkspaceId.validate(user)
         val model = recipeRepository.updateRecipe(workspaceId, recipeId, recipe)
         call.respond(HttpStatusCode.OK, model)
     }
 
     suspend fun delete(call: ApplicationCall, firebaseUser: FirebaseUser, unsafeWorkspaceId: UnsafeWorkspaceId, recipeId: RecipeId) {
         val user = userRepository.getUser(firebaseUser.uid)
-        val workspaceId = user.validate(unsafeWorkspaceId)
+        val workspaceId = unsafeWorkspaceId.validate(user)
         recipeRepository.deleteRecipe(workspaceId, recipeId)
         call.respond(HttpStatusCode.NoContent)
     }
