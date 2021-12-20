@@ -23,6 +23,7 @@ class ErrorController {
     }
 
     private fun createLogMessage(throwable: Throwable): String {
-        return throwable.toString() + if (throwable.cause != null) "\ncause: ${createLogMessage(throwable.cause!!)}" else ""
+        val cause = throwable.cause
+        return throwable.toString() + if (cause != null) "\ncause: ${createLogMessage(cause)}" else ""
     }
 }
