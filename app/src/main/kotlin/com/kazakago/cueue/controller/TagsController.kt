@@ -2,6 +2,7 @@ package com.kazakago.cueue.controller
 
 import com.kazakago.cueue.model.FirebaseUser
 import com.kazakago.cueue.model.TagRegistrationData
+import com.kazakago.cueue.model.TagSortRegistrationData
 import com.kazakago.cueue.model.UnsafeWorkspaceId
 import com.kazakago.cueue.repository.TagRepository
 import com.kazakago.cueue.repository.UserRepository
@@ -23,5 +24,12 @@ class TagsController(private val userRepository: UserRepository, private val tag
         val workspaceId = unsafeWorkspaceId.validate(user)
         val model = tagRepository.createTag(workspaceId, tag)
         call.respond(HttpStatusCode.Created, model)
+    }
+
+    suspend fun order(call: ApplicationCall, firebaseUser: FirebaseUser, unsafeWorkspaceId: UnsafeWorkspaceId, tagSort: TagSortRegistrationData) {
+        val user = userRepository.getUser(firebaseUser.uid)
+        val workspaceId = unsafeWorkspaceId.validate(user)
+        tagRepository.updateTags(workspaceId, tagSort)
+        call.respond(HttpStatusCode.OK)
     }
 }

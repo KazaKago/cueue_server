@@ -77,6 +77,11 @@ fun Application.appRouting() {
                             post {
                                 tagsController.create(call, call.requirePrincipal(), call.parameters.workspaceId(), call.requireReceive())
                             }
+                            route("/order") {
+                                patch {
+                                    tagsController.order(call, call.requirePrincipal(), call.parameters.workspaceId(), call.requireReceive())
+                                }
+                            }
                             route("/{$TAG_ID}") {
                                 get {
                                     tagController.index(call, call.requirePrincipal(), call.parameters.workspaceId(), call.parameters.tagId())

@@ -10,6 +10,7 @@ class TagEntity(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<TagEntity>(TagsTable)
 
     var name by TagsTable.name
+    var sortOrder by TagsTable.sortOrder
     var createdAt by TagsTable.createdAt
     var updatedAt by TagsTable.updatedAt
     var workspace by WorkspaceEntity referencedOn TagsTable.workspaceId
