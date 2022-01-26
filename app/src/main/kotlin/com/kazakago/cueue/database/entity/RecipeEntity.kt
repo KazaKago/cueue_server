@@ -12,6 +12,7 @@ class RecipeEntity(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<RecipeEntity>(RecipesTable)
 
     var title by RecipesTable.title
+    var kana by RecipesTable.kana
     var description by RecipesTable.description
     var url by RecipesTable.url
     val images by ContentEntity optionalReferrersOn ContentsTable.recipeId

@@ -13,12 +13,9 @@ import com.kazakago.cueue.mapper.RecipeSummaryMapper
 import com.kazakago.cueue.model.*
 import org.jetbrains.exposed.dao.load
 import org.jetbrains.exposed.dao.with
-import org.jetbrains.exposed.sql.ColumnSet
-import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import java.time.LocalDateTime
 
@@ -33,7 +30,7 @@ class RecipeRepository(private val recipeMapper: RecipeMapper, private val recip
                 conditions = conditions and (RecipeTagsRelationsTable.tagId eq tagId.value)
             }
             if (title != null) {
-                conditions = conditions and (RecipesTable.title like "%$title%")
+                conditions = conditions and ((RecipesTable.title like "%$title%") or (RecipesTable.kana like "%$title%"))
             }
             val query = table
                 .slice(RecipesTable.columns)
@@ -63,6 +60,7 @@ class RecipeRepository(private val recipeMapper: RecipeMapper, private val recip
             val entity = RecipeEntity
                 .new {
                     this.title = recipe.title
+                    this.kana = recipe.kana
                     this.description = recipe.description ?: ""
                     this.url = recipe.url
                     this.workspace = WorkspaceEntity[workspaceId.value]
@@ -84,6 +82,7 @@ class RecipeRepository(private val recipeMapper: RecipeMapper, private val recip
                 .load(RecipeEntity::images, RecipeEntity::menus, RecipeEntity::tags)
                 .apply {
                     this.title = recipe.title
+                    this.kana = recipe.kana
                     this.description = recipe.description ?: ""
                     this.url = recipe.url
                     this.clearImageRelations()

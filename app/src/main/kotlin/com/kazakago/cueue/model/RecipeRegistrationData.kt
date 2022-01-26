@@ -7,6 +7,8 @@ import kotlinx.serialization.Serializable
 data class RecipeRegistrationData(
     @SerialName("title")
     val title: String,
+    @SerialName("kana")
+    val kana: String,
     @SerialName("description")
     val description: String? = null,
     @SerialName("url")

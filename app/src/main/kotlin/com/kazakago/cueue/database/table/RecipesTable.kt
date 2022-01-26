@@ -7,6 +7,7 @@ import java.time.LocalDateTime
 
 object RecipesTable : LongIdTable() {
     val title = text("title")
+    val kana = text("kana")
     val description = text("description")
     val url = text("url").nullable()
     val workspaceId = reference(name = "workspace_id", foreign = WorkspacesTable, onUpdate = ReferenceOption.CASCADE, onDelete = ReferenceOption.CASCADE)
