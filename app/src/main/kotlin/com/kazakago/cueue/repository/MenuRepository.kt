@@ -9,6 +9,8 @@ import com.kazakago.cueue.mapper.MenuMapper
 import com.kazakago.cueue.mapper.MenuSummaryMapper
 import com.kazakago.cueue.mapper.rawValue
 import com.kazakago.cueue.model.*
+import org.jetbrains.exposed.dao.load
+import org.jetbrains.exposed.dao.with
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import java.time.LocalDateTime
@@ -18,57 +20,70 @@ class MenuRepository(private val menuMapper: MenuMapper, private val menuSummary
     suspend fun getMenus(workspaceId: WorkspaceId, afterId: MenuId?): List<MenuSummary> {
         return newSuspendedTransaction {
             val timeFrameExpression = getTimeFrameExpression()
-            val menus = MenuEntity.find { MenusTable.workspaceId eq workspaceId.value }
-                .orderBy(
-                    MenusTable.date to SortOrder.DESC,
-                    timeFrameExpression to SortOrder.ASC,
-                    MenusTable.id to SortOrder.DESC
-                )
+            val menus = MenuEntity
+                .find { MenusTable.workspaceId eq workspaceId.value }
+                .orderBy(MenusTable.date to SortOrder.DESC)
+                .orderBy(timeFrameExpression to SortOrder.ASC)
+                .orderBy(MenusTable.id to SortOrder.DESC)
             val offset = menus.getOffset(afterId?.value)
-            menus.limit(20, offset).map { menuSummaryMapper.toModel(it) }
+            menus
+                .limit(20, offset)
+                .with(MenuEntity::recipes, RecipeEntity::images, RecipeEntity::menus)
+                .map { menuSummaryMapper.toModel(it) }
         }
     }
 
     suspend fun getMenu(workspaceId: WorkspaceId, menuId: MenuId): Menu {
         return newSuspendedTransaction {
-            val entity = MenuEntity.find { (MenusTable.workspaceId eq workspaceId.value) and (MenusTable.id eq menuId.value) }.first()
+            val entity = MenuEntity
+                .find { (MenusTable.workspaceId eq workspaceId.value) and (MenusTable.id eq menuId.value) }
+                .first()
+                .load(MenuEntity::recipes, RecipeEntity::images, RecipeEntity::menus)
             menuMapper.toModel(entity)
         }
     }
 
     suspend fun createMenu(workspaceId: WorkspaceId, menu: MenuRegistrationData): Menu {
         return newSuspendedTransaction {
-            val entity = MenuEntity.new {
-                this.memo = menu.memo ?: ""
-                this.date = menu.date
-                this.timeFrame = menu.timeFrame.rawValue()
-                this.workspace = WorkspaceEntity[workspaceId.value]
-            }.apply {
-                val rawRecipeIds = menu.recipeIds?.map { it.value } ?: emptyList()
-                this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspaceId.value) and (RecipesTable.id inList rawRecipeIds) }
-            }
+            val entity = MenuEntity
+                .new {
+                    this.memo = menu.memo ?: ""
+                    this.date = menu.date
+                    this.timeFrame = menu.timeFrame.rawValue()
+                    this.workspace = WorkspaceEntity[workspaceId.value]
+                }
+                .apply {
+                    val rawRecipeIds = menu.recipeIds?.map { it.value } ?: emptyList()
+                    this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspaceId.value) and (RecipesTable.id inList rawRecipeIds) }
+                }
             menuMapper.toModel(entity)
         }
     }
 
     suspend fun updateMenu(workspaceId: WorkspaceId, menuId: MenuId, menu: MenuRegistrationData): Menu {
         return newSuspendedTransaction {
-            val entity = MenuEntity.find { (MenusTable.workspaceId eq workspaceId.value) and (MenusTable.id eq menuId.value) }.first().apply {
-                this.memo = menu.memo ?: ""
-                this.date = menu.date
-                this.timeFrame = menu.timeFrame.rawValue()
-                val rawRecipeIds = menu.recipeIds?.map { it.value } ?: emptyList()
-                this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspaceId.value) and (RecipesTable.id inList rawRecipeIds) }
-                this.updatedAt = LocalDateTime.now()
-            }
+            val entity = MenuEntity
+                .find { (MenusTable.workspaceId eq workspaceId.value) and (MenusTable.id eq menuId.value) }
+                .first()
+                .load(MenuEntity::recipes, RecipeEntity::images, RecipeEntity::menus)
+                .apply {
+                    this.memo = menu.memo ?: ""
+                    this.date = menu.date
+                    this.timeFrame = menu.timeFrame.rawValue()
+                    val rawRecipeIds = menu.recipeIds?.map { it.value } ?: emptyList()
+                    this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspaceId.value) and (RecipesTable.id inList rawRecipeIds) }
+                    this.updatedAt = LocalDateTime.now()
+                }
             menuMapper.toModel(entity)
         }
     }
 
     suspend fun deleteMenu(workspaceId: WorkspaceId, menuId: MenuId) {
         newSuspendedTransaction {
-            val menu = MenuEntity.find { (MenusTable.workspaceId eq workspaceId.value) and (MenusTable.id eq menuId.value) }.first()
-            menu.delete()
+            MenuEntity
+                .find { (MenusTable.workspaceId eq workspaceId.value) and (MenusTable.id eq menuId.value) }
+                .first()
+                .delete()
         }
     }
 

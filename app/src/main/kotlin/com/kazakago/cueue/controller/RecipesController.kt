@@ -9,10 +9,10 @@ import io.ktor.response.*
 
 class RecipesController(private val userRepository: UserRepository, private val recipeRepository: RecipeRepository) {
 
-    suspend fun index(call: ApplicationCall, firebaseUser: FirebaseUser, unsafeWorkspaceId: UnsafeWorkspaceId, afterId: RecipeId?, tagId: TagId?) {
+    suspend fun index(call: ApplicationCall, firebaseUser: FirebaseUser, unsafeWorkspaceId: UnsafeWorkspaceId, afterId: RecipeId?, tagId: TagId?, title: String?) {
         val user = userRepository.getUser(firebaseUser.uid)
         val workspaceId = unsafeWorkspaceId.validate(user)
-        val models = recipeRepository.getRecipes(workspaceId, afterId, tagId)
+        val models = recipeRepository.getRecipes(workspaceId, afterId, tagId, title)
         call.respond(HttpStatusCode.OK, models)
     }
 

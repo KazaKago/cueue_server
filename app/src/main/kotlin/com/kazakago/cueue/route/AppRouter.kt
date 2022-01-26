@@ -53,7 +53,7 @@ fun Application.appRouting() {
                     route("/{$WORKSPACE_ID}") {
                         route("/recipes") {
                             get {
-                                recipesController.index(call, call.requirePrincipal(), call.parameters.workspaceId(), call.request.queryParameters.recipeAfterId(), call.request.queryParameters.tagIdOrNull())
+                                recipesController.index(call, call.requirePrincipal(), call.parameters.workspaceId(), call.request.queryParameters.recipeAfterId(), call.request.queryParameters.tagIdOrNull(), call.request.queryParameters.title())
                             }
                             post {
                                 recipesController.create(call, call.requirePrincipal(), call.parameters.workspaceId(), call.requireReceive())
@@ -125,6 +125,7 @@ private const val MENU_ID = "menu_id"
 private const val TAG_ID = "tag_id"
 private const val RECIPE_ID = "recipe_id"
 private const val AFTER_ID = "after_id"
+private const val TITLE = "title"
 
 private fun Parameters.workspaceId() = requireLong(WORKSPACE_ID) { UnsafeWorkspaceId(it) }
 private fun Parameters.menuId() = requireLong(MENU_ID) { MenuId(it) }
@@ -133,3 +134,4 @@ private fun Parameters.recipeId() = requireLong(RECIPE_ID) { RecipeId(it) }
 private fun Parameters.menuAfterId() = getLong(AFTER_ID) { MenuId(it) }
 private fun Parameters.recipeAfterId() = getLong(AFTER_ID) { RecipeId(it) }
 private fun Parameters.tagIdOrNull() = getLong(TAG_ID) { TagId(it) }
+private fun Parameters.title() = getString(TITLE)
