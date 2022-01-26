@@ -15,7 +15,8 @@ class TagRepository(private val tagMapper: TagMapper) {
 
     suspend fun getTags(workspaceId: WorkspaceId): List<Tag> {
         return newSuspendedTransaction {
-            val entities = TagEntity.find { TagsTable.workspaceId eq workspaceId.value }
+            val entities = TagEntity
+                .find { TagsTable.workspaceId eq workspaceId.value }
                 .orderBy(TagsTable.sortOrder to SortOrder.ASC)
                 .toList()
             entities.map { tagMapper.toModel(it) }
@@ -24,18 +25,21 @@ class TagRepository(private val tagMapper: TagMapper) {
 
     suspend fun getTag(workspaceId: WorkspaceId, tagId: TagId): Tag {
         return newSuspendedTransaction {
-            val entity = TagEntity.find { (TagsTable.workspaceId eq workspaceId.value) and (TagsTable.id eq tagId.value) }.first()
+            val entity = TagEntity
+                .find { (TagsTable.workspaceId eq workspaceId.value) and (TagsTable.id eq tagId.value) }
+                .first()
             tagMapper.toModel(entity)
         }
     }
 
     suspend fun createTag(workspaceId: WorkspaceId, tag: TagRegistrationData): Tag {
         return newSuspendedTransaction {
-            val entity = TagEntity.new {
-                this.name = tag.name
-                this.sortOrder = TagEntity.count(TagsTable.workspaceId eq workspaceId.value)
-                this.workspace = WorkspaceEntity[workspaceId.value]
-            }
+            val entity = TagEntity
+                .new {
+                    this.name = tag.name
+                    this.sortOrder = TagEntity.count(TagsTable.workspaceId eq workspaceId.value)
+                    this.workspace = WorkspaceEntity[workspaceId.value]
+                }
             tagMapper.toModel(entity)
         }
     }
@@ -43,10 +47,13 @@ class TagRepository(private val tagMapper: TagMapper) {
     suspend fun updateOrder(workspaceId: WorkspaceId, tags: TagSortRegistrationData): List<Tag> {
         return newSuspendedTransaction {
             tags.tagIds.mapIndexed { index, tagId ->
-                val entity = TagEntity.find { (TagsTable.workspaceId eq workspaceId.value) and (TagsTable.id eq tagId.value) }.first().apply {
-                    this.sortOrder = index.toLong()
-                    this.updatedAt = LocalDateTime.now()
-                }
+                val entity = TagEntity
+                    .find { (TagsTable.workspaceId eq workspaceId.value) and (TagsTable.id eq tagId.value) }
+                    .first()
+                    .apply {
+                        this.sortOrder = index.toLong()
+                        this.updatedAt = LocalDateTime.now()
+                    }
                 tagMapper.toModel(entity)
             }
         }
@@ -54,10 +61,13 @@ class TagRepository(private val tagMapper: TagMapper) {
 
     suspend fun updateTag(workspaceId: WorkspaceId, tagId: TagId, tag: TagRegistrationData): Tag {
         return newSuspendedTransaction {
-            val entity = TagEntity.find { (TagsTable.workspaceId eq workspaceId.value) and (TagsTable.id eq tagId.value) }.first().apply {
-                this.name = tag.name
-                this.updatedAt = LocalDateTime.now()
-            }
+            val entity = TagEntity
+                .find { (TagsTable.workspaceId eq workspaceId.value) and (TagsTable.id eq tagId.value) }
+                .first()
+                .apply {
+                    this.name = tag.name
+                    this.updatedAt = LocalDateTime.now()
+                }
             tagMapper.toModel(entity)
         }
     }
