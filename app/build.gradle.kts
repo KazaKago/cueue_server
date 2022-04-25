@@ -4,8 +4,8 @@ plugins {
     application
     kotlin("jvm")
     kotlin("plugin.serialization")
-    id("org.flywaydb.flyway") version "8.4.1"
-    id("com.github.johnrengelman.shadow") version "7.0.0"
+    id("org.flywaydb.flyway") version "8.5.9"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 group = "com.kazakago.cueue"
@@ -36,22 +36,22 @@ tasks.register("stage") {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-netty:1.6.7")
-    implementation("io.ktor:ktor-serialization:1.6.7")
-    implementation("io.ktor:ktor-auth:1.6.7")
+    implementation("io.ktor:ktor-server-netty:1.6.8")
+    implementation("io.ktor:ktor-serialization:1.6.8")
+    implementation("io.ktor:ktor-auth:1.6.8")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
-    implementation("org.jetbrains.exposed:exposed-core:0.36.1")
-    implementation("org.jetbrains.exposed:exposed-dao:0.36.1")
-    implementation("org.jetbrains.exposed:exposed-jdbc:0.36.1")
-    implementation("org.jetbrains.exposed:exposed-java-time:0.36.1")
-    implementation("org.postgresql:postgresql:42.3.1")
-    implementation("org.flywaydb:flyway-core:8.4.1")
-    implementation("io.insert-koin:koin-ktor:3.1.4")
+    implementation("org.jetbrains.exposed:exposed-core:0.38.2")
+    implementation("org.jetbrains.exposed:exposed-dao:0.38.2")
+    implementation("org.jetbrains.exposed:exposed-jdbc:0.38.2")
+    implementation("org.jetbrains.exposed:exposed-java-time:0.38.2")
+    implementation("org.postgresql:postgresql:42.3.4")
+    implementation("org.flywaydb:flyway-core:8.5.9")
+    implementation("io.insert-koin:koin-ktor:3.1.6")
     implementation("com.google.firebase:firebase-admin:8.1.0")
-    implementation("ch.qos.logback:logback-classic:1.2.10")
+    implementation("ch.qos.logback:logback-classic:1.2.11")
     implementation("org.sejda.imageio:webp-imageio:0.1.6")
-    implementation("com.drewnoakes:metadata-extractor:2.16.0")
-    implementation("net.swiftzer.semver:semver:1.1.2")
+    implementation("com.drewnoakes:metadata-extractor:2.17.0")
+    implementation("net.swiftzer.semver:semver:1.2.0")
 
-    testImplementation("io.ktor:ktor-server-tests:1.6.7")
+    testImplementation("io.ktor:ktor-server-tests:1.6.8")
 }
