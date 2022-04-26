@@ -1,8 +1,8 @@
 package com.kazakago.cueue.controller
 
 import com.kazakago.cueue.model.AndroidPackage
-import io.ktor.application.*
-import io.ktor.response.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
 
 class CallbackController {
 

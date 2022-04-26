@@ -1,5 +1,6 @@
 package com.kazakago.cueue.route
 
+import com.kazakago.cueue.config.koin.inject
 import com.kazakago.cueue.config.maintenance.maintenanceCheck
 import com.kazakago.cueue.config.version.versionCheck
 import com.kazakago.cueue.controller.*
@@ -7,12 +8,11 @@ import com.kazakago.cueue.model.MenuId
 import com.kazakago.cueue.model.RecipeId
 import com.kazakago.cueue.model.TagId
 import com.kazakago.cueue.model.UnsafeWorkspaceId
-import io.ktor.application.*
-import io.ktor.auth.*
 import io.ktor.http.*
-import io.ktor.request.*
-import io.ktor.routing.*
-import org.koin.ktor.ext.inject
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.request.*
+import io.ktor.server.routing.*
 
 fun Application.appRouting() {
     val rootController by inject<RootController>()

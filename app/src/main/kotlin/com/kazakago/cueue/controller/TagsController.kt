@@ -6,9 +6,9 @@ import com.kazakago.cueue.model.TagSortRegistrationData
 import com.kazakago.cueue.model.UnsafeWorkspaceId
 import com.kazakago.cueue.repository.TagRepository
 import com.kazakago.cueue.repository.UserRepository
-import io.ktor.application.*
 import io.ktor.http.*
-import io.ktor.response.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
 
 class TagsController(private val userRepository: UserRepository, private val tagRepository: TagRepository) {
 

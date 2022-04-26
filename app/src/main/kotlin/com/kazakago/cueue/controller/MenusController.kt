@@ -6,9 +6,9 @@ import com.kazakago.cueue.model.MenuRegistrationData
 import com.kazakago.cueue.model.UnsafeWorkspaceId
 import com.kazakago.cueue.repository.MenuRepository
 import com.kazakago.cueue.repository.UserRepository
-import io.ktor.application.*
 import io.ktor.http.*
-import io.ktor.response.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
 
 class MenusController(private val userRepository: UserRepository, private val menuRepository: MenuRepository) {
 

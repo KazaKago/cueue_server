@@ -6,9 +6,9 @@ import com.kazakago.cueue.model.RecipeRegistrationData
 import com.kazakago.cueue.model.UnsafeWorkspaceId
 import com.kazakago.cueue.repository.RecipeRepository
 import com.kazakago.cueue.repository.UserRepository
-import io.ktor.application.*
 import io.ktor.http.*
-import io.ktor.response.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
 
 class RecipeController(private val userRepository: UserRepository, private val recipeRepository: RecipeRepository) {
 

@@ -1,6 +1,6 @@
 package com.kazakago.cueue.model
 
-import io.ktor.features.*
+import io.ktor.server.plugins.*
 
 data class UnsafeWorkspaceId(val value: Long) {
     fun validate(user: User): WorkspaceId {

@@ -1,11 +1,10 @@
 package com.kazakago.cueue.route
 
 import com.kazakago.cueue.controller.ErrorController
-import io.ktor.application.*
-import io.ktor.features.*
+import io.ktor.server.plugins.statuspages.*
 
-fun StatusPages.Configuration.handle() {
-    exception<Exception> { cause ->
+fun StatusPagesConfig.handle() {
+    exception<Exception> { call, cause ->
         val errorController = ErrorController()
         errorController.handle(call, cause)
     }

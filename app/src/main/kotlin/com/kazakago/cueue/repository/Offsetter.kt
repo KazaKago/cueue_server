@@ -1,6 +1,6 @@
 package com.kazakago.cueue.repository
 
-import io.ktor.features.*
+import io.ktor.server.plugins.*
 import org.jetbrains.exposed.dao.Entity
 
 fun <ID, ENTITY : Entity<ID>> Iterable<ENTITY>.getOffset(afterId: ID?): Long {

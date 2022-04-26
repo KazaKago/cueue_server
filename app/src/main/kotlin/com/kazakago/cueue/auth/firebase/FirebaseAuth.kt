@@ -5,18 +5,18 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseToken
-import io.ktor.application.*
-import io.ktor.auth.*
 import io.ktor.http.*
-import io.ktor.request.*
-import io.ktor.response.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
 
-class FirebaseAuthenticationProvider internal constructor(config: Configuration) : AuthenticationProvider(config) {
+class FirebaseAuthenticationProvider internal constructor(config: Config) : AuthenticationProvider(config) {
 
     internal val token: (ApplicationCall) -> String? = config.token
     internal val principle: ((verifiedToken: FirebaseToken) -> Principal?)? = config.principal
 
-    class Configuration internal constructor(name: String?) : AuthenticationProvider.Configuration(name) {
+    class Config internal constructor(name: String?) : AuthenticationProvider.Config(name) {
 
         internal var token: (ApplicationCall) -> String? = { call -> call.request.parseAuthorizationToken() }
 
@@ -24,26 +24,26 @@ class FirebaseAuthenticationProvider internal constructor(config: Configuration)
 
         internal fun build() = FirebaseAuthenticationProvider(this)
     }
-}
 
-fun Authentication.Configuration.firebase(name: String? = null, configure: FirebaseAuthenticationProvider.Configuration.() -> Unit) {
-    val provider = FirebaseAuthenticationProvider.Configuration(name).apply(configure).build()
-    provider.pipeline.intercept(AuthenticationPipeline.RequestAuthentication) { context ->
+    override suspend fun onAuthenticate(context: AuthenticationContext) {
         try {
-            val token = provider.token(call) ?: throw FirebaseAuthException(FirebaseException(ErrorCode.UNAUTHENTICATED, "No token could be found", null))
+            val token = token(context.call) ?: throw FirebaseAuthException(FirebaseException(ErrorCode.UNAUTHENTICATED, "No token could be found", null))
             val verifiedToken = FirebaseAuth.getInstance().verifyIdToken(token)
-            provider.principle?.let { it.invoke(verifiedToken)?.let { principle -> context.principal(principle) } }
+            principle?.let { it.invoke(verifiedToken)?.let { principle -> context.principal(principle) } }
         } catch (cause: Throwable) {
             val message = if (cause is FirebaseAuthException) {
                 "Authentication failed: ${cause.message ?: cause.javaClass.simpleName}"
             } else {
                 cause.message ?: cause.javaClass.simpleName
             }
-            call.respond(HttpStatusCode.Unauthorized, message)
+            context.call.respond(HttpStatusCode.Unauthorized, message)
             context.challenge.complete()
-            finish()
         }
     }
+}
+
+fun AuthenticationConfig.firebase(name: String? = null, configure: FirebaseAuthenticationProvider.Config.() -> Unit) {
+    val provider = FirebaseAuthenticationProvider.Config(name).apply(configure).build()
     register(provider)
 }
 

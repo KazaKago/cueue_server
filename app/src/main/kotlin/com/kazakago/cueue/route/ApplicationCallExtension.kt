@@ -1,11 +1,11 @@
 package com.kazakago.cueue.route
 
 import com.kazakago.cueue.exception.UnauthorizedException
-import io.ktor.application.*
-import io.ktor.auth.*
-import io.ktor.features.*
 import io.ktor.http.*
-import io.ktor.request.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.plugins.*
+import io.ktor.server.request.*
 
 suspend inline fun <reified T : Any> ApplicationCall.requireReceive(): T {
     try {

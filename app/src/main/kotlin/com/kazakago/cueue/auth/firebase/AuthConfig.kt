@@ -6,7 +6,7 @@ import com.kazakago.cueue.model.UID
 import java.net.URL
 
 object AuthConfig {
-    fun FirebaseAuthenticationProvider.Configuration.configure() {
+    fun FirebaseAuthenticationProvider.Config.configure() {
         principal = { verifiedToken ->
             FirebaseUser(
                 uid = UID(verifiedToken.uid),

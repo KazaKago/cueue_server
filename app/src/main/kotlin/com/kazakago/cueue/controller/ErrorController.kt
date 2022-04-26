@@ -2,10 +2,10 @@ package com.kazakago.cueue.controller
 
 import com.kazakago.cueue.exception.ImageDecodeException
 import com.kazakago.cueue.exception.UnauthorizedException
-import io.ktor.application.*
-import io.ktor.features.*
 import io.ktor.http.*
-import io.ktor.response.*
+import io.ktor.server.application.*
+import io.ktor.server.plugins.*
+import io.ktor.server.response.*
 import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
 
 class ErrorController {
