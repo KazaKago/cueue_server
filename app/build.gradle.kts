@@ -26,6 +26,7 @@ tasks.withType<KotlinCompile> {
 
 tasks.shadowJar {
     archiveClassifier.set("")
+    archiveVersion.set("")
     mergeServiceFiles()
 }
 
