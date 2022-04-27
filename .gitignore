@@ -5,3 +5,4 @@
 *.ipr
 *.iws
 app/cueue-staging-firebase-adminsdk-389hd-99f70c448e.json
+app/src/main/resources/development.conf

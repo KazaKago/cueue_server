@@ -2,6 +2,7 @@
   <configuration default="false" name="development" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="io.ktor.server.netty.EngineMain" />
     <module name="cueue.app.main" />
+    <option name="PROGRAM_PARAMETERS" value="-config=app/src/main/resources/development.conf" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
