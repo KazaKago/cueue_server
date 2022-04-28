@@ -7,5 +7,7 @@ This repository is server.
 
 # Project Repositories
 
-- [Server (this repository)](https://github.com/KazaKago/cueue_server)
-- [Client](https://github.com/KazaKago/cueue_flutter)
+- Server (Ktor)
+    - https://github.com/KazaKago/cueue_server
+- Client (Flutter)
+    - https://github.com/KazaKago/cueue_flutter
