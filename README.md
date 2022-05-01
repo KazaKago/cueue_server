@@ -1,6 +1,6 @@
 # Cueue server
 
-[![UnitTest](https://github.com/KazaKago/cueue_server/actions/workflows/unit_test.yml/badge.svg)](https://github.com/KazaKago/cueue_server/actions/workflows/unit_test.yml) ![Staging](https://pyheroku-badge.herokuapp.com/?app=cueue-staging)
+[![UnitTest](https://github.com/KazaKago/cueue_server/actions/workflows/unit_test.yml/badge.svg)](https://github.com/KazaKago/cueue_server/actions/workflows/unit_test.yml)
 
 **This project is under development.**
 
