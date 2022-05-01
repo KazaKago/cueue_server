@@ -10,8 +10,6 @@ data class Recipe(
     val id: RecipeId,
     @SerialName("title")
     val title: String,
-    @SerialName("kana")
-    val kana: String,
     @SerialName("description")
     val description: String,
     @SerialName("url")

@@ -30,7 +30,7 @@ class RecipeRepository(private val recipeMapper: RecipeMapper, private val recip
                 conditions = conditions and (RecipeTagsRelationsTable.tagId eq tagId.value)
             }
             if (title != null) {
-                conditions = conditions and ((RecipesTable.title like "%$title%") or (RecipesTable.kana like "%$title%"))
+                conditions = conditions and ((RecipesTable.title like "%$title%") or (RecipesTable.hiragana like "%$title%") or (RecipesTable.katakana like "%$title%"))
             }
             val query = table
                 .slice(RecipesTable.columns)
@@ -60,7 +60,8 @@ class RecipeRepository(private val recipeMapper: RecipeMapper, private val recip
             val entity = RecipeEntity
                 .new {
                     this.title = recipe.title
-                    this.kana = recipe.kana
+                    this.hiragana = recipe.furigana.hiragana
+                    this.katakana = recipe.furigana.katakana
                     this.description = recipe.description ?: ""
                     this.url = recipe.url
                     this.workspace = WorkspaceEntity[workspaceId.value]
@@ -82,7 +83,8 @@ class RecipeRepository(private val recipeMapper: RecipeMapper, private val recip
                 .load(RecipeEntity::images, RecipeEntity::menus, RecipeEntity::tags)
                 .apply {
                     this.title = recipe.title
-                    this.kana = recipe.kana
+                    this.hiragana = recipe.furigana.hiragana
+                    this.katakana = recipe.furigana.katakana
                     this.description = recipe.description ?: ""
                     this.url = recipe.url
                     this.clearImageRelations()

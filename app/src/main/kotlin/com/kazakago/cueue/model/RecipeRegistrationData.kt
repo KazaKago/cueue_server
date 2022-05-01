@@ -2,13 +2,12 @@ package com.kazakago.cueue.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
 data class RecipeRegistrationData(
     @SerialName("title")
     val title: String,
-    @SerialName("kana")
-    val kana: String,
     @SerialName("description")
     val description: String? = null,
     @SerialName("url")
@@ -17,4 +16,7 @@ data class RecipeRegistrationData(
     val imageKeys: List<String>? = null,
     @SerialName("tag_ids")
     val tagIds: List<TagId>? = null,
-)
+) {
+    @Transient
+    val furigana = Furigana(title)
+}

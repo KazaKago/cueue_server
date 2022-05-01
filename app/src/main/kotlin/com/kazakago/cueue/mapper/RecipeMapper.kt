@@ -11,7 +11,6 @@ class RecipeMapper(private val tagMapper: TagMapper) {
         return Recipe(
             id = RecipeId(recipe.id.value),
             title = recipe.title,
-            kana = recipe.kana,
             description = recipe.description,
             url = recipe.url,
             images = recipe.images
