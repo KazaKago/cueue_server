@@ -21,20 +21,29 @@ import java.time.LocalDateTime
 
 class RecipeRepository(private val recipeMapper: RecipeMapper, private val recipeSummaryMapper: RecipeSummaryMapper) {
 
-    suspend fun getRecipes(workspaceId: WorkspaceId, afterId: RecipeId?, tagId: TagId?, title: String?): List<RecipeSummary> {
+    suspend fun getRecipes(workspaceId: WorkspaceId, afterId: RecipeId?, keyword: String?, tagIds: List<TagId>?): List<RecipeSummary> {
         return newSuspendedTransaction {
             var table: ColumnSet = RecipesTable
             var conditions = RecipesTable.workspaceId eq workspaceId.value
-            if (tagId != null) {
-                table = table.leftJoin(RecipeTagsRelationsTable)
-                conditions = conditions and (RecipeTagsRelationsTable.tagId eq tagId.value)
+            if (!keyword.isNullOrBlank()) {
+                conditions = conditions and ((RecipesTable.title like "%$keyword%") or (RecipesTable.hiragana like "%$keyword%") or (RecipesTable.katakana like "%$keyword%"))
             }
-            if (title != null) {
-                conditions = conditions and ((RecipesTable.title like "%$title%") or (RecipesTable.hiragana like "%$title%") or (RecipesTable.katakana like "%$title%"))
+            if (!tagIds.isNullOrEmpty()) {
+                lateinit var tagIdsCondition: Op<Boolean>
+                tagIds.forEachIndexed { index, tagId ->
+                    tagIdsCondition = if (index == 0) {
+                        RecipeTagsRelationsTable.tagId eq tagId.value
+                    } else {
+                        tagIdsCondition or (RecipeTagsRelationsTable.tagId eq tagId.value)
+                    }
+                }
+                table = table.leftJoin(RecipeTagsRelationsTable)
+                conditions = conditions and tagIdsCondition
             }
             val query = table
                 .slice(RecipesTable.columns)
                 .select(conditions)
+                .withDistinct()
                 .orderBy(RecipesTable.id to SortOrder.DESC)
             val recipes = RecipeEntity.wrapRows(query)
             val offset = recipes.getOffset(afterId?.value)
