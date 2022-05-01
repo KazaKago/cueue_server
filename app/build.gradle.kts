@@ -58,7 +58,6 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.2.11")
     implementation("org.sejda.imageio:webp-imageio:0.1.6")
     implementation("com.drewnoakes:metadata-extractor:2.17.0")
-    implementation("net.swiftzer.semver:semver:1.2.0")
 
     testImplementation("io.ktor:ktor-server-tests")
 }

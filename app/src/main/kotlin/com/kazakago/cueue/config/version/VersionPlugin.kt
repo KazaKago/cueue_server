@@ -5,14 +5,12 @@ import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import net.swiftzer.semver.SemVer
 
 val Version = createRouteScopedPlugin("Version") {
     onCall { call ->
-        val rawApiVersion = call.request.headers["Api-Version"]
-        if (rawApiVersion != null) {
+        val apiVersion = call.request.headers["Api-Version"]?.toIntOrNull()
+        if (apiVersion != null) {
             try {
-                val apiVersion = SemVer.parse(rawApiVersion)
                 if (apiVersion < MinApiVersion.value) {
                     call.respond(HttpStatusCode.UpgradeRequired, "Require Api-Version '${MinApiVersion.value}' or higher.")
                 }
