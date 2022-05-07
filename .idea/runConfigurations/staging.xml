@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="staging" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="io.ktor.server.netty.EngineMain" />
+    <module name="cueue.app.main" />
+    <option name="PROGRAM_PARAMETERS" value="-config=src/main/resources/staging.conf" />
+    <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
