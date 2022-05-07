@@ -16,4 +16,4 @@ jobs:
     - name: Setup
       uses: ./.github/actions/setup
     - name: Test
-      run: ./.github/actions/test
+      uses: ./.github/actions/test

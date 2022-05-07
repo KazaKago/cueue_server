@@ -16,7 +16,7 @@ runs:
   using: composite
   steps:
     - name: Heroku deploy
-      uses: akhileshns/heroku-deploy@v3
+      uses: AkhileshNS/heroku-deploy@v3.12.12
       with:
         heroku_api_key: ${{ inputs.herokuApiKey }}
         heroku_app_name: ${{ inputs.herokuAppName }}
