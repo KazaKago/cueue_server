@@ -1,0 +1,12 @@
+name: Setup
+description: setup for build.
+
+runs:
+  using: composite
+  steps:
+    - name: Setup JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: 11
+        distribution: temurin
+        cache: gradle

@@ -1,0 +1,23 @@
+name: Deploy
+description: deploy to Heroku
+
+inputs:
+  herokuApiKey:
+    description: This will be used for authentication. You can find it in your heroku homepage account settings.
+    required: true
+  herokuAppName:
+    description: The appname to use for deploying/updating.
+    required: true
+  herokuEmail:
+    description: Email that you use with heroku.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Heroku deploy
+      uses: akhileshns/heroku-deploy@v3
+      with:
+        heroku_api_key: ${{ inputs.herokuApiKey }}
+        heroku_app_name: ${{ inputs.herokuAppName }}
+        heroku_email: ${{ inputs.herokuEmail }}
