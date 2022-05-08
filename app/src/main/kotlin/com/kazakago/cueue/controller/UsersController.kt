@@ -15,10 +15,11 @@ class UsersController(private val userRepository: UserRepository) {
 
     suspend fun create(call: ApplicationCall, firebaseUser: FirebaseUser) {
         if (!userRepository.existUser(firebaseUser.uid)) {
-            userRepository.createUser(firebaseUser.uid)
-            call.respond(HttpStatusCode.Created)
+            val user = userRepository.createUser(firebaseUser.uid)
+            call.respond(HttpStatusCode.Created, user)
         } else {
-            call.respond(HttpStatusCode.OK)
+            val user = userRepository.getUser(firebaseUser.uid)
+            call.respond(HttpStatusCode.OK, user)
         }
     }
 }
