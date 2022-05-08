@@ -30,4 +30,19 @@ class UserRepository(private val userMapper: UserMapper) {
             userMapper.toModel(userEntity)
         }
     }
+
+    suspend fun deleteUser(uid: UID) {
+        return newSuspendedTransaction {
+            val user = UserEntity
+                .find { UsersTable.uid eq uid.value }
+                .first()
+            val workspaces = user.workspaces.copy()
+            user.delete()
+            workspaces.forEach { workspace ->
+                if (workspace.users.empty()) {
+                    workspace.delete()
+                }
+            }
+        }
+    }
 }

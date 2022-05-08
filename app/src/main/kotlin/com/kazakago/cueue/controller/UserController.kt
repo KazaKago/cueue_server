@@ -6,7 +6,7 @@ import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 
-class UsersController(private val userRepository: UserRepository) {
+class UserController(private val userRepository: UserRepository) {
 
     suspend fun index(call: ApplicationCall, firebaseUser: FirebaseUser) {
         val model = userRepository.getUser(firebaseUser.uid)
@@ -21,5 +21,10 @@ class UsersController(private val userRepository: UserRepository) {
             val user = userRepository.getUser(firebaseUser.uid)
             call.respond(HttpStatusCode.OK, user)
         }
+    }
+
+    suspend fun delete(call: ApplicationCall, firebaseUser: FirebaseUser) {
+        userRepository.deleteUser(firebaseUser.uid)
+        call.respond(HttpStatusCode.NoContent)
     }
 }

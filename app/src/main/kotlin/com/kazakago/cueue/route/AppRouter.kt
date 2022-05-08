@@ -18,7 +18,7 @@ fun Application.appRouting() {
     val rootController by inject<RootController>()
     val contentsController by inject<ContentsController>()
     val callbackController by inject<CallbackController>()
-    val usersController by inject<UsersController>()
+    val userController by inject<UserController>()
     val recipesController by inject<RecipesController>()
     val recipeController by inject<RecipeController>()
     val tagsController by inject<TagsController>()
@@ -39,12 +39,15 @@ fun Application.appRouting() {
         maintenanceCheck {
             versionCheck {
                 authenticate {
-                    route("/users") {
+                    route("/user") {
                         get {
-                            usersController.index(call, call.requirePrincipal())
+                            userController.index(call, call.requirePrincipal())
                         }
                         post {
-                            usersController.create(call, call.requirePrincipal())
+                            userController.create(call, call.requirePrincipal())
+                        }
+                        delete {
+                            userController.delete(call, call.requirePrincipal())
                         }
                     }
                     route("/workspaces") {
