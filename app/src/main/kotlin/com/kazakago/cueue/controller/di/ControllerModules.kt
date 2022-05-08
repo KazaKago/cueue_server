@@ -8,6 +8,8 @@ val controllerModules = module {
     single { ContentsController(get()) }
     single { CallbackController() }
     single { UsersController(get()) }
+    single { WorkspacesController(get(), get()) }
+    single { WorkspaceController(get(), get()) }
     single { RecipesController(get(), get()) }
     single { RecipeController(get(), get()) }
     single { TagsController(get(), get()) }

@@ -74,9 +74,10 @@ class TagRepository(private val tagMapper: TagMapper) {
 
     suspend fun deleteTag(workspaceId: WorkspaceId, tagId: TagId) {
         newSuspendedTransaction {
-            val tags = TagEntity.find { (TagsTable.workspaceId eq workspaceId.value) and (TagsTable.id eq tagId.value) }
-            if (tags.empty()) throw NoSuchElementException()
-            tags.map { it.delete() }
+            TagEntity
+                .find { (TagsTable.workspaceId eq workspaceId.value) and (TagsTable.id eq tagId.value) }
+                .first()
+                .delete()
         }
     }
 }

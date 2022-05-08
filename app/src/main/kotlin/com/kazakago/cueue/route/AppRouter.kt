@@ -25,6 +25,8 @@ fun Application.appRouting() {
     val tagController by inject<TagController>()
     val menusController by inject<MenusController>()
     val menuController by inject<MenuController>()
+    val workspacesController by inject<WorkspacesController>()
+    val workspaceController by inject<WorkspaceController>()
     routing {
         route("/") {
             get {
@@ -43,6 +45,25 @@ fun Application.appRouting() {
                         }
                         post {
                             usersController.create(call, call.requirePrincipal())
+                        }
+                    }
+                    route("/workspaces") {
+                        get {
+                            workspacesController.index(call, call.requirePrincipal())
+                        }
+                        post {
+                            workspacesController.create(call, call.requirePrincipal(), call.requireReceive())
+                        }
+                        route("/{$WORKSPACE_ID}") {
+                            get {
+                                workspaceController.index(call, call.requirePrincipal(), call.parameters.workspaceId())
+                            }
+                            patch {
+                                workspaceController.update(call, call.requirePrincipal(), call.parameters.workspaceId(), call.requireReceive())
+                            }
+                            delete {
+                                workspaceController.delete(call, call.requirePrincipal(), call.parameters.workspaceId())
+                            }
                         }
                     }
                     route("/contents") {
