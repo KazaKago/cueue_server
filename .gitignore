@@ -4,9 +4,10 @@
 *.iml
 *.ipr
 *.iws
-.idea/
+.idea/*
 app/credentials
 app/src/main/resources/development.conf
 app/src/main/resources/staging.conf
 !.idea/codeStyles/
+!.idea/inspectionProfiles/
 !.idea/runConfigurations/
