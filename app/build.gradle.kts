@@ -58,7 +58,7 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.2.11")
     implementation("org.sejda.imageio:webp-imageio:0.1.6")
     implementation("com.drewnoakes:metadata-extractor:2.18.0")
-    implementation("org.apache.lucene:lucene-analyzers-kuromoji:8.11.1")
+    implementation("org.apache.lucene:lucene-analyzers-kuromoji:8.11.2")
     implementation("com.ibm.icu:icu4j:71.1")
 
     testImplementation("io.ktor:ktor-server-tests")
