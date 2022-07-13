@@ -37,7 +37,7 @@ tasks.register("stage") {
 }
 
 dependencies {
-    implementation(platform("io.ktor:ktor-bom:2.0.1"))
+    implementation(platform("io.ktor:ktor-bom:2.0.3"))
     implementation("io.ktor:ktor-server-netty")
     implementation("io.ktor:ktor-server-auth")
     implementation("io.ktor:ktor-server-default-headers")
