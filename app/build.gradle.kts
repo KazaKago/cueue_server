@@ -4,7 +4,7 @@ plugins {
     application
     kotlin("jvm")
     kotlin("plugin.serialization")
-    id("org.flywaydb.flyway") version "9.0.0"
+    id("org.flywaydb.flyway") version "9.0.1"
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
