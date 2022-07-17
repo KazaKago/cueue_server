@@ -29,7 +29,7 @@ fun Application.module() {
     install(XForwardedHeaders)
     install(CallLogging)
     install(CORS) {
-        register()
+        register(this@module)
     }
     install(Koin) {
         register()
