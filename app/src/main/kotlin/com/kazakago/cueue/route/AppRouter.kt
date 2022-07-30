@@ -46,9 +46,6 @@ fun Application.appRouting() {
                         post {
                             userController.create(call, call.requirePrincipal())
                         }
-                        delete {
-                            userController.delete(call, call.requirePrincipal())
-                        }
                     }
                     route("/workspaces") {
                         get {

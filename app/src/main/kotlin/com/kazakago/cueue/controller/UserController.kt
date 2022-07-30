@@ -22,9 +22,4 @@ class UserController(private val userRepository: UserRepository) {
             call.respond(HttpStatusCode.OK, user)
         }
     }
-
-    suspend fun delete(call: ApplicationCall, firebaseUser: FirebaseUser) {
-        userRepository.deleteUser(firebaseUser.uid)
-        call.respond(HttpStatusCode.NoContent)
-    }
 }

@@ -30,13 +30,4 @@ class UserRepository(private val userMapper: UserMapper) {
             userMapper.toModel(userEntity)
         }
     }
-
-    suspend fun deleteUser(uid: UID) {
-        return newSuspendedTransaction {
-            UserEntity
-                .find { UsersTable.uid eq uid.value }
-                .first()
-                .delete()
-        }
-    }
 }
