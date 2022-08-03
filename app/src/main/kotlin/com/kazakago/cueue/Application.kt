@@ -8,9 +8,9 @@ import com.kazakago.cueue.config.database.Migration
 import com.kazakago.cueue.config.firebase.Firebase
 import com.kazakago.cueue.config.koin.Koin
 import com.kazakago.cueue.config.koin.register
+import com.kazakago.cueue.config.sentry.Sentry
+import com.kazakago.cueue.config.statuspage.handle
 import com.kazakago.cueue.route.appRouting
-import com.kazakago.cueue.route.handle
-import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -28,6 +28,7 @@ fun Application.module() {
     install(DefaultHeaders)
     install(XForwardedHeaders)
     install(CallLogging)
+    install(Sentry)
     install(CORS) {
         register(this@module)
     }

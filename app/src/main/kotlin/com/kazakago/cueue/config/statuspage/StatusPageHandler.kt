@@ -1,4 +1,4 @@
-package com.kazakago.cueue.route
+package com.kazakago.cueue.config.statuspage
 
 import com.kazakago.cueue.controller.ErrorController
 import io.ktor.server.plugins.statuspages.*
