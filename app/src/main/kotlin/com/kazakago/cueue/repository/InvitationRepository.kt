@@ -18,7 +18,7 @@ class InvitationRepository(private val invitationMapper: InvitationMapper) {
     suspend fun getInvitation(invitationCode: InvitationCode): Invitation {
         return newSuspendedTransaction {
             val entity = InvitationEntity
-                .find { (InvitationsTable.code eq invitationCode.value) and (InvitationsTable.isConsumed eq false) and (InvitationsTable.createdAt greater LocalDateTime.now().minusDays(1)) }
+                .find { (InvitationsTable.code eq invitationCode.value) and (InvitationsTable.createdAt greater LocalDateTime.now().minusDays(1)) }
                 .first()
             invitationMapper.toModel(entity)
         }
