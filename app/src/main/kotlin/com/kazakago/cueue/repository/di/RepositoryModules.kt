@@ -10,5 +10,5 @@ val repositoryModules = module {
     single { RecipeRepository(get(), get()) }
     single { TagRepository(get()) }
     single { MenuRepository(get(), get()) }
-    single { InvitationRepository() }
+    single { InvitationRepository(get()) }
 }

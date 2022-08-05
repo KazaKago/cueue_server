@@ -12,4 +12,5 @@ val mapperModules = module {
     single { MenuMapper(get(), get()) }
     single { MenuSummaryMapper(get(), get()) }
     single { TimeFrameMapper() }
+    single { InvitationMapper(get()) }
 }

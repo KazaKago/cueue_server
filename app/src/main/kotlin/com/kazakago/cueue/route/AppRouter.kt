@@ -4,10 +4,7 @@ import com.kazakago.cueue.config.koin.inject
 import com.kazakago.cueue.config.maintenance.maintenanceCheck
 import com.kazakago.cueue.config.version.versionCheck
 import com.kazakago.cueue.controller.*
-import com.kazakago.cueue.model.MenuId
-import com.kazakago.cueue.model.RecipeId
-import com.kazakago.cueue.model.TagId
-import com.kazakago.cueue.model.UnsafeWorkspaceId
+import com.kazakago.cueue.model.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -28,6 +25,7 @@ fun Application.appRouting() {
     val workspacesController by inject<WorkspacesController>()
     val workspaceController by inject<WorkspaceController>()
     val invitationsController by inject<InvitationsController>()
+    val invitationController by inject<InvitationController>()
     routing {
         route("/") {
             get {
@@ -67,6 +65,13 @@ fun Application.appRouting() {
                     route("/contents") {
                         post {
                             contentsController.create(call, call.requireReceive())
+                        }
+                    }
+                    route("/invitations") {
+                        route("/{$INVITATION_CODE}") {
+                            get {
+                                invitationController.index(call, call.parameters.invitationCode())
+                            }
                         }
                     }
                     route("/{$WORKSPACE_ID}") {
@@ -132,7 +137,7 @@ fun Application.appRouting() {
                                 }
                             }
                         }
-                        route("/invitations") {
+                        route("/invitation") {
                             post {
                                 invitationsController.create(call, call.requirePrincipal(), call.parameters.workspaceId())
                             }
@@ -150,6 +155,7 @@ private const val TAG_ID = "tag_id"
 private const val RECIPE_ID = "recipe_id"
 private const val AFTER_ID = "after_id"
 private const val KEYWORD = "keyword"
+private const val INVITATION_CODE = "invitation_code"
 
 private fun Parameters.workspaceId() = requireLong(WORKSPACE_ID) { UnsafeWorkspaceId(it) }
 private fun Parameters.menuId() = requireLong(MENU_ID) { MenuId(it) }
@@ -159,3 +165,4 @@ private fun Parameters.menuAfterId() = getLong(AFTER_ID) { MenuId(it) }
 private fun Parameters.recipeAfterId() = getLong(AFTER_ID) { RecipeId(it) }
 private fun Parameters.tagIds() = getLongAll(TAG_ID) { TagId(it) }
 private fun Parameters.keyword() = getString(KEYWORD)
+private fun Parameters.invitationCode() = requireString(INVITATION_CODE) { InvitationCode(it) }

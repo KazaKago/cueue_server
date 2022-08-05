@@ -15,7 +15,7 @@ class InvitationsController(private val userRepository: UserRepository, private 
         val user = userRepository.getUser(firebaseUser.uid)
         val workspaceId = unsafeWorkspaceId.validate(user)
         val code = InvitationCode.generate()
-        invitationRepository.createInvitation(user.id, workspaceId, code)
-        call.respond(HttpStatusCode.Created, code.value)
+        val model = invitationRepository.createInvitation(user.id, workspaceId, code)
+        call.respond(HttpStatusCode.Created, model)
     }
 }
