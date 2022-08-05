@@ -62,9 +62,6 @@ fun Application.appRouting() {
                             patch {
                                 workspaceController.update(call, call.requirePrincipal(), call.parameters.workspaceId(), call.requireReceive())
                             }
-                            delete {
-                                workspaceController.delete(call, call.requirePrincipal(), call.parameters.workspaceId())
-                            }
                         }
                     }
                     route("/contents") {

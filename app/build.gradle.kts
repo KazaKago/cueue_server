@@ -47,7 +47,7 @@ dependencies {
     implementation("io.ktor:ktor-server-status-pages")
     implementation("io.ktor:ktor-server-content-negotiation")
     implementation("io.ktor:ktor-serialization-kotlinx-json")
-    implementation(platform("org.jetbrains.exposed:exposed-bom:0.39.1"))
+    implementation(platform("org.jetbrains.exposed:exposed-bom:0.39.2"))
     implementation("org.jetbrains.exposed:exposed-core")
     implementation("org.jetbrains.exposed:exposed-dao")
     implementation("org.jetbrains.exposed:exposed-jdbc")
@@ -61,7 +61,7 @@ dependencies {
     implementation("com.drewnoakes:metadata-extractor:2.18.0")
     implementation("org.apache.lucene:lucene-analyzers-kuromoji:8.11.2")
     implementation("com.ibm.icu:icu4j:71.1")
-    implementation("io.sentry:sentry:6.3.0")
+    implementation("io.sentry:sentry:6.3.1")
 
     testImplementation("io.ktor:ktor-server-tests")
 }
