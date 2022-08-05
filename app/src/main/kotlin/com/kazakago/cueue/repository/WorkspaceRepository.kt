@@ -69,17 +69,4 @@ class WorkspaceRepository(private val workspaceMapper: WorkspaceMapper) {
             workspaceMapper.toModel(entity)
         }
     }
-
-    suspend fun deleteWorkspace(workspaceId: WorkspaceId) {
-        newSuspendedTransaction {
-            val table = WorkspacesTable.leftJoin(UserWorkspacesRelationsTable)
-            val conditions = WorkspacesTable.id eq workspaceId.value
-            val query = table
-                .slice(WorkspacesTable.columns)
-                .select(conditions)
-                .first()
-            WorkspaceEntity.wrapRow(query)
-                .delete()
-        }
-    }
 }
