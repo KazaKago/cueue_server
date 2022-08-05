@@ -27,6 +27,7 @@ fun Application.appRouting() {
     val menuController by inject<MenuController>()
     val workspacesController by inject<WorkspacesController>()
     val workspaceController by inject<WorkspaceController>()
+    val invitationsController by inject<InvitationsController>()
     routing {
         route("/") {
             get {
@@ -132,6 +133,11 @@ fun Application.appRouting() {
                                 delete {
                                     menuController.delete(call, call.requirePrincipal(), call.parameters.workspaceId(), call.parameters.menuId())
                                 }
+                            }
+                        }
+                        route("/invitations") {
+                            post {
+                                invitationsController.create(call, call.requirePrincipal(), call.parameters.workspaceId())
                             }
                         }
                     }
