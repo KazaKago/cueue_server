@@ -1,9 +1,7 @@
 package com.kazakago.cueue.repository
 
-import com.kazakago.cueue.database.entity.UserEntity
 import com.kazakago.cueue.database.entity.WorkspaceEntity
 import com.kazakago.cueue.mapper.WorkspaceMapper
-import com.kazakago.cueue.model.UserId
 import com.kazakago.cueue.model.Workspace
 import com.kazakago.cueue.model.WorkspaceId
 import com.kazakago.cueue.model.WorkspaceRegistrationData
@@ -12,13 +10,10 @@ import java.time.LocalDateTime
 
 class WorkspaceRepository(private val workspaceMapper: WorkspaceMapper) {
 
-    suspend fun createWorkspace(userId: UserId, workspaceRegistrationData: WorkspaceRegistrationData): Workspace {
+    suspend fun createWorkspace(workspaceRegistrationData: WorkspaceRegistrationData): Workspace {
         return newSuspendedTransaction {
             val entity = WorkspaceEntity.new {
                 this.name = workspaceRegistrationData.name
-            }
-            UserEntity[userId.value].apply {
-                this.workspace = entity
             }
             workspaceMapper.toModel(entity)
         }

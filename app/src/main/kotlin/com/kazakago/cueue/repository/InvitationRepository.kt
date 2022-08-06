@@ -9,9 +9,7 @@ import com.kazakago.cueue.model.Invitation
 import com.kazakago.cueue.model.InvitationCode
 import com.kazakago.cueue.model.UserId
 import com.kazakago.cueue.model.WorkspaceId
-import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
-import java.time.LocalDateTime
 
 class InvitationRepository(private val invitationMapper: InvitationMapper) {
 
@@ -35,13 +33,11 @@ class InvitationRepository(private val invitationMapper: InvitationMapper) {
         }
     }
 
-    suspend fun acceptInvitation(userId: UserId, invitationCode: InvitationCode) {
+    suspend fun deleteInvitation(invitationCode: InvitationCode) {
         newSuspendedTransaction {
             val entity = InvitationEntity
-                .find { (InvitationsTable.code eq invitationCode.value) and (InvitationsTable.createdAt greater LocalDateTime.now().minusDays(1)) }
+                .find { InvitationsTable.code eq invitationCode.value }
                 .first()
-            val user = UserEntity[userId.value]
-            user.workspace = entity.workspace
             entity.delete()
         }
     }

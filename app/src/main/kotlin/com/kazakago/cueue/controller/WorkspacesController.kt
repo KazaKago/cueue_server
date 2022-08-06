@@ -11,8 +11,8 @@ import io.ktor.server.response.*
 class WorkspacesController(private val userRepository: UserRepository, private val workspaceRepository: WorkspaceRepository) {
 
     suspend fun create(call: ApplicationCall, firebaseUser: FirebaseUser, workspaceRegistrationData: WorkspaceRegistrationData) {
-        val user = userRepository.getUser(firebaseUser.uid)
-        val model = workspaceRepository.createWorkspace(user.id, workspaceRegistrationData)
+        val model = workspaceRepository.createWorkspace(workspaceRegistrationData)
+        userRepository.updateUser(firebaseUser.uid, model.id)
         call.respond(HttpStatusCode.Created, model)
     }
 }

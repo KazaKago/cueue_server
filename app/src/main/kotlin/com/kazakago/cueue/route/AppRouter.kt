@@ -68,7 +68,7 @@ fun Application.appRouting() {
                                 invitationController.index(call, call.parameters.invitationCode())
                             }
                             route("/accept") {
-                                post {
+                                patch {
                                     invitationAcceptController.accept(call, call.requirePrincipal(), call.parameters.invitationCode())
                                 }
                             }
