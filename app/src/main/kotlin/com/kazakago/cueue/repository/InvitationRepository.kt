@@ -18,7 +18,7 @@ class InvitationRepository(private val invitationMapper: InvitationMapper) {
     suspend fun getInvitation(invitationCode: InvitationCode): Invitation {
         return newSuspendedTransaction {
             val entity = InvitationEntity
-                .find { (InvitationsTable.code eq invitationCode.value) and (InvitationsTable.createdAt greater LocalDateTime.now().minusDays(1)) }
+                .find { InvitationsTable.code eq invitationCode.value }
                 .first()
             invitationMapper.toModel(entity)
         }
@@ -32,6 +32,17 @@ class InvitationRepository(private val invitationMapper: InvitationMapper) {
                 this.workspace = WorkspaceEntity[workspaceId.value]
             }
             invitationMapper.toModel(entity)
+        }
+    }
+
+    suspend fun acceptInvitation(userId: UserId, invitationCode: InvitationCode) {
+        newSuspendedTransaction {
+            val entity = InvitationEntity
+                .find { (InvitationsTable.code eq invitationCode.value) and (InvitationsTable.createdAt greater LocalDateTime.now().minusDays(1)) }
+                .first()
+            val user = UserEntity[userId.value]
+            user.workspace = entity.workspace
+            entity.delete()
         }
     }
 }

@@ -14,5 +14,5 @@ class WorkspaceEntity(id: EntityID<Long>) : LongEntity(id) {
     val recipes by RecipeEntity referrersOn RecipesTable.workspaceId
     val tags by TagEntity referrersOn TagsTable.workspaceId
     val menus by MenuEntity referrersOn MenusTable.workspaceId
-    var users by UserEntity via UserWorkspacesRelationsTable
+    val users by UserEntity optionalReferrersOn UsersTable.workspaceId
 }

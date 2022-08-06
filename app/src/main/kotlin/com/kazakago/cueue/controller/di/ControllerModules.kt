@@ -18,4 +18,5 @@ val controllerModules = module {
     single { MenuController(get(), get()) }
     single { InvitationsController(get(), get()) }
     single { InvitationController(get()) }
+    single { InvitationAcceptController(get(), get()) }
 }

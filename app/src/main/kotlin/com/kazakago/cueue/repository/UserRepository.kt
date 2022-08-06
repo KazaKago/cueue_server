@@ -1,10 +1,12 @@
 package com.kazakago.cueue.repository
 
 import com.kazakago.cueue.database.entity.UserEntity
+import com.kazakago.cueue.database.entity.WorkspaceEntity
 import com.kazakago.cueue.database.table.UsersTable
 import com.kazakago.cueue.mapper.UserMapper
 import com.kazakago.cueue.model.UID
 import com.kazakago.cueue.model.User
+import com.kazakago.cueue.model.UserRegistrationData
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
 class UserRepository(private val userMapper: UserMapper) {
@@ -24,10 +26,21 @@ class UserRepository(private val userMapper: UserMapper) {
 
     suspend fun createUser(uid: UID): User {
         return newSuspendedTransaction {
-            val userEntity = UserEntity.new {
+            val entity = UserEntity.new {
                 this.uid = uid.value
             }
-            userMapper.toModel(userEntity)
+            userMapper.toModel(entity)
+        }
+    }
+
+    suspend fun updateUser(uid: UID, userRegistrationData: UserRegistrationData): User {
+        return newSuspendedTransaction {
+            val entity = UserEntity.find { UsersTable.uid eq uid.value }
+                .first()
+                .apply {
+                    this.workspace = WorkspaceEntity[userRegistrationData.workspaceId.value]
+                }
+            userMapper.toModel(entity)
         }
     }
 }

@@ -9,7 +9,7 @@ class UserMapper(private val workspaceMapper: WorkspaceMapper) {
     fun toModel(user: UserEntity): User {
         return User(
             id = UserId(user.id.value),
-            workspaces = user.workspaces.map { workspaceMapper.toModel(it) },
+            workspace = user.workspace?.let { workspaceMapper.toModel(it) },
         )
     }
 }

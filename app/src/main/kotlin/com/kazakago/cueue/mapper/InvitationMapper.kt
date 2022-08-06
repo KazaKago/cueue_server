@@ -10,6 +10,7 @@ class InvitationMapper(private val workspaceMapper: WorkspaceMapper) {
         return Invitation(
             code = InvitationCode(invitation.code),
             workspace = workspaceMapper.toModel(invitation.workspace),
+            createdAt = invitation.createdAt
         )
     }
 }

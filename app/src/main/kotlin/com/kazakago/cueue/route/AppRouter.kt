@@ -26,6 +26,7 @@ fun Application.appRouting() {
     val workspaceController by inject<WorkspaceController>()
     val invitationsController by inject<InvitationsController>()
     val invitationController by inject<InvitationController>()
+    val invitationAcceptController by inject<InvitationAcceptController>()
     routing {
         route("/") {
             get {
@@ -47,16 +48,10 @@ fun Application.appRouting() {
                         }
                     }
                     route("/workspaces") {
-                        get {
-                            workspacesController.index(call, call.requirePrincipal())
-                        }
                         post {
                             workspacesController.create(call, call.requirePrincipal(), call.requireReceive())
                         }
                         route("/{$WORKSPACE_ID}") {
-                            get {
-                                workspaceController.index(call, call.requirePrincipal(), call.parameters.workspaceId())
-                            }
                             patch {
                                 workspaceController.update(call, call.requirePrincipal(), call.parameters.workspaceId(), call.requireReceive())
                             }
@@ -71,6 +66,11 @@ fun Application.appRouting() {
                         route("/{$INVITATION_CODE}") {
                             get {
                                 invitationController.index(call, call.parameters.invitationCode())
+                            }
+                            route("/accept") {
+                                post {
+                                    invitationAcceptController.accept(call, call.requirePrincipal(), call.parameters.invitationCode())
+                                }
                             }
                         }
                     }
