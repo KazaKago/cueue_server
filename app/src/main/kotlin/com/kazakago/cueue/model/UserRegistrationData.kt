@@ -4,9 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class User(
-    @SerialName("id")
-    val id: UserId,
-    @SerialName("workspace")
-    val workspace: Workspace?,
+data class UserRegistrationData(
+    @SerialName("workspace_id")
+    val workspaceId: WorkspaceId,
 )

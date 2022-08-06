@@ -11,13 +11,6 @@ import io.ktor.server.response.*
 
 class WorkspaceController(private val userRepository: UserRepository, private val workspaceRepository: WorkspaceRepository) {
 
-    suspend fun index(call: ApplicationCall, firebaseUser: FirebaseUser, unsafeWorkspaceId: UnsafeWorkspaceId) {
-        val user = userRepository.getUser(firebaseUser.uid)
-        val workspaceId = unsafeWorkspaceId.validate(user)
-        val model = workspaceRepository.getWorkspace(workspaceId)
-        call.respond(HttpStatusCode.OK, model)
-    }
-
     suspend fun update(call: ApplicationCall, firebaseUser: FirebaseUser, unsafeWorkspaceId: UnsafeWorkspaceId, workspaceRegistrationData: WorkspaceRegistrationData) {
         val user = userRepository.getUser(firebaseUser.uid)
         val workspaceId = unsafeWorkspaceId.validate(user)
