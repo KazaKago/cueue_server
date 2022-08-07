@@ -9,4 +9,6 @@ data class User(
     val id: UserId,
     @SerialName("workspace")
     val workspace: Workspace?,
-)
+) {
+    fun requireWorkspace() = workspace ?: throw NoSuchElementException()
+}

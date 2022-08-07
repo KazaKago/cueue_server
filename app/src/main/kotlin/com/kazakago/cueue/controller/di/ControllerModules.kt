@@ -7,6 +7,7 @@ val controllerModules = module {
     single { RootController() }
     single { ContentsController(get()) }
     single { CallbackController() }
+    single { UsersController(get()) }
     single { UserController(get()) }
     single { WorkspacesController(get(), get()) }
     single { WorkspaceController(get(), get()) }
