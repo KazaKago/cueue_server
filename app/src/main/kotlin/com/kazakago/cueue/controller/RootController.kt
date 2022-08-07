@@ -6,6 +6,6 @@ import io.ktor.server.response.*
 class RootController {
 
     suspend fun index(call: ApplicationCall) {
-        call.respond("Hello world from Ktor!!")
+        call.respond("This is Cueue!")
     }
 }

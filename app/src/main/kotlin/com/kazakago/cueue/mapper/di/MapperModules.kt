@@ -5,7 +5,8 @@ import org.koin.dsl.module
 
 val mapperModules = module {
     single { UserMapper(get()) }
-    single { WorkspaceMapper() }
+    single { UserSummaryMapper() }
+    single { WorkspaceMapper(get()) }
     single { RecipeMapper(get()) }
     single { RecipeSummaryMapper() }
     single { TagMapper() }

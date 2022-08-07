@@ -11,4 +11,6 @@ data class Workspace(
     val id: WorkspaceId = throw NullPointerException(),
     @SerialName("name")
     val name: String,
+    @SerialName("users")
+    val users: List<UserSummary>,
 )
