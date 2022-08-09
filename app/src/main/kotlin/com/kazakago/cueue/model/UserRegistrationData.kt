@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class UserRegistrationData(
     @SerialName("workspace_id")
-    val workspaceId: WorkspaceId,
+    val workspaceId: WorkspaceId?,
 )

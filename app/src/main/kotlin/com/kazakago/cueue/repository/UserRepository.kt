@@ -6,7 +6,7 @@ import com.kazakago.cueue.database.table.UsersTable
 import com.kazakago.cueue.mapper.UserMapper
 import com.kazakago.cueue.model.UID
 import com.kazakago.cueue.model.User
-import com.kazakago.cueue.model.WorkspaceId
+import com.kazakago.cueue.model.UserRegistrationData
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
 class UserRepository(private val userMapper: UserMapper) {
@@ -33,12 +33,12 @@ class UserRepository(private val userMapper: UserMapper) {
         }
     }
 
-    suspend fun updateWorkspace(uid: UID, workspaceId: WorkspaceId?): User {
+    suspend fun updateUser(uid: UID, user: UserRegistrationData): User {
         return newSuspendedTransaction {
             val entity = UserEntity.find { UsersTable.uid eq uid.value }
                 .first()
                 .apply {
-                    this.workspace = workspaceId?.value?.let { WorkspaceEntity[it] }
+                    this.workspace = user.workspaceId?.value?.let { WorkspaceEntity[it] }
                 }
             userMapper.toModel(entity)
         }

@@ -13,9 +13,9 @@ class WorkspacesController(private val userRepository: UserRepository, private v
     suspend fun create(call: ApplicationCall, firebaseUser: FirebaseUser, workspaceRegistrationData: WorkspaceRegistrationData) {
         val user = userRepository.getUser(firebaseUser.uid)
         if (user.workspace == null) {
-            val model = workspaceRepository.createWorkspace(workspaceRegistrationData)
-            userRepository.updateWorkspace(firebaseUser.uid, model.id)
-            call.respond(HttpStatusCode.Created, model)
+            val workspace = workspaceRepository.createWorkspace(workspaceRegistrationData)
+            val updatedUser = userRepository.updateUser(firebaseUser.uid, user.toRegistrationData(workspaceId = workspace.id))
+            call.respond(HttpStatusCode.Created, updatedUser.requireWorkspace())
         } else {
             call.respond(HttpStatusCode.Conflict)
         }

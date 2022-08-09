@@ -11,8 +11,9 @@ import io.ktor.server.response.*
 class InvitationAcceptController(private val invitationRepository: InvitationRepository, private val userRepository: UserRepository) {
 
     suspend fun accept(call: ApplicationCall, firebaseUser: FirebaseUser, invitationCode: InvitationCode) {
-        val model = invitationRepository.getInvitation(invitationCode)
-        userRepository.updateWorkspace(firebaseUser.uid, model.workspace.id)
+        val workspace = invitationRepository.getInvitation(invitationCode)
+        val user = userRepository.getUser(firebaseUser.uid)
+        userRepository.updateUser(firebaseUser.uid, user.toRegistrationData(workspaceId = workspace.workspace.id))
         invitationRepository.deleteInvitation(invitationCode)
         call.respond(HttpStatusCode.OK)
     }

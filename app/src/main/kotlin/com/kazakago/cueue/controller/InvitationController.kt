@@ -9,7 +9,7 @@ import io.ktor.server.response.*
 class InvitationController(private val invitationRepository: InvitationRepository) {
 
     suspend fun index(call: ApplicationCall, invitationCode: InvitationCode) {
-        val model = invitationRepository.getInvitation(invitationCode)
-        call.respond(HttpStatusCode.OK, model)
+        val invitation = invitationRepository.getInvitation(invitationCode)
+        call.respond(HttpStatusCode.OK, invitation)
     }
 }

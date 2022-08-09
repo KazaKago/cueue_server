@@ -13,7 +13,7 @@ class InvitationsController(private val userRepository: UserRepository, private 
     suspend fun create(call: ApplicationCall, firebaseUser: FirebaseUser) {
         val user = userRepository.getUser(firebaseUser.uid)
         val code = InvitationCode.generate()
-        val model = invitationRepository.createInvitation(user.id, user.requireWorkspace().id, code)
-        call.respond(HttpStatusCode.Created, model)
+        val invitation = invitationRepository.createInvitation(user.id, user.requireWorkspace().id, code)
+        call.respond(HttpStatusCode.Created, invitation)
     }
 }

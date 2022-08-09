@@ -9,7 +9,7 @@ import io.ktor.server.response.*
 class UserController(private val userRepository: UserRepository) {
 
     suspend fun index(call: ApplicationCall, firebaseUser: FirebaseUser) {
-        val model = userRepository.getUser(firebaseUser.uid)
-        call.respond(HttpStatusCode.OK, model)
+        val user = userRepository.getUser(firebaseUser.uid)
+        call.respond(HttpStatusCode.OK, user)
     }
 }
