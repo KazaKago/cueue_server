@@ -63,6 +63,9 @@ fun Application.appRouting() {
                                 put {
                                     workspaceController.update(call, call.requirePrincipal(), call.requireReceive())
                                 }
+                                delete {
+                                    workspaceController.delete(call, call.requirePrincipal())
+                                }
                             }
                         }
                     }

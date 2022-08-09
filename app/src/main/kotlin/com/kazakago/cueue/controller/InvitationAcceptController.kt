@@ -12,7 +12,7 @@ class InvitationAcceptController(private val invitationRepository: InvitationRep
 
     suspend fun accept(call: ApplicationCall, firebaseUser: FirebaseUser, invitationCode: InvitationCode) {
         val model = invitationRepository.getInvitation(invitationCode)
-        userRepository.updateUser(firebaseUser.uid, model.workspace.id)
+        userRepository.updateWorkspace(firebaseUser.uid, model.workspace.id)
         invitationRepository.deleteInvitation(invitationCode)
         call.respond(HttpStatusCode.OK)
     }
