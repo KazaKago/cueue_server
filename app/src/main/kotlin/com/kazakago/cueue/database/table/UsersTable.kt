@@ -7,6 +7,8 @@ import java.time.LocalDateTime
 
 object UsersTable : LongIdTable() {
     val uid = text("uid").uniqueIndex()
+    val displayName = text("display_name")
+    val photoId = optReference(name = "photo_id", foreign = ContentsTable, onUpdate = ReferenceOption.CASCADE, onDelete = ReferenceOption.SET_NULL)
     val workspaceId = optReference(name = "workspace_id", foreign = WorkspacesTable, onUpdate = ReferenceOption.CASCADE, onDelete = ReferenceOption.SET_NULL)
     val createdAt = datetime("created_at").clientDefault { LocalDateTime.now() }
     val updatedAt = datetime("updated_at").clientDefault { LocalDateTime.now() }

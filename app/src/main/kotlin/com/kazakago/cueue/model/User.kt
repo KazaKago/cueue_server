@@ -2,13 +2,15 @@ package com.kazakago.cueue.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 
 @Serializable
 data class User(
-    @Transient
     @SerialName("id")
-    val id: UserId = throw NullPointerException(),
+    val id: UserId,
+    @SerialName("display_name")
+    val displayName: String,
+    @SerialName("photo")
+    val photo: ContentSerializer?,
     @SerialName("workspace")
     val workspace: Workspace?,
 ) {

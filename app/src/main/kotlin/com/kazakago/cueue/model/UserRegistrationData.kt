@@ -5,6 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UserRegistrationData(
-    @SerialName("workspace_id")
-    val workspaceId: WorkspaceId?,
+    @SerialName("display_name")
+    val displayName: String,
+    @SerialName("photo_key")
+    val photoKey: String?,
 )

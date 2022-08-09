@@ -17,9 +17,9 @@ class TagsController(private val userRepository: UserRepository, private val tag
         call.respond(HttpStatusCode.OK, tags)
     }
 
-    suspend fun create(call: ApplicationCall, firebaseUser: FirebaseUser, tag: TagRegistrationData) {
+    suspend fun create(call: ApplicationCall, firebaseUser: FirebaseUser, tagRegistrationData: TagRegistrationData) {
         val user = userRepository.getUser(firebaseUser.uid)
-        val tag = tagRepository.createTag(user.requireWorkspace().id, tag)
+        val tag = tagRepository.createTag(user.requireWorkspace().id, tagRegistrationData)
         call.respond(HttpStatusCode.Created, tag)
     }
 

@@ -1,7 +1,9 @@
 package com.kazakago.cueue.repository
 
+import com.kazakago.cueue.database.entity.ContentEntity
 import com.kazakago.cueue.database.entity.UserEntity
 import com.kazakago.cueue.database.entity.WorkspaceEntity
+import com.kazakago.cueue.database.table.ContentsTable
 import com.kazakago.cueue.database.table.UsersTable
 import com.kazakago.cueue.mapper.UserMapper
 import com.kazakago.cueue.model.UID
@@ -25,11 +27,25 @@ class UserRepository(private val userMapper: UserMapper) {
         }
     }
 
-    suspend fun createUser(uid: UID): User {
+    suspend fun createUser(uid: UID, user: UserRegistrationData): User {
         return newSuspendedTransaction {
             val entity = UserEntity.new {
                 this.uid = uid.value
+                this.displayName = user.displayName
+                this.photo = user.photoKey?.let { ContentEntity.find { ContentsTable.key eq user.photoKey }.first() }
             }
+            userMapper.toModel(entity)
+        }
+    }
+
+    suspend fun updateUser(uid: UID, user: UserRegistrationData): User {
+        return newSuspendedTransaction {
+            val entity = UserEntity.find { UsersTable.uid eq uid.value }
+                .first()
+                .apply {
+                    this.displayName = user.displayName
+                    this.photo = user.photoKey?.let { ContentEntity.find { ContentsTable.key eq user.photoKey }.first() }
+                }
             userMapper.toModel(entity)
         }
     }

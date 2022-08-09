@@ -17,9 +17,9 @@ class RecipeController(private val userRepository: UserRepository, private val r
         call.respond(HttpStatusCode.OK, recipe)
     }
 
-    suspend fun update(call: ApplicationCall, firebaseUser: FirebaseUser, recipeId: RecipeId, recipe: RecipeRegistrationData) {
+    suspend fun update(call: ApplicationCall, firebaseUser: FirebaseUser, recipeId: RecipeId, recipeRegistrationData: RecipeRegistrationData) {
         val user = userRepository.getUser(firebaseUser.uid)
-        val recipe = recipeRepository.updateRecipe(user.requireWorkspace().id, recipeId, recipe)
+        val recipe = recipeRepository.updateRecipe(user.requireWorkspace().id, recipeId, recipeRegistrationData)
         call.respond(HttpStatusCode.OK, recipe)
     }
 

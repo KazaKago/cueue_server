@@ -17,9 +17,9 @@ class MenuController(private val userRepository: UserRepository, private val men
         call.respond(HttpStatusCode.OK, menu)
     }
 
-    suspend fun update(call: ApplicationCall, firebaseUser: FirebaseUser, menuId: MenuId, menu: MenuRegistrationData) {
+    suspend fun update(call: ApplicationCall, firebaseUser: FirebaseUser, menuId: MenuId, menuRegistrationData: MenuRegistrationData) {
         val user = userRepository.getUser(firebaseUser.uid)
-        val menu = menuRepository.updateMenu(user.requireWorkspace().id, menuId, menu)
+        val menu = menuRepository.updateMenu(user.requireWorkspace().id, menuId, menuRegistrationData)
         call.respond(HttpStatusCode.OK, menu)
     }
 

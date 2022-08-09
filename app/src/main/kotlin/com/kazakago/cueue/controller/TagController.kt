@@ -17,9 +17,9 @@ class TagController(private val userRepository: UserRepository, private val tagR
         call.respond(HttpStatusCode.OK, tag)
     }
 
-    suspend fun update(call: ApplicationCall, firebaseUser: FirebaseUser, tagId: TagId, tag: TagRegistrationData) {
+    suspend fun update(call: ApplicationCall, firebaseUser: FirebaseUser, tagId: TagId, tagRegistrationData: TagRegistrationData) {
         val user = userRepository.getUser(firebaseUser.uid)
-        val tag = tagRepository.updateTag(user.requireWorkspace().id, tagId, tag)
+        val tag = tagRepository.updateTag(user.requireWorkspace().id, tagId, tagRegistrationData)
         call.respond(HttpStatusCode.OK, tag)
     }
 

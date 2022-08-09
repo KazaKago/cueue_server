@@ -17,9 +17,9 @@ class MenusController(private val userRepository: UserRepository, private val me
         call.respond(HttpStatusCode.OK, menus)
     }
 
-    suspend fun create(call: ApplicationCall, firebaseUser: FirebaseUser, menu: MenuRegistrationData) {
+    suspend fun create(call: ApplicationCall, firebaseUser: FirebaseUser, menuRegistrationData: MenuRegistrationData) {
         val user = userRepository.getUser(firebaseUser.uid)
-        val menu = menuRepository.createMenu(user.requireWorkspace().id, menu)
+        val menu = menuRepository.createMenu(user.requireWorkspace().id, menuRegistrationData)
         call.respond(HttpStatusCode.Created, menu)
     }
 }

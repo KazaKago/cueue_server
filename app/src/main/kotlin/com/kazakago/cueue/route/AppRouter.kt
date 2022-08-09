@@ -50,11 +50,14 @@ fun Application.appRouting() {
                     }
                     route("/users") {
                         post {
-                            usersController.create(call, call.requirePrincipal())
+                            usersController.create(call, call.requirePrincipal(), call.requireReceive())
                         }
                         route("/me") {
                             get {
                                 userController.index(call, call.requirePrincipal())
+                            }
+                            put {
+                                userController.update(call, call.requirePrincipal(), call.requireReceive())
                             }
                             route("/workspace") {
                                 post {
