@@ -14,7 +14,7 @@ class WorkspacesController(private val userRepository: UserRepository, private v
         val user = userRepository.getUser(firebaseUser.uid)
         if (user.workspace == null) {
             val workspace = workspaceRepository.createWorkspace(workspaceRegistrationData)
-            val updatedUser = userRepository.updateUser(firebaseUser.uid, user.toRegistrationData(workspaceId = workspace.id))
+            val updatedUser = userRepository.updateWorkspace(firebaseUser.uid, workspace.id)
             call.respond(HttpStatusCode.Created, updatedUser.requireWorkspace())
         } else {
             call.respond(HttpStatusCode.Conflict)

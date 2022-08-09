@@ -13,10 +13,4 @@ data class User(
     val workspace: Workspace?,
 ) {
     fun requireWorkspace() = workspace ?: throw NoSuchElementException()
-
-    fun toRegistrationData(workspaceId: WorkspaceId? = workspace?.id): UserRegistrationData {
-        return UserRegistrationData(
-            workspaceId = workspaceId,
-        )
-    }
 }

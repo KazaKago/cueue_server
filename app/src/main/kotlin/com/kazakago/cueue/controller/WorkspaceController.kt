@@ -19,7 +19,7 @@ class WorkspaceController(private val userRepository: UserRepository, private va
     suspend fun delete(call: ApplicationCall, firebaseUser: FirebaseUser) {
         val user = userRepository.getUser(firebaseUser.uid)
         if (user.workspace != null) {
-            userRepository.updateUser(firebaseUser.uid, user.toRegistrationData(workspaceId = null))
+            userRepository.updateWorkspace(firebaseUser.uid, null)
             call.respond(HttpStatusCode.NoContent)
         } else {
             call.respond(HttpStatusCode.NotFound)
