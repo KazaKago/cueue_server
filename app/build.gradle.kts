@@ -53,7 +53,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc")
     implementation("org.jetbrains.exposed:exposed-java-time")
     implementation("org.postgresql:postgresql:42.4.1")
-    implementation("org.flywaydb:flyway-core:9.1.2")
+    implementation("org.flywaydb:flyway-core:9.1.3")
     implementation("io.insert-koin:koin-core:3.2.0")
     implementation("com.google.firebase:firebase-admin:9.0.0")
     implementation("ch.qos.logback:logback-classic:1.2.11")
