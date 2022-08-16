@@ -28,7 +28,7 @@ tasks.register("stage") {
 }
 
 dependencies {
-    implementation(projects.app)
+    implementation(projects.server)
     implementation(libs.picocli)
     implementation(libs.typesafe.config)
     implementation(platform(libs.exposed.bom))

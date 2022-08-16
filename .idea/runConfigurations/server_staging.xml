@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="server staging" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="io.ktor.server.netty.EngineMain" />
+    <module name="cueue.server.main" />
+    <option name="PROGRAM_PARAMETERS" value="-config=server/src/main/resources/staging.conf" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

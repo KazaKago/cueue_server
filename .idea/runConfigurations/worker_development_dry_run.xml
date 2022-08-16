@@ -2,7 +2,7 @@
   <configuration default="false" name="worker development dry-run" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="com.kazakago.cueue.worker.WorkerKt" />
     <module name="cueue.worker.main" />
-    <option name="PROGRAM_PARAMETERS" value="-config=app/src/main/resources/development.conf -dry-run" />
+    <option name="PROGRAM_PARAMETERS" value="-config=server/src/main/resources/development.conf -dry-run" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

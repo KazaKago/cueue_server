@@ -11,7 +11,7 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "cueue"
-include("app")
+include("server")
 include("worker")
 
 // https://docs.gradle.org/current/userguide/declaring_dependencies.html#sec:type-safe-project-accessors

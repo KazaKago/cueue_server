@@ -39,7 +39,7 @@ class Worker : Callable<Int> {
     @Option(names = ["-dry-run"])
     var dryRun = false
 
-    @Option(names = ["-config"], defaultValue = "app/src/main/resources/application.conf")
+    @Option(names = ["-config"], defaultValue = "server/src/main/resources/application.conf")
     lateinit var config: String
 
     override fun call(): Int {
