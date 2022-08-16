@@ -43,7 +43,7 @@ class Worker : Callable<Int> {
     lateinit var config: String
 
     override fun call(): Int {
-        val conf = ConfigFactory.parseFile(File(config))
+        val conf = ConfigFactory.load(ConfigFactory.parseFile(File(config)))
 
         val sentryDsn = conf.getString("app.sentry.dsn")
         if (sentryDsn.isNotBlank()) {
