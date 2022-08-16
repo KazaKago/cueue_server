@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="development" type="Application" factoryName="Application">
+  <configuration default="false" name="app development" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="io.ktor.server.netty.EngineMain" />
     <module name="cueue.app.main" />
     <option name="PROGRAM_PARAMETERS" value="-config=app/src/main/resources/development.conf" />

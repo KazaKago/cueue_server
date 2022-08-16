@@ -12,3 +12,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "cueue"
 include("app")
+include("worker")
