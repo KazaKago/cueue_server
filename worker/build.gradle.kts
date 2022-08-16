@@ -1,24 +1,25 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+@Suppress("DSL_SCOPE_VIOLATION") // https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
     application
-    kotlin("jvm")
+    alias(libs.plugins.kotlin.jvm)
 }
 
 group = "com.kazakago.cueue.worker"
-version = "1.0.0-SNAPSHOT"
+version = libs.versions.version.get()
 
 application {
     mainClass.set("com.kazakago.cueue.worker.WorkerKt")
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    setSourceCompatibility(libs.versions.java.get())
+    setTargetCompatibility(libs.versions.java.get())
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "11"
+    kotlinOptions.jvmTarget = libs.versions.java.get()
 }
 
 tasks.register("stage") {
@@ -27,15 +28,15 @@ tasks.register("stage") {
 }
 
 dependencies {
-    implementation(project(":app"))
-    implementation("info.picocli:picocli:4.6.3")
-    implementation("com.typesafe:config:1.4.2")
-    implementation(platform("org.jetbrains.exposed:exposed-bom:0.39.2"))
-    implementation("org.jetbrains.exposed:exposed-core")
-    implementation("org.jetbrains.exposed:exposed-dao")
-    implementation("org.jetbrains.exposed:exposed-jdbc")
-    implementation("org.jetbrains.exposed:exposed-java-time")
-    implementation("org.postgresql:postgresql:42.4.1")
-    implementation("com.google.firebase:firebase-admin:9.0.0")
-    implementation("io.sentry:sentry:6.3.1")
+    implementation(projects.app)
+    implementation(libs.picocli)
+    implementation(libs.typesafe.config)
+    implementation(platform(libs.exposed.bom))
+    implementation(libs.exposed.core)
+    implementation(libs.exposed.dao)
+    implementation(libs.exposed.jdbc)
+    implementation(libs.exposed.java.time)
+    implementation(libs.postgresql)
+    implementation(libs.firebase.admin)
+    implementation(libs.sentry)
 }

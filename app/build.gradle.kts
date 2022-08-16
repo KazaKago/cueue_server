@@ -1,26 +1,27 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+@Suppress("DSL_SCOPE_VIOLATION") // https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
     application
-    kotlin("jvm")
-    kotlin("plugin.serialization")
-    id("org.flywaydb.flyway")
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.flyway)
 }
 
 group = "com.kazakago.cueue"
-version = "1.0.0-SNAPSHOT"
+version = libs.versions.version.get()
 
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    setSourceCompatibility(libs.versions.java.get())
+    setTargetCompatibility(libs.versions.java.get())
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "11"
+    kotlinOptions.jvmTarget = libs.versions.java.get()
 }
 
 tasks.register("stage") {
@@ -29,31 +30,31 @@ tasks.register("stage") {
 }
 
 dependencies {
-    implementation(platform("io.ktor:ktor-bom:2.1.0"))
-    implementation("io.ktor:ktor-server-netty")
-    implementation("io.ktor:ktor-server-auth")
-    implementation("io.ktor:ktor-server-default-headers")
-    implementation("io.ktor:ktor-server-forwarded-header")
-    implementation("io.ktor:ktor-server-cors")
-    implementation("io.ktor:ktor-server-call-logging")
-    implementation("io.ktor:ktor-server-status-pages")
-    implementation("io.ktor:ktor-server-content-negotiation")
-    implementation("io.ktor:ktor-serialization-kotlinx-json")
-    implementation(platform("org.jetbrains.exposed:exposed-bom:0.39.2"))
-    implementation("org.jetbrains.exposed:exposed-core")
-    implementation("org.jetbrains.exposed:exposed-dao")
-    implementation("org.jetbrains.exposed:exposed-jdbc")
-    implementation("org.jetbrains.exposed:exposed-java-time")
-    implementation("org.postgresql:postgresql:42.4.1")
-    implementation("org.flywaydb:flyway-core:9.1.3")
-    implementation("io.insert-koin:koin-core:3.2.0")
-    implementation("com.google.firebase:firebase-admin:9.0.0")
-    implementation("ch.qos.logback:logback-classic:1.2.11")
-    implementation("org.sejda.imageio:webp-imageio:0.1.6")
-    implementation("com.drewnoakes:metadata-extractor:2.18.0")
-    implementation("org.apache.lucene:lucene-analyzers-kuromoji:8.11.2")
-    implementation("com.ibm.icu:icu4j:71.1")
-    implementation("io.sentry:sentry:6.3.1")
+    implementation(platform(libs.ktor.bom))
+    implementation(libs.ktor.server.netty)
+    implementation(libs.ktor.server.auth)
+    implementation(libs.ktor.server.default.header)
+    implementation(libs.ktor.server.forwarded.header)
+    implementation(libs.ktor.server.cors)
+    implementation(libs.ktor.server.call.logging)
+    implementation(libs.ktor.server.status.pages)
+    implementation(libs.ktor.server.content.negotitation)
+    implementation(libs.ktor.serialization.json)
+    implementation(platform(libs.exposed.bom))
+    implementation(libs.exposed.core)
+    implementation(libs.exposed.dao)
+    implementation(libs.exposed.jdbc)
+    implementation(libs.exposed.java.time)
+    implementation(libs.postgresql)
+    implementation(libs.flyway)
+    implementation(libs.koin)
+    implementation(libs.firebase.admin)
+    implementation(libs.logback)
+    implementation(libs.webp.imageio)
+    implementation(libs.metadata.extractor)
+    implementation(libs.lucene.kuromoji)
+    implementation(libs.icu4j)
+    implementation(libs.sentry)
 
-    testImplementation("io.ktor:ktor-server-tests")
+    testImplementation(libs.ktor.server.tests)
 }
