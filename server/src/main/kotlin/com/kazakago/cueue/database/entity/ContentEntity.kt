@@ -11,4 +11,6 @@ class ContentEntity(id: EntityID<Long>) : LongEntity(id) {
     var key by ContentsTable.key
     var recipe by RecipeEntity optionalReferencedOn ContentsTable.recipeId
     var recipeOrder by ContentsTable.recipeOrder
+    var createdAt by ContentsTable.createdAt
+    var updatedAt by ContentsTable.updatedAt
 }
