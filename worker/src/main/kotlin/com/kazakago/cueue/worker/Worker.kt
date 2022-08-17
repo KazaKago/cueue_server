@@ -73,8 +73,8 @@ class Worker : Callable<Int> {
                 .select { UsersTable.uid notInList firebaseUserUids }
             val users = UserEntity.wrapRows(usersQuery)
             users.forEach {
+                println("[Deleting User] id = ${it.id}, uid = ${it.uid}, displayName = ${it.displayName}")
                 if (!dryRun) it.delete()
-                println("[Deleted User] id = ${it.id}, uid = ${it.uid}, displayName = ${it.displayName}")
             }
             println()
 
@@ -84,8 +84,8 @@ class Worker : Callable<Int> {
                 .select { UsersTable.id.isNull() }
             val workspaces = WorkspaceEntity.wrapRows(workspacesQuery)
             workspaces.forEach {
+                println("[Deleting Workspace] id = ${it.id}, name = ${it.name}")
                 if (!dryRun) it.delete()
-                println("[Deleted Workspace] id = ${it.id}, name = ${it.name}")
             }
             println()
 
@@ -97,10 +97,10 @@ class Worker : Callable<Int> {
             val bucket = StorageClient.getInstance().bucket()
             contents.forEach {
                 val blob = bucket.get(it.key)
+                println("[Deleting Blob] name = ${blob.name}")
                 if (!dryRun) blob.delete()
-                println("[Deleted Blob] name = ${blob.name}")
+                println("[Deleting Content] id = ${it.id}, key = ${it.key}")
                 if (!dryRun) it.delete()
-                println("[Deleted Content] id = ${it.id}, key = ${it.key}")
             }
             println()
 
@@ -109,8 +109,8 @@ class Worker : Callable<Int> {
                 .select { InvitationsTable.createdAt less LocalDateTime.now().minusDays(1) }
             val invitations = InvitationEntity.wrapRows(invitationQuery)
             invitations.forEach {
+                println("[Deleting Invitation] id = ${it.id}, code = ${it.code}, created_at = ${it.createdAt}")
                 if (!dryRun) it.delete()
-                println("[Deleted Invitation] id = ${it.id}, code = ${it.code}, created_at = ${it.createdAt}")
             }
             println()
         }
