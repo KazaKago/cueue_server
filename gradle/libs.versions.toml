@@ -3,7 +3,7 @@ version = "1.0.0"
 
 java = "11"
 kotlin = "1.7.10"
-flyway = "9.1.4"
+flyway = "9.1.5"
 
 [libraries]
 # Ktor
