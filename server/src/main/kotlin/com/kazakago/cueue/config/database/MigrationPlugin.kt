@@ -5,10 +5,11 @@ import org.flywaydb.core.Flyway
 
 val Migration = createApplicationPlugin(name = "Migration") {
     val environment = environment ?: throw IllegalStateException()
+    val connectionInfo = ConnectionInfo(environment.config.property("app.database.url").getString())
     val flyway = Flyway.configure().dataSource(
-        environment.config.property("app.database.url").getString(),
-        environment.config.property("app.database.user").getString(),
-        environment.config.property("app.database.password").getString(),
+        connectionInfo.jdbcUrl,
+        connectionInfo.user,
+        connectionInfo.password,
     ).load()
     flyway.migrate()
 }
