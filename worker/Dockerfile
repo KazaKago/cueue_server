@@ -4,6 +4,6 @@ ENV APP_HOME /app
 
 WORKDIR $APP_HOME
 COPY ./ $APP_HOME/
-RUN ./gradlew installDist
+RUN ./gradlew worker:installDist
 
-CMD ["server/build/install/server/bin/server"]
+CMD ["worker/build/install/worker/bin/worker"]
