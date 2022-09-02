@@ -1,4 +1,4 @@
-FROM eclipse-temurin:11-alpine
+FROM eclipse-temurin:18-alpine
 
 ENV APP_HOME /app
 
