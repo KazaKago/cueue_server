@@ -22,11 +22,6 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = libs.versions.java.get()
 }
 
-tasks.register("stage") {
-    group = "heroku"
-    dependsOn(tasks.installDist)
-}
-
 dependencies {
     implementation(projects.server)
     implementation(libs.picocli)

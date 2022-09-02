@@ -24,11 +24,6 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = libs.versions.java.get()
 }
 
-tasks.register("stage") {
-    group = "heroku"
-    dependsOn(tasks.installDist)
-}
-
 dependencies {
     implementation(platform(libs.ktor.bom))
     implementation(libs.ktor.server.netty)
