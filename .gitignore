@@ -7,6 +7,7 @@
 .idea/*
 server/src/main/resources/development.conf
 server/src/main/resources/staging.conf
+suspender/src/main/resources/application.conf
 !.idea/codeStyles/
 !.idea/inspectionProfiles/
 !.idea/runConfigurations/

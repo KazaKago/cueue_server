@@ -50,6 +50,8 @@ picocli = "info.picocli:picocli:4.6.3"
 typesafe-config = "com.typesafe:config:1.4.2"
 # Apache Common Codec
 apache-common-codec = "commons-codec:commons-codec:1.15"
+# OkHttp
+okHttp = "com.squareup.okhttp3:okhttp:4.10.0"
 
 [plugins]
 # Kotlin JVM
