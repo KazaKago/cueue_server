@@ -7,6 +7,7 @@ import com.google.firebase.auth.ExportedUserRecord
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.cloud.StorageClient
 import com.kazakago.cueue.config.database.ConnectionInfo
+import com.kazakago.cueue.config.firebase.FirebaseCredentials
 import com.kazakago.cueue.database.entity.ContentEntity
 import com.kazakago.cueue.database.entity.InvitationEntity
 import com.kazakago.cueue.database.entity.UserEntity
@@ -18,14 +19,12 @@ import com.kazakago.cueue.database.table.WorkspacesTable
 import com.typesafe.config.ConfigFactory
 import io.sentry.Sentry
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.less
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import picocli.CommandLine
 import picocli.CommandLine.Option
 import java.io.File
-import java.io.FileInputStream
 import java.time.LocalDateTime
 import java.util.concurrent.Callable
 import kotlin.system.exitProcess
@@ -51,14 +50,12 @@ class Worker : Callable<Int> {
         if (sentryDsn.isNotBlank()) {
             Sentry.init { it.dsn = sentryDsn }
         }
-        val file = File(conf.getString("app.firebase.credentials"))
-        FileInputStream(file).use {
-            val options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(it))
-                .setStorageBucket(conf.getString("app.firebase.storage_bucket_name"))
-                .build()
-            FirebaseApp.initializeApp(options)
-        }
+        val credentials = FirebaseCredentials(conf.getString("app.firebase.credentials"))
+        val options = FirebaseOptions.builder()
+            .setCredentials(GoogleCredentials.fromStream(credentials.inputStream))
+            .setStorageBucket(conf.getString("app.firebase.storage_bucket_name"))
+            .build()
+        FirebaseApp.initializeApp(options)
         val connectionInfo = ConnectionInfo(conf.getString("app.database.url"))
         Database.connect(
             url = connectionInfo.jdbcUrl,
