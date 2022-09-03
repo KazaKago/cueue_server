@@ -11,7 +11,7 @@ val Firebase = createApplicationPlugin(name = "Firebase") {
     val environment = environment ?: throw IllegalStateException()
     AndroidPackage.applicationId = environment.config.property("app.firebase.android_application_id").getString()
     StorageBucket.bucketName = environment.config.property("app.firebase.storage_bucket_name").getString()
-    val credentials = FirebaseCredentials(environment.config.property("app.firebase.credentials").toString())
+    val credentials = FirebaseCredentials(environment.config.property("app.firebase.credentials").getString())
     val options = FirebaseOptions.builder()
         .setCredentials(GoogleCredentials.fromStream(credentials.inputStream))
         .setStorageBucket(StorageBucket.bucketName)

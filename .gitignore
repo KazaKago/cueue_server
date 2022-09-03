@@ -5,7 +5,6 @@
 *.ipr
 *.iws
 .idea/*
-server/credentials
 server/src/main/resources/development.conf
 server/src/main/resources/staging.conf
 !.idea/codeStyles/
