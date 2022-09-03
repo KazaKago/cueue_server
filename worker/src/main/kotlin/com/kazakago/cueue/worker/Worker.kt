@@ -6,6 +6,7 @@ import com.google.firebase.FirebaseOptions
 import com.google.firebase.auth.ExportedUserRecord
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.cloud.StorageClient
+import com.kazakago.cueue.config.database.ConnectionInfo
 import com.kazakago.cueue.database.entity.ContentEntity
 import com.kazakago.cueue.database.entity.InvitationEntity
 import com.kazakago.cueue.database.entity.UserEntity
@@ -58,11 +59,12 @@ class Worker : Callable<Int> {
                 .build()
             FirebaseApp.initializeApp(options)
         }
+        val connectionInfo = ConnectionInfo(conf.getString("app.database.url"))
         Database.connect(
-            url = conf.getString("app.database.url"),
+            url = connectionInfo.jdbcUrl,
             driver = "org.postgresql.Driver",
-            user = conf.getString("app.database.user"),
-            password = conf.getString("app.database.password"),
+            user = connectionInfo.user,
+            password = connectionInfo.password,
         )
 
         if (dryRun) println("\n--- RUN WITH \"DRY RUN\" MODE! ---\n")
