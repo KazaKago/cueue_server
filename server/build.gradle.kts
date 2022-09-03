@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.lucene.kuromoji)
     implementation(libs.icu4j)
     implementation(libs.sentry)
+    implementation(libs.apache.common.codec)
 
     testImplementation(libs.ktor.server.tests)
 }

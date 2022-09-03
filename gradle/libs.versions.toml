@@ -48,6 +48,8 @@ sentry = "io.sentry:sentry:6.4.1"
 picocli = "info.picocli:picocli:4.6.3"
 # Typesafe Config
 typesafe-config = "com.typesafe:config:1.4.2"
+# Apache Common Codec
+apache-common-codec = "commons-codec:commons-codec:1.15"
 
 [plugins]
 # Kotlin JVM
