@@ -7,8 +7,8 @@ import io.ktor.server.plugins.cors.*
 fun CORSConfig.register(application: ApplicationCallPipeline) {
     val environment = application.environment ?: throw IllegalStateException()
     val host = environment.config.property("app.url.host").getString()
-    val schemes = environment.config.property("app.url.schemes").getList()
-    val subDomains = environment.config.property("app.url.subDomains").getList()
+    val schemes = environment.config.property("app.url.schemes").getString().filterNot { it.isWhitespace() }.split(",")
+    val subDomains = environment.config.property("app.url.subDomains").getString().filterNot { it.isWhitespace() }.split(",")
     allowHost(host, schemes, subDomains)
     allowHeader(HttpHeaders.ContentType)
     allowHeader(HttpHeaders.Authorization)

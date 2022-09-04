@@ -9,7 +9,7 @@ import io.ktor.server.routing.*
 val Maintenance = createRouteScopedPlugin("Maintenance") {
     val environment = environment ?: throw IllegalStateException()
     val isMaintenanceMode = environment.config.property("app.maintenance.active").getString().toBoolean()
-    val excludedIps = environment.config.property("app.maintenance.excluded_ips").getList()
+    val excludedIps = environment.config.property("app.maintenance.excluded_ips").getString().filterNot { it.isWhitespace() }.split(",")
 
     onCall { call ->
         if (isMaintenanceMode && !excludedIps.contains(call.request.origin.remoteHost)) {
