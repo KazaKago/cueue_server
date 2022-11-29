@@ -43,7 +43,7 @@ lucene-kuromoji = "org.apache.lucene:lucene-analyzers-kuromoji:8.11.2"
 # icu4j
 icu4j = "com.ibm.icu:icu4j:72.1"
 # Sentry
-sentry = "io.sentry:sentry:6.8.0"
+sentry = "io.sentry:sentry:6.9.0"
 # Picocli
 picocli = "info.picocli:picocli:4.7.0"
 # Typesafe Config
