@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 @Suppress("DSL_SCOPE_VIOLATION") // https://github.com/gradle/gradle/issues/22797
 plugins {
     application
@@ -13,13 +11,12 @@ application {
     mainClass.set("com.kazakago.cueue.worker.WorkerKt")
 }
 
-java {
-    setSourceCompatibility(libs.versions.java.get())
-    setTargetCompatibility(libs.versions.java.get())
+kotlin {
+    jvmToolchain(libs.versions.java.get().toInt())
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = libs.versions.java.get()
+tasks.test {
+    useJUnitPlatform()
 }
 
 dependencies {
