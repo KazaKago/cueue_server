@@ -41,7 +41,7 @@ metadata-extractor = "com.drewnoakes:metadata-extractor:2.18.0"
 # Lucene Kuromoji
 lucene-kuromoji = "org.apache.lucene:lucene-analyzers-kuromoji:8.11.2"
 # icu4j
-icu4j = "com.ibm.icu:icu4j:72.1"
+icu4j = "com.ibm.icu:icu4j:73.1"
 # Sentry
 sentry = "io.sentry:sentry:6.13.1"
 # Picocli
