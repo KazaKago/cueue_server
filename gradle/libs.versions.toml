@@ -45,7 +45,7 @@ icu4j = "com.ibm.icu:icu4j:73.1"
 # Sentry
 sentry = "io.sentry:sentry:6.17.0"
 # Picocli
-picocli = "info.picocli:picocli:4.7.2"
+picocli = "info.picocli:picocli:4.7.3"
 # Typesafe Config
 typesafe-config = "com.typesafe:config:1.4.2"
 # Apache Common Codec
