@@ -49,7 +49,7 @@ picocli = "info.picocli:picocli:4.7.4"
 # Typesafe Config
 typesafe-config = "com.typesafe:config:1.4.2"
 # Apache Common Codec
-apache-common-codec = "commons-codec:commons-codec:1.15"
+apache-common-codec = "commons-codec:commons-codec:1.16.0"
 # OkHttp
 okHttp = "com.squareup.okhttp3:okhttp:4.11.0"
 
