@@ -47,7 +47,7 @@ sentry = "io.sentry:sentry:6.28.0"
 # Picocli
 picocli = "info.picocli:picocli:4.7.5"
 # Typesafe Config
-typesafe-config = "com.typesafe:config:1.4.2"
+typesafe-config = "com.typesafe:config:1.4.3"
 # Apache Common Codec
 apache-common-codec = "commons-codec:commons-codec:1.16.0"
 # OkHttp
