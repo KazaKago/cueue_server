@@ -51,7 +51,7 @@ typesafe-config = "com.typesafe:config:1.4.2"
 # Apache Common Codec
 apache-common-codec = "commons-codec:commons-codec:1.16.0"
 # OkHttp
-okHttp = "com.squareup.okhttp3:okhttp:4.11.0"
+okHttp = "com.squareup.okhttp3:okhttp:4.12.0"
 
 [plugins]
 # Kotlin JVM
