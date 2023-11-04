@@ -28,6 +28,7 @@ exposed-java-time = { module = "org.jetbrains.exposed:exposed-java-time" }
 postgresql = "org.postgresql:postgresql:42.6.0"
 # Flyway
 flyway = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
+flyway-postgres = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
 # Koin
 koin = "io.insert-koin:koin-core:3.5.0"
 # Firebase Admin

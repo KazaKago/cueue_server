@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.exposed.java.time)
     implementation(libs.postgresql)
     implementation(libs.flyway)
+    implementation(libs.flyway.postgres)
     implementation(libs.koin)
     implementation(libs.firebase.admin)
     implementation(libs.logback)
