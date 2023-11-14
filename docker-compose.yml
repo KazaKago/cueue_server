@@ -1,6 +1,6 @@
 services:
   database:
-    image: postgres:14.9-alpine
+    image: postgres:14.10-alpine
     environment:
       TZ: Asia/Tokyo
       POSTGRES_PASSWORD: password
