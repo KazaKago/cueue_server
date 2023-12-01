@@ -34,7 +34,7 @@ koin = "io.insert-koin:koin-core:3.5.0"
 # Firebase Admin
 firebase-admin = "com.google.firebase:firebase-admin:9.2.0"
 # Logback
-logback = "ch.qos.logback:logback-classic:1.4.11"
+logback = "ch.qos.logback:logback-classic:1.4.14"
 # WebP ImageIO
 webp-imageio = "org.sejda.imageio:webp-imageio:0.1.6"
 # Metadata Extractor
