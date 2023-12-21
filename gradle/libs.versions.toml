@@ -2,7 +2,7 @@
 version = "1.0.0"
 
 java = "17"
-kotlin = "1.9.20"
+kotlin = "1.9.22"
 flyway = "10.0.0"
 
 [libraries]
