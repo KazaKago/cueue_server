@@ -41,8 +41,8 @@ class RecipeRepository(private val recipeMapper: RecipeMapper, private val recip
                 conditions = conditions and tagIdsCondition
             }
             val query = table
-                .slice(RecipesTable.columns)
-                .select(conditions)
+                .select(RecipesTable.columns)
+                .where(conditions)
                 .withDistinct()
                 .orderBy(RecipesTable.id to SortOrder.DESC)
             val recipes = RecipeEntity.wrapRows(query)

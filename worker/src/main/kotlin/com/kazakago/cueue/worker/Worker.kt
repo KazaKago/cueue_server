@@ -20,7 +20,7 @@ import com.typesafe.config.ConfigFactory
 import io.sentry.Sentry
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import picocli.CommandLine
 import picocli.CommandLine.Option
@@ -70,7 +70,8 @@ class Worker : Callable<Int> {
             // Delete users not attached to Firebase Authentication.
             val firebaseUserUids = listFirebaseUsers().map { it.uid }
             val usersQuery = UsersTable
-                .select { UsersTable.uid notInList firebaseUserUids }
+                .selectAll()
+                .where { UsersTable.uid notInList firebaseUserUids }
             val users = UserEntity.wrapRows(usersQuery)
             users.forEach {
                 println("[Deleting User] id = ${it.id}, uid = ${it.uid}, displayName = ${it.displayName}")
@@ -81,7 +82,8 @@ class Worker : Callable<Int> {
             // Delete Workspace not attached to any user.
             val workspacesQuery = WorkspacesTable
                 .leftJoin(UsersTable)
-                .select { UsersTable.id.isNull() }
+                .selectAll()
+                .where { UsersTable.id.isNull() }
             val workspaces = WorkspaceEntity.wrapRows(workspacesQuery)
             workspaces.forEach {
                 println("[Deleting Workspace] id = ${it.id}, name = ${it.name}")
@@ -92,7 +94,8 @@ class Worker : Callable<Int> {
             // Delete content that has been created for more than 24 hours and is not attached anywhere
             val contentsQuery = ContentsTable
                 .leftJoin(UsersTable)
-                .select { ContentsTable.recipeId.isNull() and UsersTable.uid.isNull() }
+                .selectAll()
+                .where { ContentsTable.recipeId.isNull() and UsersTable.uid.isNull() }
             val contents = ContentEntity.wrapRows(contentsQuery)
             val bucket = StorageClient.getInstance().bucket()
             contents.forEach {
@@ -106,7 +109,8 @@ class Worker : Callable<Int> {
 
             // Delete invitations that have been created for more than 24 hours
             val invitationQuery = InvitationsTable
-                .select { InvitationsTable.createdAt less LocalDateTime.now().minusDays(1) }
+                .selectAll()
+                .where { InvitationsTable.createdAt less LocalDateTime.now().minusDays(1) }
             val invitations = InvitationEntity.wrapRows(invitationQuery)
             invitations.forEach {
                 println("[Deleting Invitation] id = ${it.id}, code = ${it.code}, created_at = ${it.createdAt}")
