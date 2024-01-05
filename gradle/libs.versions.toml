@@ -7,7 +7,7 @@ flyway = "10.4.1"
 
 [libraries]
 # Kotlinx datetime
-kotlinx-datetime = "org.jetbrains.kotlinx:kotlinx-datetime:0.4.1"
+kotlinx-datetime = "org.jetbrains.kotlinx:kotlinx-datetime:0.5.0"
 # Ktor
 ktor-bom = "io.ktor:ktor-bom:2.3.7"
 ktor-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-json" }
