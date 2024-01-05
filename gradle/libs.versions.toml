@@ -30,7 +30,7 @@ postgresql = "org.postgresql:postgresql:42.7.1"
 flyway = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
 flyway-postgres = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
 # Koin
-koin = "io.insert-koin:koin-core:3.5.0"
+koin = "io.insert-koin:koin-core:3.5.3"
 # Firebase Admin
 firebase-admin = "com.google.firebase:firebase-admin:9.2.0"
 # Logback
