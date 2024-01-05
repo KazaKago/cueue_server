@@ -1,6 +1,6 @@
 package com.kazakago.cueue.config.database
 
-import io.ktor.server.application.*
+import io.ktor.server.application.createApplicationPlugin
 import org.flywaydb.core.Flyway
 
 val Migration = createApplicationPlugin(name = "Migration") {

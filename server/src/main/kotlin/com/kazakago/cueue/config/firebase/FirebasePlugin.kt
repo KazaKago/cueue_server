@@ -5,7 +5,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.kazakago.cueue.model.AndroidPackage
 import com.kazakago.cueue.storage.StorageBucket
-import io.ktor.server.application.*
+import io.ktor.server.application.createApplicationPlugin
 
 val Firebase = createApplicationPlugin(name = "Firebase") {
     val environment = environment ?: throw IllegalStateException()

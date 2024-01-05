@@ -5,11 +5,15 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseToken
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.auth.AuthenticationConfig
+import io.ktor.server.auth.AuthenticationContext
+import io.ktor.server.auth.AuthenticationProvider
+import io.ktor.server.auth.Principal
+import io.ktor.server.request.ApplicationRequest
+import io.ktor.server.request.authorization
+import io.ktor.server.response.respond
 
 class FirebaseAuthenticationProvider internal constructor(config: Config) : AuthenticationProvider(config) {
 

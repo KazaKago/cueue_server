@@ -8,9 +8,14 @@ import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
-import java.util.*
+import java.util.Base64
+import java.util.UUID
 import javax.imageio.ImageIO
-import kotlin.math.*
+import kotlin.math.abs
+import kotlin.math.cos
+import kotlin.math.floor
+import kotlin.math.max
+import kotlin.math.sin
 
 class DecodedImage(imageDataUri: String) : Content {
 

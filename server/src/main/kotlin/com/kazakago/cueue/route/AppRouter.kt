@@ -3,16 +3,38 @@ package com.kazakago.cueue.route
 import com.kazakago.cueue.config.koin.inject
 import com.kazakago.cueue.config.maintenance.maintenanceCheck
 import com.kazakago.cueue.config.version.versionCheck
-import com.kazakago.cueue.controller.*
+import com.kazakago.cueue.controller.CallbackController
+import com.kazakago.cueue.controller.ContentsController
+import com.kazakago.cueue.controller.InvitationAcceptController
+import com.kazakago.cueue.controller.InvitationController
+import com.kazakago.cueue.controller.InvitationsController
+import com.kazakago.cueue.controller.MenuController
+import com.kazakago.cueue.controller.MenusController
+import com.kazakago.cueue.controller.RecipeController
+import com.kazakago.cueue.controller.RecipesController
+import com.kazakago.cueue.controller.RootController
+import com.kazakago.cueue.controller.TagController
+import com.kazakago.cueue.controller.TagsController
+import com.kazakago.cueue.controller.UserController
+import com.kazakago.cueue.controller.UsersController
+import com.kazakago.cueue.controller.WorkspaceController
+import com.kazakago.cueue.controller.WorkspacesController
 import com.kazakago.cueue.model.InvitationCode
 import com.kazakago.cueue.model.MenuId
 import com.kazakago.cueue.model.RecipeId
 import com.kazakago.cueue.model.TagId
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.request.*
-import io.ktor.server.routing.*
+import io.ktor.http.Parameters
+import io.ktor.server.application.Application
+import io.ktor.server.application.call
+import io.ktor.server.auth.authenticate
+import io.ktor.server.request.receiveText
+import io.ktor.server.routing.delete
+import io.ktor.server.routing.get
+import io.ktor.server.routing.patch
+import io.ktor.server.routing.post
+import io.ktor.server.routing.put
+import io.ktor.server.routing.route
+import io.ktor.server.routing.routing
 
 fun Application.appRouting() {
     val rootController by inject<RootController>()

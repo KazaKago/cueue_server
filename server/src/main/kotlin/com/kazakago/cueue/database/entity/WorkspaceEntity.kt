@@ -1,6 +1,10 @@
 package com.kazakago.cueue.database.entity
 
-import com.kazakago.cueue.database.table.*
+import com.kazakago.cueue.database.table.MenusTable
+import com.kazakago.cueue.database.table.RecipesTable
+import com.kazakago.cueue.database.table.TagsTable
+import com.kazakago.cueue.database.table.UsersTable
+import com.kazakago.cueue.database.table.WorkspacesTable
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID

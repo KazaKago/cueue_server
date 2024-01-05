@@ -1,7 +1,7 @@
 package com.kazakago.cueue.controller
 
-import io.ktor.server.application.*
-import io.ktor.server.response.*
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.response.respond
 
 class RootController {
 

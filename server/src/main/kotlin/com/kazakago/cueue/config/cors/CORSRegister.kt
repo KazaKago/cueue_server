@@ -1,8 +1,9 @@
 package com.kazakago.cueue.config.cors
 
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.plugins.cors.*
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
+import io.ktor.server.application.ApplicationCallPipeline
+import io.ktor.server.plugins.cors.CORSConfig
 
 fun CORSConfig.register(application: ApplicationCallPipeline) {
     val environment = application.environment ?: throw IllegalStateException()

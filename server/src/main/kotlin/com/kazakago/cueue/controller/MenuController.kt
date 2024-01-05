@@ -5,9 +5,9 @@ import com.kazakago.cueue.model.MenuId
 import com.kazakago.cueue.model.MenuRegistrationData
 import com.kazakago.cueue.repository.MenuRepository
 import com.kazakago.cueue.repository.UserRepository
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.response.*
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.response.respond
 
 class MenuController(private val userRepository: UserRepository, private val menuRepository: MenuRepository) {
 

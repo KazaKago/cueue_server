@@ -1,10 +1,8 @@
 package com.kazakago.cueue.mapper
 
 import com.kazakago.cueue.database.entity.MenuEntity
-import com.kazakago.cueue.database.table.RecipesTable
 import com.kazakago.cueue.model.Menu
 import com.kazakago.cueue.model.MenuId
-import org.jetbrains.exposed.sql.SortOrder
 
 class MenuMapper(private val timeFrameMapper: TimeFrameMapper, private val recipeSummaryMapper: RecipeSummaryMapper) {
 

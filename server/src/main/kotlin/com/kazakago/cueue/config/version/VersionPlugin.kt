@@ -1,10 +1,14 @@
 package com.kazakago.cueue.config.version
 
 import com.kazakago.cueue.model.MinApiVersion
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.createRouteScopedPlugin
+import io.ktor.server.application.install
+import io.ktor.server.response.respond
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.RouteSelector
+import io.ktor.server.routing.RouteSelectorEvaluation
+import io.ktor.server.routing.RoutingResolveContext
 
 val Version = createRouteScopedPlugin("Version") {
     onCall { call ->

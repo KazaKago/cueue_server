@@ -1,6 +1,6 @@
 package com.kazakago.cueue.config.sentry
 
-import io.ktor.server.application.*
+import io.ktor.server.application.createApplicationPlugin
 
 val Sentry = createApplicationPlugin(name = "Sentry") {
     val environment = environment ?: throw IllegalStateException()

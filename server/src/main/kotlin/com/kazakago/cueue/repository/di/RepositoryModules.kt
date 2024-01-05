@@ -1,6 +1,12 @@
 package com.kazakago.cueue.repository.di
 
-import com.kazakago.cueue.repository.*
+import com.kazakago.cueue.repository.ContentRepository
+import com.kazakago.cueue.repository.InvitationRepository
+import com.kazakago.cueue.repository.MenuRepository
+import com.kazakago.cueue.repository.RecipeRepository
+import com.kazakago.cueue.repository.TagRepository
+import com.kazakago.cueue.repository.UserRepository
+import com.kazakago.cueue.repository.WorkspaceRepository
 import org.koin.dsl.module
 
 val repositoryModules = module {

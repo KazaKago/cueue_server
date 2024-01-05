@@ -1,6 +1,6 @@
 package com.kazakago.cueue.config.database
 
-import io.ktor.server.application.*
+import io.ktor.server.application.createApplicationPlugin
 import org.jetbrains.exposed.sql.Database
 import java.net.URI
 

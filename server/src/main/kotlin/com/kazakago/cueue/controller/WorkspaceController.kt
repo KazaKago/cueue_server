@@ -4,9 +4,9 @@ import com.kazakago.cueue.model.FirebaseUser
 import com.kazakago.cueue.model.WorkspaceRegistrationData
 import com.kazakago.cueue.repository.UserRepository
 import com.kazakago.cueue.repository.WorkspaceRepository
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.response.*
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.response.respond
 
 class WorkspaceController(private val userRepository: UserRepository, private val workspaceRepository: WorkspaceRepository) {
 

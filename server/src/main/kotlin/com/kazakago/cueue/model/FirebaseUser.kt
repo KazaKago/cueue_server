@@ -1,6 +1,6 @@
 package com.kazakago.cueue.model
 
-import io.ktor.server.auth.*
+import io.ktor.server.auth.Principal
 import java.net.URL
 
 data class FirebaseUser(
