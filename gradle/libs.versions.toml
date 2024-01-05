@@ -38,7 +38,7 @@ logback = "ch.qos.logback:logback-classic:1.4.11"
 # WebP ImageIO
 webp-imageio = "org.sejda.imageio:webp-imageio:0.1.6"
 # Metadata Extractor
-metadata-extractor = "com.drewnoakes:metadata-extractor:2.18.0"
+metadata-extractor = "com.drewnoakes:metadata-extractor:2.19.0"
 # Lucene Kuromoji
 lucene-kuromoji = "org.apache.lucene:lucene-analyzers-kuromoji:8.11.2"
 # icu4j
