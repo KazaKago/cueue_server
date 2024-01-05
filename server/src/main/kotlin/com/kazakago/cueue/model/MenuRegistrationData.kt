@@ -1,8 +1,8 @@
 package com.kazakago.cueue.model
 
+import kotlinx.datetime.LocalDate
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.time.LocalDate
 
 @Serializable
 data class MenuRegistrationData(

@@ -21,6 +21,7 @@ tasks.test {
 }
 
 dependencies {
+    implementation(libs.kotlinx.datetime)
     implementation(platform(libs.ktor.bom))
     implementation(libs.ktor.server.netty)
     implementation(libs.ktor.server.auth)
@@ -35,7 +36,7 @@ dependencies {
     implementation(libs.exposed.core)
     implementation(libs.exposed.dao)
     implementation(libs.exposed.jdbc)
-    implementation(libs.exposed.java.time)
+    implementation(libs.exposed.kotlinx.datetime)
     implementation(libs.postgresql)
     implementation(libs.flyway)
     implementation(libs.flyway.postgres)

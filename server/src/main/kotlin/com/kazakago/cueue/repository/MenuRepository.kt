@@ -9,11 +9,13 @@ import com.kazakago.cueue.mapper.MenuMapper
 import com.kazakago.cueue.mapper.MenuSummaryMapper
 import com.kazakago.cueue.mapper.rawValue
 import com.kazakago.cueue.model.*
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.exposed.dao.load
 import org.jetbrains.exposed.dao.with
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
-import java.time.LocalDateTime
 
 class MenuRepository(private val menuMapper: MenuMapper, private val menuSummaryMapper: MenuSummaryMapper) {
 
@@ -72,7 +74,7 @@ class MenuRepository(private val menuMapper: MenuMapper, private val menuSummary
                     this.timeFrame = menu.timeFrame.rawValue()
                     val rawRecipeIds = menu.recipeIds?.map { it.value } ?: emptyList()
                     this.recipes = RecipeEntity.find { (RecipesTable.workspaceId eq workspaceId.value) and (RecipesTable.id inList rawRecipeIds) }
-                    this.updatedAt = LocalDateTime.now()
+                    this.updatedAt = Clock.System.now().toLocalDateTime(TimeZone.UTC)
                 }
             menuMapper.toModel(entity)
         }

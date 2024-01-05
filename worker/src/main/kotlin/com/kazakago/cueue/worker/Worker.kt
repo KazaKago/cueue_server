@@ -18,6 +18,9 @@ import com.kazakago.cueue.database.table.UsersTable
 import com.kazakago.cueue.database.table.WorkspacesTable
 import com.typesafe.config.ConfigFactory
 import io.sentry.Sentry
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.selectAll
@@ -25,9 +28,9 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import picocli.CommandLine
 import picocli.CommandLine.Option
 import java.io.File
-import java.time.LocalDateTime
 import java.util.concurrent.Callable
 import kotlin.system.exitProcess
+import kotlin.time.Duration.Companion.days
 
 fun main(args: Array<String>): Unit = exitProcess(
     CommandLine(Worker())
@@ -110,7 +113,7 @@ class Worker : Callable<Int> {
             // Delete invitations that have been created for more than 24 hours
             val invitationQuery = InvitationsTable
                 .selectAll()
-                .where { InvitationsTable.createdAt less LocalDateTime.now().minusDays(1) }
+                .where { InvitationsTable.createdAt less (Clock.System.now() - 1.days).toLocalDateTime(TimeZone.UTC) }
             val invitations = InvitationEntity.wrapRows(invitationQuery)
             invitations.forEach {
                 println("[Deleting Invitation] id = ${it.id}, code = ${it.code}, created_at = ${it.createdAt}")

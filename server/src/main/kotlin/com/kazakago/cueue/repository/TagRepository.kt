@@ -5,11 +5,13 @@ import com.kazakago.cueue.database.entity.WorkspaceEntity
 import com.kazakago.cueue.database.table.TagsTable
 import com.kazakago.cueue.mapper.TagMapper
 import com.kazakago.cueue.model.*
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
-import java.time.LocalDateTime
 
 class TagRepository(private val tagMapper: TagMapper) {
 
@@ -52,7 +54,7 @@ class TagRepository(private val tagMapper: TagMapper) {
                     .first()
                     .apply {
                         this.sortOrder = index.toLong()
-                        this.updatedAt = LocalDateTime.now()
+                        this.updatedAt = Clock.System.now().toLocalDateTime(TimeZone.UTC)
                     }
                 tagMapper.toModel(entity)
             }
@@ -66,7 +68,7 @@ class TagRepository(private val tagMapper: TagMapper) {
                 .first()
                 .apply {
                     this.name = tag.name
-                    this.updatedAt = LocalDateTime.now()
+                    this.updatedAt = Clock.System.now().toLocalDateTime(TimeZone.UTC)
                 }
             tagMapper.toModel(entity)
         }

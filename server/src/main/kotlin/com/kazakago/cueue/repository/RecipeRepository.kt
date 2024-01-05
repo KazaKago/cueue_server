@@ -11,13 +11,15 @@ import com.kazakago.cueue.database.table.TagsTable
 import com.kazakago.cueue.mapper.RecipeMapper
 import com.kazakago.cueue.mapper.RecipeSummaryMapper
 import com.kazakago.cueue.model.*
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.exposed.dao.load
 import org.jetbrains.exposed.dao.with
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
-import java.time.LocalDateTime
 
 class RecipeRepository(private val recipeMapper: RecipeMapper, private val recipeSummaryMapper: RecipeSummaryMapper) {
 
@@ -100,7 +102,7 @@ class RecipeRepository(private val recipeMapper: RecipeMapper, private val recip
                     this.createImageRelations(recipe.imageKeys)
                     val rawTagIds = recipe.tagIds?.map { it.value } ?: emptyList()
                     this.tags = TagEntity.find { (TagsTable.workspaceId eq workspaceId.value) and (TagsTable.id inList rawTagIds) }
-                    this.updatedAt = LocalDateTime.now()
+                    this.updatedAt = Clock.System.now().toLocalDateTime(TimeZone.UTC)
                 }
             recipeMapper.toModel(entity)
         }

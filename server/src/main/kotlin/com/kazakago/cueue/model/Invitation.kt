@@ -1,9 +1,10 @@
 package com.kazakago.cueue.model
 
+import kotlinx.datetime.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import java.time.LocalDateTime
+import kotlin.time.Duration.Companion.days
 
 @Serializable
 data class Invitation(
@@ -18,14 +19,14 @@ data class Invitation(
 ) {
     @SerialName("expire_at")
     @Serializable(with = LocalDateTimeSerializer::class)
-    val expireAt: LocalDateTime = createdAt.plusDays(1)
+    val expireAt: LocalDateTime = (createdAt.toInstant(TimeZone.UTC) + 1.days).toLocalDateTime(TimeZone.UTC)
 
     init {
         verify()
     }
 
     private fun verify() {
-        if (expireAt < LocalDateTime.now()) {
+        if (expireAt.toInstant(TimeZone.UTC) < Clock.System.now()) {
             throw NoSuchElementException()
         }
     }

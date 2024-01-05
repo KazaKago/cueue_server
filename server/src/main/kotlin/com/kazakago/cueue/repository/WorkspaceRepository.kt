@@ -5,8 +5,10 @@ import com.kazakago.cueue.mapper.WorkspaceMapper
 import com.kazakago.cueue.model.Workspace
 import com.kazakago.cueue.model.WorkspaceId
 import com.kazakago.cueue.model.WorkspaceRegistrationData
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
-import java.time.LocalDateTime
 
 class WorkspaceRepository(private val workspaceMapper: WorkspaceMapper) {
 
@@ -23,7 +25,7 @@ class WorkspaceRepository(private val workspaceMapper: WorkspaceMapper) {
         return newSuspendedTransaction {
             val entity = WorkspaceEntity[workspaceId.value].apply {
                 this.name = workspaceRegistrationData.name
-                this.updatedAt = LocalDateTime.now()
+                this.updatedAt = Clock.System.now().toLocalDateTime(TimeZone.UTC)
             }
             workspaceMapper.toModel(entity)
         }
