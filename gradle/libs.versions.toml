@@ -3,7 +3,7 @@ version = "1.0.0"
 
 java = "17"
 kotlin = "1.9.22"
-flyway = "10.4.1"
+flyway = "10.5.0"
 
 [libraries]
 # Kotlinx datetime
