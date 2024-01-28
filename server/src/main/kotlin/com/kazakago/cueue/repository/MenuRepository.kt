@@ -29,17 +29,14 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 
 class MenuRepository(private val menuMapper: MenuMapper, private val menuSummaryMapper: MenuSummaryMapper) {
 
-    suspend fun getMenus(workspaceId: WorkspaceId, afterId: MenuId?): List<MenuSummary> {
+    suspend fun getMenus(workspaceId: WorkspaceId): List<MenuSummary> {
         return newSuspendedTransaction {
             val timeFrameExpression = getTimeFrameExpression()
-            val menus = MenuEntity
+            MenuEntity
                 .find { MenusTable.workspaceId eq workspaceId.value }
                 .orderBy(MenusTable.date to SortOrder.DESC)
                 .orderBy(timeFrameExpression to SortOrder.ASC)
                 .orderBy(MenusTable.id to SortOrder.DESC)
-            val offset = menus.getOffset(afterId?.value)
-            menus
-                .limit(20, offset)
                 .with(MenuEntity::recipes, RecipeEntity::images, RecipeEntity::menus)
                 .map { menuSummaryMapper.toModel(it) }
         }

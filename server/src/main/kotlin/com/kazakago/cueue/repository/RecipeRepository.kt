@@ -32,7 +32,7 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 
 class RecipeRepository(private val recipeMapper: RecipeMapper, private val recipeSummaryMapper: RecipeSummaryMapper) {
 
-    suspend fun getRecipes(workspaceId: WorkspaceId, afterId: RecipeId?, keyword: String?, tagIds: List<TagId>?): List<RecipeSummary> {
+    suspend fun getRecipes(workspaceId: WorkspaceId, keyword: String?, tagIds: List<TagId>?): List<RecipeSummary> {
         return newSuspendedTransaction {
             var table: ColumnSet = RecipesTable
             var conditions = RecipesTable.workspaceId eq workspaceId.value
@@ -56,10 +56,7 @@ class RecipeRepository(private val recipeMapper: RecipeMapper, private val recip
                 .where(conditions)
                 .withDistinct()
                 .orderBy(RecipesTable.id to SortOrder.DESC)
-            val recipes = RecipeEntity.wrapRows(query)
-            val offset = recipes.getOffset(afterId?.value)
-            recipes
-                .limit(20, offset)
+            RecipeEntity.wrapRows(query)
                 .with(RecipeEntity::images, RecipeEntity::menus)
                 .map { recipeSummaryMapper.toModel(it) }
         }
