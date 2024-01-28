@@ -7,12 +7,13 @@ import com.kazakago.cueue.repository.UserRepository
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.response.respond
+import kotlinx.datetime.LocalDate
 
 class MenusController(private val userRepository: UserRepository, private val menuRepository: MenuRepository) {
 
-    suspend fun index(call: ApplicationCall, firebaseUser: FirebaseUser) {
+    suspend fun index(call: ApplicationCall, firebaseUser: FirebaseUser, date: LocalDate) {
         val user = userRepository.getUser(firebaseUser.uid)
-        val menus = menuRepository.getMenus(user.requireWorkspace().id)
+        val menus = menuRepository.getMenus(user.requireWorkspace().id, date)
         call.respond(HttpStatusCode.OK, menus)
     }
 

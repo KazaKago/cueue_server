@@ -15,6 +15,7 @@ import com.kazakago.cueue.model.MenuSummary
 import com.kazakago.cueue.model.TimeFrame
 import com.kazakago.cueue.model.WorkspaceId
 import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.exposed.dao.load
@@ -29,11 +30,11 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 
 class MenuRepository(private val menuMapper: MenuMapper, private val menuSummaryMapper: MenuSummaryMapper) {
 
-    suspend fun getMenus(workspaceId: WorkspaceId): List<MenuSummary> {
+    suspend fun getMenus(workspaceId: WorkspaceId, data: LocalDate): List<MenuSummary> {
         return newSuspendedTransaction {
             val timeFrameExpression = getTimeFrameExpression()
             MenuEntity
-                .find { MenusTable.workspaceId eq workspaceId.value }
+                .find { (MenusTable.workspaceId eq workspaceId.value) and (MenusTable.date eq data) }
                 .orderBy(MenusTable.date to SortOrder.DESC)
                 .orderBy(timeFrameExpression to SortOrder.ASC)
                 .orderBy(MenusTable.id to SortOrder.DESC)

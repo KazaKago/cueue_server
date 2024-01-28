@@ -33,6 +33,7 @@ import io.ktor.server.routing.post
 import io.ktor.server.routing.put
 import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
+import kotlinx.datetime.LocalDate
 
 fun Application.appRouting() {
     val rootController by inject<RootController>()
@@ -124,7 +125,7 @@ fun Application.appRouting() {
                     }
                     route("/menus") {
                         get {
-                            menusController.index(call, call.requirePrincipal())
+                            menusController.index(call, call.requirePrincipal(), call.request.queryParameters.date())
                         }
                         post {
                             menusController.create(call, call.requirePrincipal(), call.requireReceive())
@@ -162,12 +163,14 @@ fun Application.appRouting() {
     }
 }
 
+private const val DATE = "date"
 private const val MENU_ID = "menu_id"
 private const val TAG_ID = "tag_id"
 private const val RECIPE_ID = "recipe_id"
 private const val KEYWORD = "keyword"
 private const val INVITATION_CODE = "invitation_code"
 
+private fun Parameters.date() = requireString(DATE) { LocalDate.parse(it) }
 private fun Parameters.menuId() = requireLong(MENU_ID) { MenuId(it) }
 private fun Parameters.tagId() = requireLong(TAG_ID) { TagId(it) }
 private fun Parameters.recipeId() = requireLong(RECIPE_ID) { RecipeId(it) }
