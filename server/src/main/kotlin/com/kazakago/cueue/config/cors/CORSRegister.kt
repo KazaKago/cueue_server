@@ -14,7 +14,6 @@ fun CORSConfig.register(application: ApplicationCallPipeline) {
     allowHeader(HttpHeaders.ContentType)
     allowHeader(HttpHeaders.Authorization)
     allowHeader("Api-Version")
-    allowHeader("AppCheck-Token")
     allowMethod(HttpMethod.Options)
     allowMethod(HttpMethod.Put)
     allowMethod(HttpMethod.Patch)

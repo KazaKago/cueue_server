@@ -15,10 +15,10 @@ import io.ktor.server.request.ApplicationRequest
 import io.ktor.server.request.authorization
 import io.ktor.server.response.respond
 
-class FirebaseAuthenticationProvider internal constructor(config: Config) : AuthenticationProvider(config) {
+class FirebaseAuthenticationProvider private constructor(config: Config) : AuthenticationProvider(config) {
 
-    internal val token: (ApplicationCall) -> String? = config.token
-    internal val principle: ((verifiedToken: FirebaseToken) -> Principal?)? = config.principal
+    private val token: (ApplicationCall) -> String? = config.token
+    private val principle: ((verifiedToken: FirebaseToken) -> Principal?)? = config.principal
 
     class Config internal constructor(name: String?) : AuthenticationProvider.Config(name) {
 
