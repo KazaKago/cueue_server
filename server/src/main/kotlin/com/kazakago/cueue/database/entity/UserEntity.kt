@@ -11,7 +11,7 @@ class UserEntity(id: EntityID<Long>) : LongEntity(id) {
     var uid by UsersTable.uid
     var displayName by UsersTable.displayName
     var photo by ContentEntity optionalReferencedOn UsersTable.photoId
-    var workspace by WorkspaceEntity optionalReferencedOn UsersTable.workspaceId
+    var workspace by WorkspaceEntity referencedOn UsersTable.workspaceId
     var createdAt by UsersTable.createdAt
     var updatedAt by UsersTable.updatedAt
 }

@@ -12,11 +12,10 @@ import org.jetbrains.exposed.dao.id.EntityID
 class WorkspaceEntity(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<WorkspaceEntity>(WorkspacesTable)
 
-    var name by WorkspacesTable.name
     var createdAt by WorkspacesTable.createdAt
     var updatedAt by WorkspacesTable.updatedAt
     val recipes by RecipeEntity referrersOn RecipesTable.workspaceId
     val tags by TagEntity referrersOn TagsTable.workspaceId
     val menus by MenuEntity referrersOn MenusTable.workspaceId
-    val users by UserEntity optionalReferrersOn UsersTable.workspaceId
+    val users by UserEntity referrersOn UsersTable.workspaceId
 }

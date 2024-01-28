@@ -33,6 +33,7 @@ class UserRepository(private val userMapper: UserMapper) {
                 this.uid = uid.value
                 this.displayName = user.displayName
                 this.photo = user.photoKey?.let { ContentEntity.find { ContentsTable.key eq user.photoKey }.first() }
+                this.workspace = WorkspaceEntity.new {}
             }
             userMapper.toModel(entity)
         }
@@ -50,12 +51,12 @@ class UserRepository(private val userMapper: UserMapper) {
         }
     }
 
-    suspend fun updateWorkspace(uid: UID, workspaceId: WorkspaceId?): User {
+    suspend fun updateWorkspace(uid: UID, workspaceId: WorkspaceId): User {
         return newSuspendedTransaction {
             val entity = UserEntity.find { UsersTable.uid eq uid.value }
                 .first()
                 .apply {
-                    this.workspace = workspaceId?.value?.let { WorkspaceEntity[it] }
+                    this.workspace = WorkspaceEntity[workspaceId.value]
                 }
             userMapper.toModel(entity)
         }

@@ -89,7 +89,7 @@ class Worker : Callable<Int> {
                 .where { UsersTable.id.isNull() }
             val workspaces = WorkspaceEntity.wrapRows(workspacesQuery)
             workspaces.forEach {
-                println("[Deleting Workspace] id = ${it.id}, name = ${it.name}")
+                println("[Deleting Workspace] id = ${it.id}")
                 if (!dryRun) it.delete()
             }
             println()

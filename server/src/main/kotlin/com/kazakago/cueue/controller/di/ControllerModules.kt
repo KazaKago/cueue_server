@@ -14,8 +14,6 @@ import com.kazakago.cueue.controller.TagController
 import com.kazakago.cueue.controller.TagsController
 import com.kazakago.cueue.controller.UserController
 import com.kazakago.cueue.controller.UsersController
-import com.kazakago.cueue.controller.WorkspaceController
-import com.kazakago.cueue.controller.WorkspacesController
 import org.koin.dsl.module
 
 val controllerModules = module {
@@ -24,8 +22,6 @@ val controllerModules = module {
     single { CallbackController() }
     single { UsersController(get()) }
     single { UserController(get()) }
-    single { WorkspacesController(get(), get()) }
-    single { WorkspaceController(get(), get()) }
     single { RecipesController(get(), get()) }
     single { RecipeController(get(), get()) }
     single { TagsController(get(), get()) }

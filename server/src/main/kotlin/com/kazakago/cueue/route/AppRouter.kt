@@ -17,8 +17,6 @@ import com.kazakago.cueue.controller.TagController
 import com.kazakago.cueue.controller.TagsController
 import com.kazakago.cueue.controller.UserController
 import com.kazakago.cueue.controller.UsersController
-import com.kazakago.cueue.controller.WorkspaceController
-import com.kazakago.cueue.controller.WorkspacesController
 import com.kazakago.cueue.model.InvitationCode
 import com.kazakago.cueue.model.MenuId
 import com.kazakago.cueue.model.RecipeId
@@ -48,8 +46,6 @@ fun Application.appRouting() {
     val tagController by inject<TagController>()
     val menusController by inject<MenusController>()
     val menuController by inject<MenuController>()
-    val workspacesController by inject<WorkspacesController>()
-    val workspaceController by inject<WorkspaceController>()
     val invitationsController by inject<InvitationsController>()
     val invitationController by inject<InvitationController>()
     val invitationAcceptController by inject<InvitationAcceptController>()
@@ -80,17 +76,6 @@ fun Application.appRouting() {
                             }
                             put {
                                 userController.update(call, call.requirePrincipal(), call.requireReceive())
-                            }
-                            route("/workspace") {
-                                post {
-                                    workspacesController.create(call, call.requirePrincipal(), call.requireReceive())
-                                }
-                                put {
-                                    workspaceController.update(call, call.requirePrincipal(), call.requireReceive())
-                                }
-                                delete {
-                                    workspaceController.delete(call, call.requirePrincipal())
-                                }
                             }
                         }
                     }
