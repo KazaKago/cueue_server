@@ -1,6 +1,5 @@
 package com.kazakago.cueue.controller.di
 
-import com.kazakago.cueue.controller.CallbackController
 import com.kazakago.cueue.controller.ContentsController
 import com.kazakago.cueue.controller.InvitationAcceptController
 import com.kazakago.cueue.controller.InvitationController
@@ -19,7 +18,6 @@ import org.koin.dsl.module
 val controllerModules = module {
     single { RootController() }
     single { ContentsController(get()) }
-    single { CallbackController() }
     single { UsersController(get()) }
     single { UserController(get()) }
     single { RecipesController(get(), get()) }

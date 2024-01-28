@@ -3,7 +3,6 @@ package com.kazakago.cueue.route
 import com.kazakago.cueue.config.koin.inject
 import com.kazakago.cueue.config.maintenance.maintenanceCheck
 import com.kazakago.cueue.config.version.versionCheck
-import com.kazakago.cueue.controller.CallbackController
 import com.kazakago.cueue.controller.ContentsController
 import com.kazakago.cueue.controller.InvitationAcceptController
 import com.kazakago.cueue.controller.InvitationController
@@ -25,7 +24,6 @@ import io.ktor.http.Parameters
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
 import io.ktor.server.auth.authenticate
-import io.ktor.server.request.receiveText
 import io.ktor.server.routing.delete
 import io.ktor.server.routing.get
 import io.ktor.server.routing.patch
@@ -38,7 +36,6 @@ import kotlinx.datetime.LocalDate
 fun Application.appRouting() {
     val rootController by inject<RootController>()
     val contentsController by inject<ContentsController>()
-    val callbackController by inject<CallbackController>()
     val usersController by inject<UsersController>()
     val userController by inject<UserController>()
     val recipesController by inject<RecipesController>()
@@ -54,9 +51,6 @@ fun Application.appRouting() {
         route("/") {
             get {
                 rootController.index(call)
-            }
-            post("/callback/sign_in_with_apple") {
-                callbackController.create(call, call.receiveText())
             }
         }
         maintenanceCheck {
