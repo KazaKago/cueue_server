@@ -27,7 +27,7 @@ exposed-dao = { module = "org.jetbrains.exposed:exposed-dao" }
 exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc" }
 exposed-kotlinx-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime" }
 # PostgresSQL
-postgresql = "org.postgresql:postgresql:42.7.1"
+postgresql = "org.postgresql:postgresql:42.7.2"
 # Flyway
 flyway = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
 flyway-postgres = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
