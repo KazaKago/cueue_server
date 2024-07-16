@@ -52,7 +52,7 @@ picocli = "info.picocli:picocli:4.7.5"
 # Typesafe Config
 typesafe-config = "com.typesafe:config:1.4.3"
 # Apache Common Codec
-apache-common-codec = "commons-codec:commons-codec:1.16.1"
+apache-common-codec = "commons-codec:commons-codec:1.17.1"
 
 [plugins]
 # Kotlin JVM
